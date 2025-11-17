@@ -1,0 +1,6 @@
+rootProject.name = 'DocuFlow'
+include 'Domain'
+include 'Application'
+include 'Infrastructure'
+
+
