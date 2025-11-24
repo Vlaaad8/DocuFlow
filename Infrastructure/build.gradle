@@ -10,8 +10,13 @@ repositories {
 }
 
 dependencies {
+    implementation project(':Domain')
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // https://mvnrepository.com/artifact/com.azure/azure-ai-formrecognizer
+    implementation("com.azure:azure-ai-formrecognizer:4.1.13")
+    implementation 'org.springframework.boot:spring-boot-starter:3.2.5'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.2.5'
 }
 
 test {
