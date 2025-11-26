@@ -36,7 +36,7 @@ public class AzureIDAdapter implements IdPort {
 
         if (result.getDocuments() == null || result.getDocuments().isEmpty()) {
             return allExtractedFields;
-        }
+
 
         for (AnalyzedDocument doc : result.getDocuments()) {
 

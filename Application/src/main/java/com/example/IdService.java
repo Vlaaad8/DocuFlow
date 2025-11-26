@@ -25,6 +25,6 @@ public class IdService {
         if(cnp.length() != 13) {
             return false;
         }
-        if(cnp.charAt(0)==)
+        return true;
     }
 }
