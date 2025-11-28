@@ -1,0 +1,25 @@
+<div class="sidenavComponent">
+  <mat-toolbar color="primary" class="toolbar-design"><img src="DocuFlow2.png" alt="DocuFlow"
+      class="mainLogo"></mat-toolbar>
+
+  <div [ngClass]="selectedDashboardTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleDashboard()">
+    <mat-icon class="icon-design">dashboard</mat-icon>
+    Dashboard
+  </div>
+  <div [ngClass]="selectedUploadTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleUpload()"><mat-icon
+      class="icon-design">document_scanner</mat-icon>Upload Document</div>
+  <div [ngClass]="selectedGenerateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleGenerate()">
+    <mat-icon class="icon-design">file_present</mat-icon>Generate Document
+  </div>
+  <div [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
+    <mat-icon class="icon-design">design_services</mat-icon>Template Manager
+  </div>
+
+  <div class="user-info">
+    <div><mat-icon>account_circle</mat-icon></div>
+    <div>
+      <h3>Admin User</h3>
+      <p>HR Manager</p>
+    </div>
+  </div>
+</div>

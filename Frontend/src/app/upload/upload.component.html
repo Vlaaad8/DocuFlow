@@ -1,0 +1,80 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav-design">
+    <app-sidenav-user [selectedUploadTab]="true"></app-sidenav-user>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="description-section">
+      <div class="first-row">
+        <h2>Upload Document</h2>
+        <app-exit-button></app-exit-button>
+      </div>
+      <p>Your document will be securely uploaded and processed here.</p>
+    </div>
+
+    <ng-container [ngSwitch]="currentStage">
+      <ng-container *ngSwitchCase="'upload'">
+        <ng-container *ngTemplateOutlet="uploadSection"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'processing'">
+        <ng-container *ngTemplateOutlet="loadingScreen"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'results'">
+        <ng-container *ngTemplateOutlet="resultExtraction"></ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #uploadSection>
+      <mat-chip-listbox aria-label="Upload options" class="chip-area">
+        <mat-chip-option class="chip-item" value="identity-card" (selectionChange)="onChipSelect($event)">Identity
+          card</mat-chip-option>
+        <mat-chip-option class="chip-item" value="document"
+          (selectionChange)="onChipSelect($event)">Document</mat-chip-option>
+      </mat-chip-listbox>
+      <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
+        (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
+        <div class="drop-zone">
+          <mat-icon class="upload-icon">backup</mat-icon>
+          <div></div>
+          <h2>Drop your document here</h2>
+          <p>or click to select a file</p>
+          <p *ngIf="selectedFile !== null">{{ selectedFile.name }}</p>
+        </div>
+        <input #fileInput type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" (change)="handleFileSelected($event)"
+          style="visibility: hidden;">
+      </div>
+    </ng-template>
+
+    <ng-template #resultExtraction>
+      <div class="output-section">
+        <h3>Overview of the results</h3>
+        <div class="split-section">
+          <div class="left-part">
+            <h3>Document Preview</h3>
+            <div class="document-present">
+              <mat-icon class="description-icon">description</mat-icon>
+              <h4>{{ selectedFile?.name }}</h4>
+              <p>{{selectedFile?.size}}</p>
+              <button class="preview-option" (click)="openFile()">👁️ Preview</button>
+            </div>
+          </div>
+          <div class="right-part">
+            <h3>Extracted Information</h3>
+            <app-input-extracted-data *ngFor="let field of extractedFields" [extractedValue]="field.value"
+              [confidenceScore]="field.confidence" [fieldName]="field.label" />
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #loadingScreen>
+      <div class="loading-wrapper">
+        <div class="loading-container">
+          <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
+          <h4>Processing document...</h4>
+          <p>Please wait while we process your document.</p>
+        </div>
+      </div>
+    </ng-template>
+  </mat-sidenav-content>
+</mat-sidenav-container>

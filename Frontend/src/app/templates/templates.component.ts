@@ -1,0 +1,73 @@
+import { Component, OnInit } from '@angular/core';
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
+import { MatIcon } from "@angular/material/icon";
+import { CommonModule } from '@angular/common';
+import { TemplateContainerComponent } from "../commons/template-container/template-container.component";
+import { TemplateService } from '../services/template.service';
+import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
+
+@Component({
+  selector: 'app-templates',
+  templateUrl: './templates.component.html',
+  styleUrls: ['./templates.component.css'],
+  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent]
+})
+export class TemplatesComponent implements OnInit {
+  selectedFile: File | null = null;
+  isModalOpen: boolean = false;
+  isDragOver: boolean = false;
+  constructor(private service: TemplateService) { }
+
+  ngOnInit() {
+  }
+
+  openUploadModal() {
+    this.isModalOpen = true
+}
+
+onDrop($event: DragEvent) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.isDragOver = false;
+    const files = $event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.selectedFile = files[0];
+    }
+  }
+  onDragLeave($event: DragEvent) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.isDragOver = false;
+  }
+  onDragOver($event: DragEvent) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+    handleFileSelected($event: Event) {
+    const input = $event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.extractData();
+    } else {
+      this.selectedFile = null;
+    }
+  }
+
+  extractData(): void {
+
+    this.service.uploadTemplate(this.selectedFile!, 'templateName').subscribe({
+      next: (response) => {
+        console.log('Template uploaded successfully:', response);
+        this.isModalOpen = false;
+      },
+      error: (error) => {
+        console.error('Error uploading template:', error);
+      }
+    });
+  }
+
+
+}

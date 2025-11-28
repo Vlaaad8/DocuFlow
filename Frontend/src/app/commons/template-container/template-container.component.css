@@ -1,0 +1,90 @@
+.template-container {
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    max-width: 1200px;
+    min-width: 300px;
+    margin: 16px;
+}
+
+.template-header {
+    display: flex;
+    align-items: center;
+}
+
+.template-header mat-icon {
+    font-size: 32px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    border-radius: 8px;
+    margin-right: 4px;
+
+}
+
+.first-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.first-row h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.second-row {
+    font-size: 14px;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.fields {
+    color: black;
+    font-weight: 600;
+}
+
+.third-row {
+    font-size: 14px;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+
+.field-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.field-design {
+    padding: 4px 10px;
+    background: #eff6ff;
+    color: #1e40af;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+ .confidence {
+        padding: 6px 12px;
+        background: #d1fae5;
+        color: #065f46;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .valid{
+        background: #d1fae5;
+        color: #065f46;
+    }

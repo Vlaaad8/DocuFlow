@@ -1,0 +1,210 @@
+    .description-section {
+        padding: 16px 32px;
+    }
+
+    .description-section h2 {
+        font-size: 26px;
+    }
+
+    .description-section p {
+        color: #6b7280;
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .drop-container {
+        padding: 16px 32px;
+        border: 3.5px dashed #d1d5dbdc;
+        background-color: #ffffff;
+        border-radius: 10px;
+        max-width: 1200px;
+        min-height: 250px;
+        margin: 16px 32px;
+
+    }
+
+    .drag-mode,
+    .drop-container:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        transform: translateY(-2px);
+
+    }
+
+    .chip-area {
+        margin: 5px 32px;
+    }
+
+
+    .drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .drop-zone p {
+        color: #6b7280;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .drop-zone h2 {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .upload-icon {
+        color: #3b82f6;
+        font-size: 60px;
+        width: fit-content;
+        height: fit-content;
+        box-shadow: 0 0 15px #5591f0;
+        background-color: #ddeafc;
+        border-radius: 50%;
+        padding: 12px;
+
+    }
+
+    .output-section {
+
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+        margin: 16px 32px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 16px 32px;
+    }
+
+    .output-section h3 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .split-section {
+        display: flex;
+        gap: 20px;
+    }
+
+    .left-part {
+        width: 30%;
+    }
+
+    .right-part {
+        width: 70%;
+    }
+
+    .split-section h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .loading-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-container {
+        padding: 16px 32px;
+        background-color: #ffffff;
+        border-radius: 14px;
+        min-width: 500px;
+        min-height: 300px;
+        margin: 16px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+    }
+
+    .loading-container h4 {
+        margin-top: 40px;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 0px;
+    }
+
+    .loading-container p {
+        color: #374151;
+        font-size: 16px;
+        font-weight: 420;
+    }
+
+    .custom-spinner {
+        ::ng-deep circle {
+            stroke: #3b82f6 !important;
+        }
+    }
+
+    .document-present {
+        min-height: 200px;
+        border: 2px solid #d1d5dbdc;
+        border-radius: 8px;
+        margin-right: 10px;
+        margin-top: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        background: #f9fafb;
+        gap: 7px;
+    }
+
+    .document-present mat-icon {
+        font-size: 60px;
+        margin-top: 12px;
+        width: fit-content;
+        height: inherit
+    }
+
+    .document-present h4 {
+        margin: 0;
+        color: #374151;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .document-present p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .preview-option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 6px 8px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+        color: #6b7280
+    }
+
+    .preview-option:hover {
+        background: #f3f4f6;
+    }
+
+    .sidenav-design {
+        width: 18%;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+    }
+    .first-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }

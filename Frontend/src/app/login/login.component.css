@@ -1,0 +1,112 @@
+.logo-part {
+    width: 30%;
+    background-color: #3b82f6;
+    box-shadow: 0 0 12px #3b82f6;
+    height: 100vh;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.loginLogo {
+    width: 90%;
+}
+
+.functional-part {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+}
+
+.main-container {
+    display: flex;
+}
+
+.functional-part h3 {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.functional-part p {
+    color: #6b7280;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.login-container {
+    padding: 16px 32px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    max-width: 1200px;
+    min-width: 400px;
+    min-height: 300px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+    margin: 16px 32px;
+
+}
+
+.input-design label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+    display: block;
+}
+
+.input-design input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 7px;
+    border: 2px solid #d1d5dbdc;
+}
+
+.input-design {
+    padding-left: 0px;
+    padding-right: 16px;
+    padding-top: 16p;
+    padding-bottom: 16px;
+}
+
+.logButton {
+    margin: 16px 0px;
+    background-color: #3b82f6;
+    border-radius: 8px;
+    width: 100%;
+    border: none;
+    padding: 8px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+
+}
+.logButton:hover {
+    background-color: #2876f4;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(59, 130, 246, 0.45);
+}
+.info-section {
+    padding-bottom: 10px;
+
+}
+
+.input-check {
+    display: flex;
+    align-items: flex-start;
+}
+
+.input-check input[type="checkbox"] {
+    padding: 2px;
+    border-radius: 8px;
+    align-items: center;
+
+}
+
+#signUp {
+    color: #3b82f6;
+    font-weight: 600;
+}
