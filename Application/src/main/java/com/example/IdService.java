@@ -21,6 +21,7 @@ public class IdService {
     }
 
 //Start Validare CNP https://ro.wikipedia.org/wiki/Cod_numeric_personal_(România)
+    //TODO continua validarile pentru campuri
     private boolean validateCNP(String cnp) {
         if(cnp.length() != 13) {
             return false;

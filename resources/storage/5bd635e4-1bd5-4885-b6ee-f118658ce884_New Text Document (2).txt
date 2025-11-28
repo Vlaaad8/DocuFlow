@@ -1,0 +1,1 @@
+{{ name }} este un angajat model.
