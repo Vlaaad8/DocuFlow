@@ -1,6 +1,8 @@
+import { I } from '@angular/cdk/keycodes';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from "@angular/material/icon";
+import { Template } from '../../model/Template';
 
 @Component({
   selector: 'app-template-container',
@@ -9,8 +11,8 @@ import { MatIconModule } from "@angular/material/icon";
   imports: [MatIconModule,CommonModule]
 })
 export class TemplateContainerComponent implements OnInit {
-
-  fields: String[] = ['Field 1', 'Field 2', 'Field 3', 'Field 4', 'Field 5', 'Field 6', 'Field 7', 'Field 8', 'Field 9', 'Field 10', 'Field 11', 'Field 12'];
+  @Input({required: true}) template!: Template;
+ 
   constructor() { }
 
   ngOnInit() {

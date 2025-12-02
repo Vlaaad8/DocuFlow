@@ -25,42 +25,40 @@ public class TemplateService {
     private final TemplateTextPort textPort;
     private final FieldRepository fieldRepository;
     private final TemplateRepository templateRepository;
-    private final Path rootFolder = Paths.get("resources/storage");
+    private final Path rootFolder = Paths.get("storage");
 
-    public TemplateService(TemplateTextPort textPort, FieldRepository fieldRepository,TemplateRepository templateRepository) {
+    public TemplateService(TemplateTextPort textPort, FieldRepository fieldRepository, TemplateRepository templateRepository) {
         this.textPort = textPort;
         this.fieldRepository = fieldRepository;
         this.templateRepository = templateRepository;
     }
 
     //TODO file upload to disk and refactor code
-    public void uploadTemplate(InputStream inputStream, String fileName){
+    public Template uploadTemplate(InputStream inputStream, String fileName) {
         try {
             byte[] content = inputStream.readAllBytes();
             String extractedText = textPort.extract(new ByteArrayInputStream(content), fileName);
+
+
             if (!hasValidFormat(extractedText)) {
-                throw new RuntimeException("A");
+                throw new RuntimeException("File has not the valid format");
             }
-            Set<Field> fields =extractFields(extractedText);
+
+            Set<Field> fields = extractFields(extractedText);
+
             Files.createDirectories(rootFolder);
             String safeFileName = (fileName == null || fileName.isBlank())
                     ? "template_" + UUID.randomUUID()
                     : fileName;
             String storedFileName = UUID.randomUUID() + "_" + safeFileName;
+
             Path destination = rootFolder.resolve(storedFileName);
             Files.write(destination, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             String storagePath = destination.toString();
+            Template template = new Template(safeFileName, TemplateCategory.NOTICE, TemplateStatus.VALID, storagePath, fields);
 
-
-            Template template = new Template();
-            template.setName(safeFileName);
-            template.setCategory(TemplateCategory.NOTICE);
-            template.setStatus(TemplateStatus.VALID);
-            template.setStoragePath(storagePath);
-            template.setFields(fields);
-
-          templateRepository.save(template);
+            return templateRepository.save(template);
 
         } catch (RuntimeException | IOException e) {
             throw new RuntimeException(e);
@@ -133,6 +131,10 @@ public class TemplateService {
             }
         }
         return fields;
+    }
+
+    public List<Template> getTemplates(){
+        return templateRepository.findAll();
     }
 
 

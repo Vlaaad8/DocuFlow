@@ -2,19 +2,19 @@
   <div class="template-header">
     <mat-icon>article</mat-icon>
     <div class="first-row">
-      <h3>Contract de munca</h3>
-      <p class="confidence valid">Valid</p>
+      <h3>{{ template.name }}</h3>
+      <p class="confidence valid">{{template.status}}</p>
     </div>
     <div></div>
   </div>
   <div class="second-row">
     <p>Fields:</p>
-    <p class="fields">12 fields</p>
+    <p class="fields">{{ template.fields.length }} fields</p>
   </div>
   <div class="third-row">
     <p>Dynamic Fields:</p>
     <div class="field-list">
-      <span *ngFor="let field of fields" class="field-design">{{ field }}</span>
+      <span *ngFor="let field of template.fields" class="field-design">{{ field.fieldName }}</span>
     </div>
   </div>
 

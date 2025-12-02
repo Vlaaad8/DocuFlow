@@ -2,16 +2,15 @@ package com.example.web;
 
 
 import com.example.TemplateService;
+import com.example.template.Template;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
-@RestController
+@RestController()
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class TemplateController {
@@ -19,7 +18,11 @@ public class TemplateController {
     private TemplateService templateService;
 
     @PostMapping("template/validate")
-    public void validateTemplate(@RequestParam MultipartFile file) throws IOException {
-        templateService.uploadTemplate(file.getInputStream(),file.getOriginalFilename());
+    public Template validateTemplate(@RequestParam MultipartFile file) throws IOException {
+        return templateService.uploadTemplate(file.getInputStream(),file.getOriginalFilename());
+    }
+    @GetMapping("template")
+    public List<Template> getTemplates() {
+        return this.templateService.getTemplates();
     }
 }

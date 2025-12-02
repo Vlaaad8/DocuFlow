@@ -46,8 +46,7 @@
       </div>
     </div>
     <div class="displayTemplates">
-      <app-template-container> </app-template-container>
-      <app-template-container> </app-template-container>
+      <app-template-container *ngFor="let template of templates" [template]="template"> </app-template-container>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

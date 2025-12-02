@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TemplateContainerComponent } from "../commons/template-container/template-container.component";
 import { TemplateService } from '../services/template.service';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
+import { Template } from '../model/Template';
 
 @Component({
   selector: 'app-templates',
@@ -17,9 +18,11 @@ export class TemplatesComponent implements OnInit {
   selectedFile: File | null = null;
   isModalOpen: boolean = false;
   isDragOver: boolean = false;
+  templates: Template[] = [];
   constructor(private service: TemplateService) { }
 
   ngOnInit() {
+    this.loadTemplates();
   }
 
   openUploadModal() {
@@ -59,12 +62,24 @@ onDrop($event: DragEvent) {
   extractData(): void {
 
     this.service.uploadTemplate(this.selectedFile!, 'templateName').subscribe({
-      next: (response) => {
-        console.log('Template uploaded successfully:', response);
+      next: (response : Template) => {
         this.isModalOpen = false;
+        this.templates.push(response);
       },
       error: (error) => {
         console.error('Error uploading template:', error);
+      }
+    });
+  }
+
+  public loadTemplates(): void {
+    this.service.getTemplates().subscribe({
+      next: (response) => {
+        this.templates = response;
+        console.log('Templates loaded successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error loading templates:', error);
       }
     });
   }
