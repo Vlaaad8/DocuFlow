@@ -167,6 +167,7 @@
         color: #374151;
         font-size: 16px;
         font-weight: 500;
+        width: fit-content;
     }
 
     .document-present p {
@@ -203,8 +204,39 @@
         flex-direction: column;
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
     }
+
     .first-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .upload-another-btn {
+        padding: 8px 16px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .button-section {
+        display: flex;
+        gap: 10px;
+
+
+    }
+
+    .back-button {
+        background: #eff6ff;
+        color: #1e40af;
+        border: none;
+        padding: 8px 8px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 25px;
+        cursor: pointer;
     }

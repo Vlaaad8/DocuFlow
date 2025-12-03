@@ -81,4 +81,10 @@ export class UploadComponent implements OnInit {
       window.open(fileURL);
     }
   }
+  public handleBack(): void {
+    this.currentStage = 'upload';
+    this.selectedFile = null;
+    this.selectedCategory = null;
+    this.extractedFields = [];
+  }
 }

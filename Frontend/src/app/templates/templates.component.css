@@ -161,6 +161,7 @@
     display: flex;
     gap: 16px;
     padding: 16px 32px;
+    flex-wrap: wrap;
 }
 
 .buttonSection {
@@ -177,4 +178,7 @@
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
+}
+.displayTemplates app-template-container {
+  flex: 1 1 0;
 }

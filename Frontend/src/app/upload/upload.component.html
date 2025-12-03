@@ -47,7 +47,15 @@
 
     <ng-template #resultExtraction>
       <div class="output-section">
+        <div class="first-row">
         <h3>Overview of the results</h3>
+          <input #fileInput type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" (change)="handleFileSelected($event)"
+          style="visibility: hidden;">
+          <div class="button-section">
+        <button class="upload-another-btn" (click)="fileInput.click()" >Upload another document</button>
+        <mat-icon class="back-button" (click)="handleBack()">arrow_back</mat-icon>
+        </div>
+        </div>
         <div class="split-section">
           <div class="left-part">
             <h3>Document Preview</h3>

@@ -12,10 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +30,6 @@ public class TemplateService {
         this.templateRepository = templateRepository;
     }
 
-    //TODO file upload to disk and refactor code
     public Template uploadTemplate(InputStream inputStream, String fileName) {
         try {
             byte[] content = inputStream.readAllBytes();
@@ -45,6 +41,9 @@ public class TemplateService {
             }
 
             Set<Field> fields = extractFields(extractedText);
+            if(!hasRequiredFields(fields)){
+                throw new RuntimeException("Required fields are missing");
+            }
 
             Files.createDirectories(rootFolder);
             String safeFileName = (fileName == null || fileName.isBlank())
@@ -82,9 +81,10 @@ public class TemplateService {
         return leftParenthesis == rightParenthesis;
     }
 
-    private boolean hasRequiredFields(List<Field> fields, String text) {
-        for (Field field : fields) {
-            if (!text.contains(field.getRepresentation())) {
+    private boolean hasRequiredFields(Set<Field> fields) {
+        List<Field> requiredFields = this.fieldRepository.getFieldByRequired(true);
+        for (Field field : requiredFields) {
+            if (!fields.contains(field)) {
                 return false;
             }
         }
@@ -119,7 +119,6 @@ public class TemplateService {
                 return false;
             }
         }
-        //TODO : verifica ca toate campurile required sunt in template
         return true;
     }
 
