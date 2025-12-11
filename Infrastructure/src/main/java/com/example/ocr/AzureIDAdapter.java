@@ -1,8 +1,8 @@
 package com.example.ocr;
 
-import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClient;
-import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClientBuilder;
-import com.azure.ai.formrecognizer.documentanalysis.models.*;
+import com.azure.ai.documentintelligence.DocumentIntelligenceClient;
+import com.azure.ai.documentintelligence.DocumentIntelligenceClientBuilder;
+import com.azure.ai.documentintelligence.models.*;
 import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.util.BinaryData;
 import com.azure.core.util.polling.SyncPoller;
@@ -13,44 +13,66 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.azure.ai.documentintelligence.models.DocumentFieldType.*;
+
 
 @Component
 public class AzureIDAdapter implements IdPort {
-    private final DocumentAnalysisClient documentClient;
+    private final DocumentIntelligenceClient documentClient;
 
 
     public AzureIDAdapter(AzureProperties azureProperties) {
-        this.documentClient = new DocumentAnalysisClientBuilder().credential(new AzureKeyCredential(azureProperties.getKey())).endpoint(azureProperties.getEndpoint()).buildClient();
+        this.documentClient = new DocumentIntelligenceClientBuilder().credential(new AzureKeyCredential(azureProperties.getKey())).endpoint(azureProperties.getEndpoint()).buildClient();
     }
 
     @Override
     public List<ExtractedField> analyzeId(InputStream fileStream, long fileLength) {
-        BinaryData fileData = BinaryData.fromStream(fileStream, fileLength);
+        try {
+            byte[] fileBytes = fileStream.readAllBytes();
 
-        SyncPoller<OperationResult, AnalyzeResult> poller =
-                documentClient.beginAnalyzeDocument("prebuilt-idDocument", fileData);
 
-        AnalyzeResult result = poller.getFinalResult();
+            AnalyzeDocumentOptions options =
+                    new AnalyzeDocumentOptions(BinaryData.fromBytes(fileBytes));
 
-        List<ExtractedField> allExtractedFields = new ArrayList<>();
 
-        if (result.getDocuments() == null || result.getDocuments().isEmpty()) {
+            SyncPoller<AnalyzeOperationDetails, AnalyzeResult> poller =
+                    documentClient.beginAnalyzeDocument("prebuilt-idDocument", options);
+
+            AnalyzeResult result = poller.getFinalResult();
+
+            List<ExtractedField> allExtractedFields = new ArrayList<>();
+
+            if (result.getDocuments() == null || result.getDocuments().isEmpty()) {
+                return allExtractedFields;
+
+            }
+            for (AnalyzedDocument doc : result.getDocuments()) {
+
+                Map<String, DocumentField> fields = doc.getFields();
+
+                fields.forEach((key, field) -> {
+                    String value = null;
+                    if (field.getType() == STRING) {
+                        value = field.getValueString();
+                    } else if (field.getType() == COUNTRY_REGION) {
+                        value = field.getValueCountryRegion();
+                    } else if (field.getType() == DATE) {
+                        value = field.getValueDate().toString();
+                    } else if (field.getType() == ADDRESS) {
+                        //TODO split into sections
+                        value = String.valueOf(field.getValueAddress());
+                    }
+
+                    if (value != null) {
+                        Float confidence = (float) (field.getConfidence() * 100);
+                        allExtractedFields.add(new ExtractedField(key, value, confidence));
+                    }
+                });
+            }
+
             return allExtractedFields;
-
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        for (AnalyzedDocument doc : result.getDocuments()) {
-
-            Map<String, DocumentField> fields = doc.getFields();
-
-            fields.forEach((key, field) -> {
-                String value = field.getContent();
-                Float confidence = field.getConfidence()*100;
-
-                allExtractedFields.add(new ExtractedField(key, value, confidence));
-            });
-        }
-
-        return allExtractedFields;
     }
-
 }

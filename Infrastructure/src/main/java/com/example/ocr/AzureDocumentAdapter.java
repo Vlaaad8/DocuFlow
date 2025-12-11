@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO To rethink this all - maybe it's outdated
 @Component
 public class AzureDocumentAdapter implements DocumentPort {
     private final DocumentAnalysisClient documentClient;

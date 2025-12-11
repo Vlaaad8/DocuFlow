@@ -1,0 +1,1 @@
+{{ name }} stie sa raspunda la {{ prenume }}

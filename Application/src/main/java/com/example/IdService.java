@@ -4,6 +4,7 @@ import com.example.ocr.DocumentPort;
 import com.example.ocr.ExtractedField;
 import com.example.ocr.IdPort;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class IdService {
         this.idPort = idPort;
     }
 
-    public List<ExtractedField> getFields(InputStream inputStream , int fileSize) {
+    public List<ExtractedField> getFields(InputStream inputStream , int fileSize) throws IOException {
         return idPort.analyzeId(inputStream, fileSize);
     }
 
