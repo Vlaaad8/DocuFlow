@@ -3,6 +3,7 @@ package com.example;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
 import com.example.template.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -12,11 +13,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@AllArgsConstructor
 public class TemplateService {
 
     private final TemplateTextPort textPort;
@@ -24,11 +29,6 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
     private final Path rootFolder = Paths.get("storage");
 
-    public TemplateService(TemplateTextPort textPort, FieldRepository fieldRepository, TemplateRepository templateRepository) {
-        this.textPort = textPort;
-        this.fieldRepository = fieldRepository;
-        this.templateRepository = templateRepository;
-    }
 
     public Template uploadTemplate(InputStream inputStream, String fileName) {
         try {
@@ -41,7 +41,7 @@ public class TemplateService {
             }
 
             Set<Field> fields = extractFields(extractedText);
-            if(!hasRequiredFields(fields)){
+            if (!hasRequiredFields(fields)) {
                 throw new RuntimeException("Required fields are missing");
             }
 
@@ -132,7 +132,7 @@ public class TemplateService {
         return fields;
     }
 
-    public List<Template> getTemplates(){
+    public List<Template> getTemplates() {
         return templateRepository.findAll();
     }
 

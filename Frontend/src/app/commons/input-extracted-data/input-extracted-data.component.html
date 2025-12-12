@@ -1,9 +1,9 @@
-<div class="preview-input">
+<div class="preview-input" [formGroup]="group">
   <div class="label-section">
-    <label for="documentPreview">{{fieldName}}</label>
+    <label for="documentPreview">{{label}}</label>
   </div>
   <div class="results">
-    <input type="text" placeholder="No value extracted yet" [value]="extractedValue"
+    <input type="text" placeholder="No value extracted yet" formControlName="value"
       [ngClass]="getInputConfidenceClass()">
     <span class="confidence" [ngClass]="getConfidenceClass()">{{confidenceScore}}%</span>
   </div>

@@ -3,19 +3,17 @@ package com.example;
 import com.example.ocr.DocumentPort;
 import com.example.ocr.ExtractedField;
 import com.example.ocr.IdPort;
+import lombok.AllArgsConstructor;
+import org.hibernate.annotations.AnyKeyJavaClass;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-
+@AllArgsConstructor
 public class IdService {
 
     private final IdPort idPort;
-
-    public IdService(IdPort idPort) {
-        this.idPort = idPort;
-    }
 
     public List<ExtractedField> getFields(InputStream inputStream , int fileSize) throws IOException {
         return idPort.analyzeId(inputStream, fileSize);

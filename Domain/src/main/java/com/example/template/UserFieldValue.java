@@ -3,10 +3,7 @@ package com.example.template;
 
 import com.example.login.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +15,7 @@ public class UserFieldValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(nullable = false)
     private String value;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -27,4 +25,9 @@ public class UserFieldValue {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public UserFieldValue(String value, Field field, User user) {
+        this.value = value;
+        this.field = field;
+        this.user = user;
+    }
 }

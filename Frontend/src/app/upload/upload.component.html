@@ -77,9 +77,12 @@
           </div>
           <div class="right-part">
             <h3>Extracted Information</h3>
-            <app-input-extracted-data *ngFor="let field of extractedFieldsMock" [extractedValue]="field.value"
-              [confidenceScore]="field.confidence" [fieldName]="field.label" />
-            <button class="upload-another-btn">Save results</button>
+            <form [formGroup]="formGroup" (ngSubmit)="onSaveData()">
+              <div formArrayName="fields">
+                <app-input-extracted-data *ngFor="let row of inputFormFields.controls" [group]="row" />
+                <button class="upload-another-btn" type="submit">Save results</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

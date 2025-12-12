@@ -32,4 +32,9 @@ public class OcrController {
     public List<ExtractedField> extractDataDocument(@RequestParam MultipartFile file) throws IOException {
         return  documentService.getKeyValues(file.getInputStream(), (int) file.getSize());
     }
+
+    @PostMapping("ocr/extracted-fields")
+    public void saveExtractedFields(@RequestParam List<ExtractedField> extractedFields,@RequestParam int userId){
+
+    }
 }
