@@ -1,7 +1,10 @@
 <div class="preview-input">
-  <label for="documentPreview">{{fieldName}}</label>
+  <div class="label-section">
+    <label for="documentPreview">{{fieldName}}</label>
+  </div>
   <div class="results">
-    <input type="text" placeholder="No value extracted yet" [value]="extractedValue" [ngClass]="getInputConfidenceClass()">
+    <input type="text" placeholder="No value extracted yet" [value]="extractedValue"
+      [ngClass]="getInputConfidenceClass()">
     <span class="confidence" [ngClass]="getConfidenceClass()">{{confidenceScore}}%</span>
   </div>
 </div>

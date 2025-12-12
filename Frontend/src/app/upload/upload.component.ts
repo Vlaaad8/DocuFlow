@@ -9,21 +9,50 @@ import { UploadService } from '../services/upload.service';
 import { ExtractedField } from '../model/ExtractedField';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, MatChipsModule, MatIcon, CommonModule, InputExtractedDataComponent, MatProgressSpinnerModule, ExitButtonComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, MatChipsModule, MatIcon, CommonModule, InputExtractedDataComponent, MatProgressSpinnerModule, ExitButtonComponent,ReactiveFormsModule]
 })
 export class UploadComponent implements OnInit {
   isDragOver: boolean = false;
   selectedFile: File | null = null;
   selectedCategory: string | null = null;
   extractedFields: ExtractedField[] = [];
-  currentStage : String = 'upload'; // upload, processing, results
-
-  constructor(private service: UploadService) { }
+  currentStage : String = 'results'; // upload, processing, results
+  errorMessage: string | null = null;
+  formGroup! : FormGroup
+  extractedFieldsMock: ExtractedField[] = [
+    {
+        label: "vendor_name",
+        value: "Dedeman SRL",
+        confidence: 98
+    },
+    {
+        label: "invoice_number",
+        value: "F-2024001293",
+        confidence: 95
+    },
+    {
+        label: "invoice_date",
+        value: "2024-05-15",
+        confidence: 0.96
+    },
+    {
+        label: "total_amount",
+        value: "450.00",
+        confidence: 2
+    },
+    {
+        label: "currency",
+        value: "RON",
+        confidence: 79
+    }
+];
+  constructor(private service: UploadService,private formBuilder: FormBuilder) { }
 
   ngOnInit() {
   }
@@ -70,9 +99,16 @@ export class UploadComponent implements OnInit {
           this.currentStage = 'results';
         },
         error: (error) => {
+          this.errorMessage = 'An error occurred while extracting data. Please try again.';
+          this.currentStage = 'upload';
+          this.selectedCategory = null;
           console.error('Error extracting data:', error);
         }
       });
+    }
+    else if(!this.selectedCategory) {
+      this.errorMessage = 'Please select a document category before uploading.';
+      this.selectedFile = null;
     }
   }
   public openFile(): void {

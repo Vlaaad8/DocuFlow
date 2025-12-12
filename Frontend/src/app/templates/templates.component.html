@@ -45,8 +45,21 @@
         </div>
       </div>
     </div>
+
+    <ng-container *ngIf="templates.length > 0 then showTemplates ; else  loadingScreen"></ng-container>
+    <ng-template #showTemplates>
     <div class="displayTemplates">
       <app-template-container *ngFor="let template of templates" [template]="template"> </app-template-container>
     </div>
+</ng-template>
+        <ng-template #loadingScreen>
+      <div class="loading-wrapper">
+        <div class="loading-container">
+          <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
+          <h4>Loading all templates...</h4>
+          <p>Please wait while we process your request</p>
+        </div>
+      </div>
+    </ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

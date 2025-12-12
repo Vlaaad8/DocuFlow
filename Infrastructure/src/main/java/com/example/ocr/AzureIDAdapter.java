@@ -59,10 +59,10 @@ public class AzureIDAdapter implements IdPort {
                     } else if (field.getType() == DATE) {
                         value = field.getValueDate().toString();
                     } else if (field.getType() == ADDRESS) {
-                        //TODO split into sections
-                        value = String.valueOf(field.getValueAddress());
+                        //TODO split into sections and to make it work as a whole - temp disabled
+                        //value = String.valueOf(field.getValueAddress());
                     }
-
+                    //TODO MachineReadableZone - very important , can double check data and provides me with relevant information
                     if (value != null) {
                         Float confidence = (float) (field.getConfidence() * 100);
                         allExtractedFields.add(new ExtractedField(key, value, confidence));

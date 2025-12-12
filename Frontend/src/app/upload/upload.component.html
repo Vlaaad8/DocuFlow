@@ -31,6 +31,13 @@
         <mat-chip-option class="chip-item" value="document"
           (selectionChange)="onChipSelect($event)">Document</mat-chip-option>
       </mat-chip-listbox>
+      <div class="error-section" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        <div class="action-zone">
+          <p>{{errorMessage}}</p>
+          <mat-icon (click)="errorMessage = null">close</mat-icon>
+        </div>
+      </div>
       <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
         (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
         <div class="drop-zone">
@@ -43,18 +50,20 @@
         <input #fileInput type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" (change)="handleFileSelected($event)"
           style="visibility: hidden;">
       </div>
+
+
     </ng-template>
 
     <ng-template #resultExtraction>
       <div class="output-section">
         <div class="first-row">
-        <h3>Overview of the results</h3>
+          <h3>Overview of the results</h3>
           <input #fileInput type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" (change)="handleFileSelected($event)"
-          style="visibility: hidden;">
+            style="visibility: hidden;">
           <div class="button-section">
-        <button class="upload-another-btn" (click)="fileInput.click()" >Upload another document</button>
-        <mat-icon class="back-button" (click)="handleBack()">arrow_back</mat-icon>
-        </div>
+            <button class="upload-another-btn" (click)="fileInput.click()">Upload another document</button>
+            <mat-icon class="back-button" (click)="handleBack()">arrow_back</mat-icon>
+          </div>
         </div>
         <div class="split-section">
           <div class="left-part">
@@ -68,8 +77,9 @@
           </div>
           <div class="right-part">
             <h3>Extracted Information</h3>
-            <app-input-extracted-data *ngFor="let field of extractedFields" [extractedValue]="field.value"
+            <app-input-extracted-data *ngFor="let field of extractedFieldsMock" [extractedValue]="field.value"
               [confidenceScore]="field.confidence" [fieldName]="field.label" />
+            <button class="upload-another-btn">Save results</button>
           </div>
         </div>
       </div>

@@ -1,16 +1,16 @@
 import {
-  MatCommonModule
-} from "./chunk-RO35VYYH.js";
-import "./chunk-2B65VIWC.js";
-import "./chunk-OKW6WNV7.js";
-import {
   DomSanitizer
 } from "./chunk-C2KOMOSV.js";
 import {
   HttpClient
 } from "./chunk-OS2MUO5P.js";
+import {
+  MatCommonModule
+} from "./chunk-GN6HGRFW.js";
+import "./chunk-2B65VIWC.js";
 import "./chunk-6OREKYJX.js";
 import "./chunk-APPCZKFW.js";
+import "./chunk-OKW6WNV7.js";
 import {
   ChangeDetectionStrategy,
   Component,

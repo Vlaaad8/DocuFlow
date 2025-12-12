@@ -7,12 +7,13 @@ import { TemplateContainerComponent } from "../commons/template-container/templa
 import { TemplateService } from '../services/template.service';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
 import { Template } from '../model/Template';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
   styleUrls: ['./templates.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent, MatProgressSpinner]
 })
 export class TemplatesComponent implements OnInit {
   selectedFile: File | null = null;
