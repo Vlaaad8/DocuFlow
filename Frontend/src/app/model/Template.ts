@@ -1,7 +1,7 @@
 import { Field } from "./Field";
 
 export interface Template{
-    id: string;
+    id: number;
     name: string;
     category: string;
     status: string;

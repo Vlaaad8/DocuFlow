@@ -63,7 +63,9 @@ public class TemplateService {
             throw new RuntimeException(e);
         }
     }
-
+    public void delete(int id){
+        templateRepository.deleteById(id);
+    }
     private boolean verifyParenthesis(String text) {
         int leftParenthesis = 0;
         int rightParenthesis = 0;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FieldMapperRepository extends JpaRepository<Integer, FieldMapper> {
-    @Query("FROM FieldMapper f WHERE f.azureFieldName=:field")
+public interface FieldMapperRepository extends JpaRepository<FieldMapper,Integer> {
+    @Query("SELECT f.field FROM FieldMapper f WHERE f.azureFieldName=:field")
     Optional<Field> getByAzureFieldName(@Param("field") String azureFieldName);
 }

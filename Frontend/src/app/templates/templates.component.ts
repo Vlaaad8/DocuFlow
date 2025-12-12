@@ -84,6 +84,21 @@ onDrop($event: DragEvent) {
       }
     });
   }
-
-
+  handleTemplateEvenet(action: String, template: Template): void{
+    if(action === 'Delete'){
+      console.log("Deleting template: ", template);
+      this.service.deleteTemplate(template.id).subscribe({next: () => {
+        this.templates = this.templates.filter(t => t.id !== template.id);
+      },
+      error: (error) => {
+        console.error('Error deleting template:', error);
+      }});
+    }
+    else if(action === 'Search'){
+      console.log("Previewing template: ", template);
+    }
+    else{
+      console.log("Unknown action: ", action);
+    }
+  }
 }

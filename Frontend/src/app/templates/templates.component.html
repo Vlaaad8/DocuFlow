@@ -49,7 +49,7 @@
     <ng-container *ngIf="templates.length > 0 then showTemplates ; else  loadingScreen"></ng-container>
     <ng-template #showTemplates>
     <div class="displayTemplates">
-      <app-template-container *ngFor="let template of templates" [template]="template"> </app-template-container>
+      <app-template-container *ngFor="let template of templates" [template]="template" (event)="handleTemplateEvenet($event,template)"> </app-template-container>
     </div>
 </ng-template>
         <ng-template #loadingScreen>

@@ -28,12 +28,12 @@ export class UploadComponent implements OnInit {
   formGroup!: FormGroup;
   extractedFieldsMock: ExtractedField[] = [
     {
-      label: "vendor_name",
+      label: "FirstName",
       value: "Dedeman SRL",
       confidence: 98
     },
-    {
-      label: "invoice_number",
+    { 
+      label: "LastName",
       value: "F-2024001293",
       confidence: 95
     },
@@ -42,7 +42,7 @@ export class UploadComponent implements OnInit {
       value: "2024-05-15",
       confidence: 0.96
     },
-    {
+    { 
       label: "total_amount",
       value: "450.00",
       confidence: 2
@@ -147,6 +147,6 @@ export class UploadComponent implements OnInit {
   public onSaveData(): void {
     const extractedData : ExtractedField[] = this.inputFormFields.value;
     console.log('Saved extracted data:', extractedData);
-    // Here you can add logic to send the extractedData to a backend or process it further
+    this.service.saveExtractedData(extractedData);
   }
 }

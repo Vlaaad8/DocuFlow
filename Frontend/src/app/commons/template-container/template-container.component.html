@@ -17,5 +17,9 @@
       <span *ngFor="let field of template.fields" class="field-design">{{ field.fieldName }}</span>
     </div>
   </div>
+  <div class="button-section">
+       <button class="preview-option" (click)="handleClick('Search')"><mat-icon>search</mat-icon> Preview</button>
+       <button class="preview-option delete" (click)="handleClick('Delete')"><mat-icon>delete</mat-icon> Remove</button>
+  </div>
 
 </div>

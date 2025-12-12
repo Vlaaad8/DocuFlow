@@ -1,6 +1,6 @@
 import { I } from '@angular/cdk/keycodes';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from "@angular/material/icon";
 import { Template } from '../../model/Template';
 
@@ -12,10 +12,14 @@ import { Template } from '../../model/Template';
 })
 export class TemplateContainerComponent implements OnInit {
   @Input({required: true}) template!: Template;
+  @Output() event = new EventEmitter<String>();
  
   constructor() { }
 
   ngOnInit() {
+  }
+  handleClick(action: String): void{
+    this.event.emit(action);
   }
 
 }

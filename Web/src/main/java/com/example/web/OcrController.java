@@ -3,13 +3,11 @@ package com.example.web;
 
 import com.example.DocumentService;
 import com.example.IdService;
+import com.example.MappingService;
 import com.example.ocr.ExtractedField;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,6 +20,7 @@ public class OcrController {
 
     private final IdService idService;
     private final DocumentService documentService;
+    private final MappingService mappingService;
 
     @PostMapping("ocr/identity-card")
     public List<ExtractedField> extractDataId(@RequestParam MultipartFile file) throws IOException {
@@ -34,7 +33,8 @@ public class OcrController {
     }
 
     @PostMapping("ocr/extracted-fields")
-    public void saveExtractedFields(@RequestParam List<ExtractedField> extractedFields,@RequestParam int userId){
+    public void saveExtractedFields(@RequestBody List<ExtractedField> extractedFields){
+        extractedFields.forEach(field-> this.mappingService.mapField(field,7));
 
     }
 }

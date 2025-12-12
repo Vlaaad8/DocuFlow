@@ -21,4 +21,15 @@ export class UploadService {
     formData.append('file', file);
     return this.http.post<ExtractedField[]>(`${URL}${documentType}`, formData);
   }
+
+  public saveExtractedData(data: ExtractedField[]): void {
+    this.http.post<void>(`${URL}extracted-fields`, data).subscribe({
+      next: () => {
+        console.log('Extracted data saved successfully.');
+      },
+      error: (error) => {
+        console.error('Error saving extracted data:', error);
+      }
+    });
+  }
 }

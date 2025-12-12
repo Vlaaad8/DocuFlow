@@ -25,4 +25,8 @@ public class TemplateController {
     public List<Template> getTemplates() {
         return this.templateService.getTemplates();
     }
+    @DeleteMapping("template")
+    public void deleteTemplate(@RequestParam() int id) {
+        this.templateService.delete(id);
+    }
 }

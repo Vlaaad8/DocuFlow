@@ -21,4 +21,8 @@ public uploadTemplate(file: File, templateName: string) : Observable<Template> {
 public getTemplates(): Observable<Template[]> {
     return this.http.get<Template[]>(`${URL}`);
   }
+  //TODO to be fixed : bad request
+  public deleteTemplate(templateId: number): Observable<void> {
+    return this.http.delete<void>(`${URL}/${templateId}`);
+  }
 }
