@@ -6,12 +6,15 @@ import { TemplatesComponent } from './templates/templates.component';
 import { GenerateComponent } from './generate/generate.component';
 
 export const routes: Routes = [{
-  path: '',component: DashboardComponent,pathMatch: 'full',
+  path: 'dashboard',component: DashboardComponent,
 },{
     path: 'upload',component:UploadComponent
 }
 ,{
   path: 'login',component:LoginComponent
+},
+{
+  path: '',component:LoginComponent
 },
 {
   path: 'template', component: TemplatesComponent

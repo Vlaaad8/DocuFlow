@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
+import { User } from '../../model/User';
 
 @Component({
   selector: 'app-sidenav-user',
@@ -16,15 +17,20 @@ export class SidenavUserComponent implements OnInit {
   @Input() selectedGenerateTab: boolean = false;
   @Input() selectedDashboardTab: boolean = false;
   @Input() selectedTemplateTab: boolean = false;
+
+  user!: User;
+  
   constructor(private router: Router) { }
 
   ngOnInit() {
+    sessionStorage.getItem('loggedInUser')
+    this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   }
   handleGenerate() : void { 
       this.router.navigate(['/generate']);
   }
   handleDashboard() : void {  
-      this.router.navigate(['']);
+      this.router.navigate(['dashboard']);
   }
   handleUpload() : void {
       this.router.navigate(['upload']);

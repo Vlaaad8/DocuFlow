@@ -33,6 +33,5 @@ public class MappingService {
             }
             userFieldValueRepository.save(userFieldValue);
         }
-        //TODO handle the case when i have to update the value, not just add it
     }
 }

@@ -9,17 +9,19 @@
         <h3>Sign in</h3>
         <p>Sign in into your account to proceed</p>
       </div>
-      <div class="input-design">
-        <label>Username</label>
-        <input type="text" placeholder="name@docuflow.ro">
-      </div>
-      <div class="input-design">
-        <label>Password</label>
-        <input type="password">
-      </div>
+      <form [formGroup]="formGroup" (ngSubmit)="onSignUp()">
+        <div class="input-design">
+          <label>Username or Email</label>
+          <input type="text" placeholder="name@docuflow.ro" formControlName="username">
+        </div>
+        <div class="input-design">
+          <label>Password</label>
+          <input type="password" formControlName="password">
+        </div>
 
-      <button class="logButton" (click)="onSignUp()">Sign in</button>
-      <p>Don't have an account? <span id="signUp">Sign up</span></p>
+        <button class="logButton">Sign in</button>
+        <p>Don't have an account? <span id="signUp">Sign up</span></p>
+      </form>
     </div>
 
   </div>

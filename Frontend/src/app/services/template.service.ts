@@ -11,18 +11,17 @@ const URL = 'http://localhost:8080/template';
 })
 export class TemplateService {
 
-constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-public uploadTemplate(file: File, templateName: string) : Observable<Template> {
+  public uploadTemplate(file: File, templateName: string): Observable<Template> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<Template>(`${URL}/validate`, formData);
   }
-public getTemplates(): Observable<Template[]> {
+  public getTemplates(): Observable<Template[]> {
     return this.http.get<Template[]>(`${URL}`);
   }
-  //TODO to be fixed : bad request
   public deleteTemplate(templateId: number): Observable<void> {
-    return this.http.delete<void>(`${URL}/${templateId}`);
+    return this.http.delete<void>(`${URL}`, { params: { id: templateId } });
   }
 }

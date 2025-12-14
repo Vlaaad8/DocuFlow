@@ -15,11 +15,18 @@
     <mat-icon class="icon-design">design_services</mat-icon>Template Manager
   </div>
 
-  <div class="user-info">
-    <div><mat-icon>account_circle</mat-icon></div>
-    <div>
-      <h3>Admin User</h3>
-      <p>HR Manager</p>
+
+  <div class="user-section">
+    <div class="user-card">
+          <img
+          [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.firstName + user.lastName"
+          [alt]="user.firstName" class="user-avatar"
+
+        />
+      <div class="user-specs">
+        <h3>{{user.firstName}} {{user.lastName}} </h3>
+      <p>{{user.role}}</p>
+      </div>
     </div>
   </div>
-</div>
+

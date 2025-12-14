@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 @Service
 @AllArgsConstructor
 public class TemplateService {
-
+    //TODO when delete: remove the file also from storage, not just DB
     private final TemplateTextPort textPort;
     private final FieldRepository fieldRepository;
     private final TemplateRepository templateRepository;
