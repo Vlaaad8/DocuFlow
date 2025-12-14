@@ -27,7 +27,7 @@ export class SidenavUserComponent implements OnInit {
     this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   }
   handleGenerate() : void { 
-      this.router.navigate(['/generate']);
+      this.router.navigate(['generate']);
   }
   handleDashboard() : void {  
       this.router.navigate(['dashboard']);

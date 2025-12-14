@@ -26,3 +26,12 @@
         justify-content: space-between;
         align-items: center;
     }
+    .main-content{
+        display:flex;
+    }
+    .first-part{
+        width: 50%;
+    }
+    .second-part{
+        width: 50%;
+    }

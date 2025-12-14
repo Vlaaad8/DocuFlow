@@ -1,22 +1,19 @@
 package com.example;
 
+import com.example.exceptions.TemplateValidationException;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
 import com.example.template.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,39 +26,76 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
     private final Path rootFolder = Paths.get("storage");
 
+    //TODO refactor all this, this just uploads , doesnt validate anymore
+//    public Template uploadTemplate(InputStream inputStream, String fileName) {
+//        try {
+//            byte[] content = inputStream.readAllBytes();
+//            String extractedText = textPort.extract(new ByteArrayInputStream(content));
+//
+//            //am scos validarile
+//
+//            Files.createDirectories(rootFolder);
+//            String safeFileName = (fileName == null || fileName.isBlank())
+//                    ? "template_" + UUID.randomUUID()
+//                    : fileName;
+//            String storedFileName = UUID.randomUUID() + "_" + safeFileName;
+//
+//            Path destination = rootFolder.resolve(storedFileName);
+//            Files.write(destination, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+//
+//            String storagePath = destination.toString();
+////            Template template = new Template(safeFileName, TemplateCategory.NOTICE, TemplateStatus.VALID, storagePath, fields);
+////
+////            return templateRepository.save(template);
+//
+//        } catch (RuntimeException | IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-    public Template uploadTemplate(InputStream inputStream, String fileName) {
+    public void uploadService(MultipartFile file, String name, String description, TemplateCategory templateCategory) {
+        try {
+            Files.createDirectories(rootFolder);
+
+            String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+
+            String saveName = UUID.randomUUID() + extension;
+
+            Path destination = rootFolder.resolve(saveName);
+
+            file.transferTo(destination);
+
+            File storedFile = destination.toFile();
+
+            String path = storedFile.getAbsolutePath();
+
+            String extractedText = textPort.extract(new FileInputStream(storedFile));
+            Set<Field> fields = extractFields(extractedText);
+            Template template = new Template(name, templateCategory, description, path, fields);
+
+            templateRepository.save(template);
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean validateTemplate(InputStream inputStream){
         try {
             byte[] content = inputStream.readAllBytes();
-            String extractedText = textPort.extract(new ByteArrayInputStream(content), fileName);
-
-
+            String extractedText = textPort.extract(new ByteArrayInputStream(content));
             if (!hasValidFormat(extractedText)) {
-                throw new RuntimeException("File has not the valid format");
+                throw new TemplateValidationException("File has not the valid format");
             }
 
             Set<Field> fields = extractFields(extractedText);
             if (!hasRequiredFields(fields)) {
-                throw new RuntimeException("Required fields are missing");
+                throw new TemplateValidationException("Some required fields are missing from this template");
             }
-
-            Files.createDirectories(rootFolder);
-            String safeFileName = (fileName == null || fileName.isBlank())
-                    ? "template_" + UUID.randomUUID()
-                    : fileName;
-            String storedFileName = UUID.randomUUID() + "_" + safeFileName;
-
-            Path destination = rootFolder.resolve(storedFileName);
-            Files.write(destination, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-            String storagePath = destination.toString();
-            Template template = new Template(safeFileName, TemplateCategory.NOTICE, TemplateStatus.VALID, storagePath, fields);
-
-            return templateRepository.save(template);
-
-        } catch (RuntimeException | IOException e) {
+        }catch(Exception e){
             throw new RuntimeException(e);
         }
+        return true;
+
     }
     public void delete(int id){
         templateRepository.deleteById(id);
@@ -136,6 +170,12 @@ public class TemplateService {
 
     public List<Template> getTemplates() {
         return templateRepository.findAll();
+    }
+
+    public List<String> getTemplateCategories(){
+        List<String> all = new ArrayList<>();
+        Arrays.stream(TemplateCategory.values()).map(Enum::name).forEach(all::add);
+        return all;
     }
 
 

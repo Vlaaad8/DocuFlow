@@ -1,9 +1,6 @@
 package com.example.web;
 
-import com.example.DocumentService;
-import com.example.IdService;
-import com.example.MappingService;
-import com.example.TemplateService;
+import com.example.*;
 import com.example.jpa.*;
 import com.example.ocr.DocumentPort;
 import com.example.ocr.IdPort;
@@ -32,5 +29,9 @@ public class ApplicationConfig {
     @Bean
     public MappingService mappingService(FieldMapperRepository fieldMapperRepository, UserRepository userRepository, UserFieldValueRepository userFieldValueRepository) {
         return new MappingService(fieldMapperRepository, userRepository, userFieldValueRepository);
+    }
+    @Bean
+    public GeneratorService generatorService(TemplateRepository templateRepository,UserFieldValueRepository userFieldValueRepository) {
+        return new GeneratorService(templateRepository,userFieldValueRepository);
     }
 }

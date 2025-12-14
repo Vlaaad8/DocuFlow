@@ -1,20 +1,26 @@
 <mat-sidenav-container>
   <mat-sidenav mode="side" opened class="sidenav-design">
-    <app-sidenav-user [selectedDashboardTab]="true"></app-sidenav-user>
+    <app-sidenav-user [selectedGenerateTab]="true"></app-sidenav-user>
 
 
   </mat-sidenav>
 
   <mat-sidenav-content>
-<div class="description-section">
+    <div class="description-section">
       <div class="first-row">
         <h2>Generate Document</h2>
         <app-exit-button></app-exit-button>
       </div>
       <p>Autofill and sign your document with ease using our generation tools.</p>
-    </div>
-    <div class="main-content">
-      <!-- Main content for document generation goes here -->
+      <div class="main-content">
+        <div class="first-part">
+          aaa
+        </div>
+        <div class="second-part">
+          <app-template-selector
+            *ngFor="let template of [    { id: 1, name: 'Contract', description: 'Standard employment contract', labels: ['Legal', 'HR'] },    { id: 2, name: 'NDA', description: 'Non-disclosure agreement', labels: ['Legal'] },    { id: 3, name: 'Invoice', description: 'Professional invoice template', labels: ['Finance'] },    { id: 4, name: 'Report', description: 'Monthly performance report', labels: ['Management', 'Finance'] }  ]"></app-template-selector>
+        </div>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

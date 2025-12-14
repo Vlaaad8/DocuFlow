@@ -25,19 +25,18 @@ public class Template {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TemplateCategory category;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TemplateStatus status;
+    @Column
+    private String description;
     @Column(nullable = false)
     private String storagePath;
     @ManyToMany
     @JoinTable(name = "template_fields",joinColumns = @JoinColumn (name = "template_id"),inverseJoinColumns = @JoinColumn(name="field_id"))
     private Set<Field> fields = new HashSet<>();
 
-    public Template(String name, TemplateCategory category, TemplateStatus status, String storagePath, Set<Field> fields ) {
+    public Template(String name, TemplateCategory category, String description, String storagePath, Set<Field> fields) {
         this.name = name;
         this.category = category;
-        this.status = status;
+        this.description = description;
         this.storagePath = storagePath;
         this.fields = fields;
     }

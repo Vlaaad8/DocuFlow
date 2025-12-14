@@ -2,8 +2,8 @@ package com.example.web;
 
 import com.example.UserService;
 import com.example.login.User;
+import com.example.web.requests.LoginRequest;
 import lombok.AllArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

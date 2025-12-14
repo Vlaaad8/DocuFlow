@@ -14,9 +14,8 @@ public class ApacheText implements TemplateTextPort {
 
     private final Tika tika = new Tika();
     @Override
-    public String extract(InputStream stream, String fileName) {
+    public String extract(InputStream stream) {
         try {
-            System.out.println(fileName);
             return tika.parseToString(stream);
         } catch (IOException | TikaException e) {
             throw new RuntimeException(e);

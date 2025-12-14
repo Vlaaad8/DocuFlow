@@ -1,3 +1,11 @@
-<p>
-  template-selector works!
-</p>
+<div class="generator-card">
+  <div class="content">>
+      <mat-icon>contract_page</mat-icon>
+      <h3>Contract</h3>
+      <p>Standard employment contract</p>
+      <div class="field-list">
+        <span *ngFor ="let label of ['Legal', 'HR']" class="field-design">{{label}}</span>
+      </div>
+      <button class="button">Generate</button>
+  </div>
+</div>

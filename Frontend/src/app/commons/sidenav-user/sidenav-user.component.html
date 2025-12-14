@@ -7,7 +7,8 @@
     Dashboard
   </div>
   <div [ngClass]="selectedUploadTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleUpload()"><mat-icon
-      class="icon-design">document_scanner</mat-icon>Upload Document</div>
+      class="icon-design">document_scanner</mat-icon>Upload Document
+    </div>
   <div [ngClass]="selectedGenerateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleGenerate()">
     <mat-icon class="icon-design">file_present</mat-icon>Generate Document
   </div>
@@ -18,15 +19,11 @@
 
   <div class="user-section">
     <div class="user-card">
-          <img
-          [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.firstName + user.lastName"
-          [alt]="user.firstName" class="user-avatar"
-
-        />
+      <img [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.firstName + user.lastName"
+        [alt]="user.firstName" class="user-avatar" />
       <div class="user-specs">
         <h3>{{user.firstName}} {{user.lastName}} </h3>
-      <p>{{user.role}}</p>
+        <p>{{user.role}}</p>
       </div>
     </div>
   </div>
-

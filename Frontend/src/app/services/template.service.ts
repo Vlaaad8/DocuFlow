@@ -13,7 +13,7 @@ export class TemplateService {
 
   constructor(private http: HttpClient) { }
 
-  public uploadTemplate(file: File, templateName: string): Observable<Template> {
+  public validateTemplate(file: File): Observable<Template> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<Template>(`${URL}/validate`, formData);
@@ -23,5 +23,16 @@ export class TemplateService {
   }
   public deleteTemplate(templateId: number): Observable<void> {
     return this.http.delete<void>(`${URL}`, { params: { id: templateId } });
+  }
+  public uploadTemplate(file: File, name: string, category: string, description: string): Observable<Template> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('description', description);
+    return this.http.post<Template>(`${URL}`, formData);
+  }
+  public getTemplateCategories(): Observable<string[]> {
+    return this.http.get<string[]>(`${URL}/category`);
   }
 }
