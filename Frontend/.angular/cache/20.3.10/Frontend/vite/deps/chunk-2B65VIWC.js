@@ -2,6 +2,7 @@ import {
   isPlatformBrowser
 } from "./chunk-6OREKYJX.js";
 import {
+  ElementRef,
   Injectable,
   PLATFORM_ID,
   inject,
@@ -70,7 +71,23 @@ var Platform = class _Platform {
   }], () => [], null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/element.mjs
+function coerceNumberProperty(value, fallbackValue = 0) {
+  if (_isNumberValue(value)) {
+    return Number(value);
+  }
+  return arguments.length === 2 ? fallbackValue : 0;
+}
+function _isNumberValue(value) {
+  return !isNaN(parseFloat(value)) && !isNaN(Number(value));
+}
+function coerceElement(elementOrRef) {
+  return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+}
+
 export {
-  Platform
+  Platform,
+  coerceNumberProperty,
+  coerceElement
 };
-//# sourceMappingURL=chunk-OM5F372C.js.map
+//# sourceMappingURL=chunk-2B65VIWC.js.map

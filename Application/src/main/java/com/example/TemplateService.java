@@ -6,13 +6,9 @@ import com.example.jpa.TemplateRepository;
 import com.example.template.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,56 +16,31 @@ import java.util.regex.Pattern;
 @Service
 @AllArgsConstructor
 public class TemplateService {
-    //TODO when delete: remove the file also from storage, not just DB
     private final TemplateTextPort textPort;
     private final FieldRepository fieldRepository;
     private final TemplateRepository templateRepository;
+
     private final Path rootFolder = Paths.get("storage");
 
-    //TODO refactor all this, this just uploads , doesnt validate anymore
-//    public Template uploadTemplate(InputStream inputStream, String fileName) {
-//        try {
-//            byte[] content = inputStream.readAllBytes();
-//            String extractedText = textPort.extract(new ByteArrayInputStream(content));
-//
-//            //am scos validarile
-//
-//            Files.createDirectories(rootFolder);
-//            String safeFileName = (fileName == null || fileName.isBlank())
-//                    ? "template_" + UUID.randomUUID()
-//                    : fileName;
-//            String storedFileName = UUID.randomUUID() + "_" + safeFileName;
-//
-//            Path destination = rootFolder.resolve(storedFileName);
-//            Files.write(destination, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-//
-//            String storagePath = destination.toString();
-////            Template template = new Template(safeFileName, TemplateCategory.NOTICE, TemplateStatus.VALID, storagePath, fields);
-////
-////            return templateRepository.save(template);
-//
-//        } catch (RuntimeException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
-    public void uploadService(MultipartFile file, String name, String description, TemplateCategory templateCategory) {
+    public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory) {
         try {
             Files.createDirectories(rootFolder);
 
-            String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-
-            String saveName = UUID.randomUUID() + extension;
+            String saveName = UUID.randomUUID() + ".docx";
 
             Path destination = rootFolder.resolve(saveName);
 
-            file.transferTo(destination);
+           try(InputStream in = stream){
+               Files.copy(in, destination, StandardCopyOption.REPLACE_EXISTING);
+           }
 
-            File storedFile = destination.toFile();
+           //TODO validare structurala a DOCX
 
-            String path = storedFile.getAbsolutePath();
 
-            String extractedText = textPort.extract(new FileInputStream(storedFile));
+            String path = destination.toAbsolutePath().toString();
+
+            String extractedText = textPort.extract(new FileInputStream(path));
             Set<Field> fields = extractFields(extractedText);
             Template template = new Template(name, templateCategory, description, path, fields);
 
@@ -98,8 +69,17 @@ public class TemplateService {
 
     }
     public void delete(int id){
-        templateRepository.deleteById(id);
+        Template template = this.templateRepository.getReferenceById(id);
+            Path path = Path.of(template.getStoragePath());
+            try {
+                Files.deleteIfExists(path);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            templateRepository.deleteById(id);
     }
+
     private boolean verifyParenthesis(String text) {
         int leftParenthesis = 0;
         int rightParenthesis = 0;

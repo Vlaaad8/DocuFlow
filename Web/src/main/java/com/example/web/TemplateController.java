@@ -3,12 +3,11 @@ package com.example.web;
 
 import com.example.TemplateService;
 import com.example.template.Template;
-import com.example.web.requests.TemplateRequest;
+import com.example.template.TemplateCategory;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,8 +39,11 @@ public class TemplateController {
     }
 
     @PostMapping("template")
-    public void addTemplate(@RequestBody TemplateRequest templateRequest) throws IOException {
-        this.templateService.uploadService(templateRequest.file(),templateRequest.name(),templateRequest.description(),templateRequest.category());
+    public void addTemplate(@RequestParam("file") MultipartFile file,
+                            @RequestParam("name") String name,
+                            @RequestParam("description") String description,
+                            @RequestParam("category") TemplateCategory category) throws IOException {
+        this.templateService.uploadService(file.getInputStream(),name, description, category);
     }
 
 }

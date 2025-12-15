@@ -135,7 +135,11 @@ onDrop($event: DragEvent) {
     const formData = this.formGroup.value;
     console.log('Submitting template with data:', formData);
    this.service.uploadTemplate(this.selectedFile!, formData.name, formData.category, formData.description).subscribe({next: (response) => {
-      console.log('Template uploaded successfully:', response);
+      this.isModalOpen = false;
+      this.selectedFile = null;
+      this.isTemplateValid = false;
+      this.errorMessage = null;
+      this.loadTemplates();
     },
     error: (error) => {
       this.errorMessage = 'An error occurred while uploading the template. Please try again.';
