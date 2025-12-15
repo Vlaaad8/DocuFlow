@@ -17,8 +17,31 @@
           aaa
         </div>
         <div class="second-part">
-          <app-template-selector
-            *ngFor="let template of [    { id: 1, name: 'Contract', description: 'Standard employment contract', labels: ['Legal', 'HR'] },    { id: 2, name: 'NDA', description: 'Non-disclosure agreement', labels: ['Legal'] },    { id: 3, name: 'Invoice', description: 'Professional invoice template', labels: ['Finance'] },    { id: 4, name: 'Report', description: 'Monthly performance report', labels: ['Management', 'Finance'] }  ]"></app-template-selector>
+          <app-template-selector [schema]="template" (event)="handleGenerateEvent($event)"
+            *ngFor="let template of templates"></app-template-selector>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-zone" *ngIf="isModalOpen">
+      <div class="card">
+        <div class="card-header">
+          <h3>Template Details</h3>
+          <mat-icon (click)="isModalOpen = false">close</mat-icon>
+        </div>
+        <div class="card-body">
+          <h3>Document preview</h3>
+          <div class="detail-card">
+            <p>Document will be generated with you following personal data</p>
+            <div>
+              <p class="field-item" *ngFor="let field of templateFields"><span class="field-label">{{field.name}}:
+                </span> <span>{{field.value}}</span></p>
+            </div>
+          </div>
+          <div class="buttonSection">
+            <button type="submit" (click)="generateDocument()">Generate Document</button>
+            <button type="button" (click)="handleLeave()">Cancel</button>
+          </div>
         </div>
       </div>
     </div>

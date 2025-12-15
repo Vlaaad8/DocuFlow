@@ -1,11 +1,33 @@
-<div class="generator-card">
-  <div class="content">>
-      <mat-icon>contract_page</mat-icon>
-      <h3>Contract</h3>
-      <p>Standard employment contract</p>
+<ng-container *ngIf="schema.canGenerate then template ; else locked"></ng-container>
+
+<ng-template #locked>
+<div class="generator-card locked">
+  <div class="content">
+    <p id="lock">🔒</p>
+    <div class="text-section">
+      <h3>{{schema.template.name}}</h3>
+      <p>{{schema.template.description}}</p>
       <div class="field-list">
-        <span *ngFor ="let label of ['Legal', 'HR']" class="field-design">{{label}}</span>
+        <span *ngFor="let label of schema.template.fields" class="field-design">{{label}}</span>
       </div>
-      <button class="button">Generate</button>
+    </div>
+    <button class="button locked-message" disabled  (click)="handleGenerate()">Missing required data</button>
   </div>
 </div>
+</ng-template>
+
+<ng-template #template>
+<div class="generator-card">
+  <div class="content">
+    <mat-icon>description</mat-icon>
+    <div class="text-section">
+      <h3>{{schema.template.name}}</h3>
+      <p>{{schema.template.description}}</p>
+      <div class="field-list">
+        <span *ngFor="let label of schema.template.fields" class="field-design">{{label.fieldName}}</span>
+      </div>
+    </div>
+    <button class="button" (click)="handleGenerate()">Generate</button>
+  </div>
+</div>
+</ng-template>

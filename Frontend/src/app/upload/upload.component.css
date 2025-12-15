@@ -222,7 +222,9 @@
         cursor: pointer;
         transition: background-color 0.2s;
     }
-
+    .upload-another-btn:hover {
+        background-color: #2563eb;
+    }
     .button-section {
         display: flex;
         gap: 10px;

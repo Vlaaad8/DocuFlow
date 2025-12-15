@@ -9,7 +9,6 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 import { Template } from '../model/Template';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CdkObserveContent } from "@angular/cdk/observers";
 
 @Component({
   selector: 'app-templates',

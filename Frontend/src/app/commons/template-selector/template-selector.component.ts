@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from "@angular/material/icon";
 import { Template } from '../../model/Template';
+import { GenerateTemplate } from '../../model/GenerateTemplate';
 
 @Component({
   selector: 'app-template-selector',
@@ -11,12 +12,15 @@ import { Template } from '../../model/Template';
 })
 export class TemplateSelectorComponent implements OnInit {
 
-  // @Input({required: true}) template! : Template
+  @Input() schema! : GenerateTemplate;
   @Output() event = new EventEmitter<Template>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+  handleGenerate(): void {
+    this.event.emit(this.schema.template);
   }
 
 }
