@@ -13,9 +13,11 @@
     <mat-icon class="icon-design">file_present</mat-icon>Generate Document
   </div>
   <div [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
-    <mat-icon class="icon-design">design_services</mat-icon>Template Manager
+    <mat-icon class="icon-design">attach_file_add</mat-icon>Template Manager
   </div>
-
+  <div [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplateCreator()">
+    <mat-icon class="icon-design">create</mat-icon>Template Creator
+  </div>
 
   <div class="user-section">
     <div class="user-card">

@@ -92,7 +92,7 @@
     <ng-template #showTemplates>
       <div class="displayTemplates">
         <app-template-container *ngFor="let template of templates" [template]="template"
-          (event)="handleTemplateEvenet($event,template)"> </app-template-container>
+          (event)="handleTemplateEvenet($event,template)"class="templateCard"> </app-template-container>
       </div>
     </ng-template>
     <ng-template #loadingScreen>

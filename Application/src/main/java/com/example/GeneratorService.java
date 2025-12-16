@@ -20,7 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-//TODO generation flow : check if a user has enough data to generate a document , and then give him the document
 @Service
 public class GeneratorService {
 
@@ -56,7 +55,7 @@ public class GeneratorService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String generateName = UUID.randomUUID() + ".docx";
+        String generateName = UUID.randomUUID() + ".pdf";
         Path destination = rootFolder.resolve(generateName);
 
         try {

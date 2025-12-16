@@ -17,7 +17,7 @@ export class SidenavUserComponent implements OnInit {
   @Input() selectedGenerateTab: boolean = false;
   @Input() selectedDashboardTab: boolean = false;
   @Input() selectedTemplateTab: boolean = false;
-
+  @Input() selectemTemplteCreator: boolean = false;
   user!: User;
   
   constructor(private router: Router) { }
@@ -37,6 +37,9 @@ export class SidenavUserComponent implements OnInit {
   }
   handleTemplate() : void {
       this.router.navigate(['template']);
+  }
+  handleTemplateCreator() : void {
+      this.router.navigate(['template-creator']);
   }
 
 }

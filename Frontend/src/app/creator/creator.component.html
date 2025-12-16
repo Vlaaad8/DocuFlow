@@ -1,0 +1,25 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav-design">
+    <app-sidenav-user [selectemTemplteCreator]="true"></app-sidenav-user>
+
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+   <div class="description-section">
+      <div class="first-row">
+        <h2>Template Creator</h2>
+        <app-exit-button></app-exit-button>
+      </div>
+      <p>Create and customize your document templates here.</p>
+    </div>
+<div class="editor">
+  <editor
+    [apiKey]="tinymceApiKey"
+    [init]="tinyInit"
+    [(ngModel)]="content">
+  </editor>
+</div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

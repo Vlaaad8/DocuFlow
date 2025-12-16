@@ -1,6 +1,9 @@
 package com.example.generator;
 
+import com.example.converter.Convertors;
 import com.example.ocr.MappingPort;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +15,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.itextpdf.text.pdf.XfaXpathConstructor.XdpPackage.Pdf;
 
 @Component
 public class ApachePOI implements MappingPort {
@@ -32,12 +37,13 @@ public class ApachePOI implements MappingPort {
                 replaceInTables(footer.getTables(), values);
             }
 
-            try (OutputStream out = Files.newOutputStream(outputDocx)) {
-                document.write(out);
-            }
+            Convertors.convertWordToPDF(document, outputDocx);
 
+        } catch (Exception  e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     private static void replaceInBody(XWPFDocument doc, Map<String, String> values) {
         replaceInParagraphs(doc.getParagraphs(), values);
