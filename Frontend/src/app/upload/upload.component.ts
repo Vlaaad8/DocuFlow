@@ -23,36 +23,9 @@ export class UploadComponent implements OnInit {
   selectedFile: File | null = null;
   selectedCategory: string | null = null;
   extractedFields: ExtractedField[] = [];
-  currentStage: String = 'results'; // upload, processing, results
+  currentStage: String = 'upload'; // upload, processing, results
   errorMessage: string | null = null;
   formGroup!: FormGroup;
-  extractedFieldsMock: ExtractedField[] = [
-    {
-      label: "FirstName",
-      value: "Dedeman SRL",
-      confidence: 98
-    },
-    { 
-      label: "LastName",
-      value: "F-2024001293",
-      confidence: 95
-    },
-    {
-      label: "invoice_date",
-      value: "2024-05-15",
-      confidence: 0.96
-    },
-    { 
-      label: "total_amount",
-      value: "450.00",
-      confidence: 2
-    },
-    {
-      label: "currency",
-      value: "RON",
-      confidence: 79
-    }
-  ];
   constructor(private service: UploadService, private formBuilder: FormBuilder) { }
 
   get inputFormFields(): FormArray<FormGroup> {
@@ -74,8 +47,7 @@ export class UploadComponent implements OnInit {
     fields: this.formBuilder.array([])
   });
 
-  // doar pentru test cât timp folosești mock:
-  this.buildFormsForFields(this.extractedFieldsMock);}
+  this.buildFormsForFields(this.extractedFields);}
 
   handleFileSelected($event: Event) {
     const input = $event.target as HTMLInputElement;
@@ -116,6 +88,7 @@ export class UploadComponent implements OnInit {
       this.service.extractData(this.selectedFile, this.selectedCategory).subscribe({
         next: (data: ExtractedField[]) => {
           this.extractedFields = data;
+          this.buildFormsForFields(this.extractedFields);
           this.currentStage = 'results';
         },
         error: (error) => {

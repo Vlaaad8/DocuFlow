@@ -118,9 +118,9 @@ public class TemplateService {
 
     private boolean hasValidFormat(String text) {
         if (!verifyParenthesis(text)) {
-            return false;
+            throw new TemplateValidationException("The number of parenthesis is not even");
         }
-        Pattern validField = Pattern.compile("\\{\\{ [a-zA-Z]+ \\}\\}");
+        Pattern validField = Pattern.compile("\\{\\{\\s[a-zA-Z]+(_[a-zA-Z]+)*\\s\\}\\}");
         Pattern allFields = Pattern.compile("\\{\\{.*?\\}\\}");
         List<Field> trueFields = this.fieldRepository.findAll();
         Matcher allFieldsMatcher = allFields.matcher(text);
@@ -128,11 +128,11 @@ public class TemplateService {
         while (allFieldsMatcher.find()) {
             String fieldName = allFieldsMatcher.group();
             if (!validField.matcher(fieldName).matches()) {
-                return false;
+                throw new TemplateValidationException("The field " + fieldName + " is not valid");
             }
 
             if (!isRealField(trueFields, fieldName)) {
-                return false;
+                throw new TemplateValidationException("The field " + fieldName + " is not real");
             }
         }
         return true;
