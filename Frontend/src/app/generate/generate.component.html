@@ -13,8 +13,16 @@
       </div>
       <p>Autofill and sign your document with ease using our generation tools.</p>
       <div class="main-content">
+        
         <div class="first-part">
-          aaa
+          <div class="info-panel">
+            <h3>Your Data Profile</h3>
+            <ul>
+              <li>A</li>
+              <li>B</li>
+              <li>C</li>
+            </ul>
+          </div>
         </div>
         <div class="second-part">
           <app-template-selector [schema]="template" (event)="handleGenerateEvent($event)"
@@ -29,20 +37,34 @@
           <h3>Template Details</h3>
           <mat-icon (click)="isModalOpen = false">close</mat-icon>
         </div>
-        <div class="card-body">
-          <h3>Document preview</h3>
-          <div class="detail-card">
-            <p>Document will be generated with you following personal data</p>
-            <div>
-              <p class="field-item" *ngFor="let field of templateFields"><span class="field-label">{{field.name}}:
-                </span> <span>{{field.value}}</span></p>
+        <ng-container *ngIf="modalStage === 'presentation'; then presentation else loading"></ng-container>
+
+        <ng-template #presentation>
+          <div class="card-body">
+            <h3>Document preview</h3>
+            <div class="detail-card">
+              <p>Document will be generated with you following personal data</p>
+              <div>
+                <p class="field-item" *ngFor="let field of templateFields"><span class="field-label">{{field.name}}:
+                  </span> <span>{{field.value}}</span></p>
+              </div>
+            </div>
+            <div class="buttonSection">
+              <button type="submit" (click)="generateDocument()">Generate Document</button>
+              <button type="button" (click)="handleLeave()">Cancel</button>
             </div>
           </div>
-          <div class="buttonSection">
-            <button type="submit" (click)="generateDocument()">Generate Document</button>
-            <button type="button" (click)="handleLeave()">Cancel</button>
+        </ng-template>
+
+        <ng-template #loading>
+          <div class="loading-wrapper">
+            <div class="loading-container">
+              <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
+              <h4>Generating document...</h4>
+              <p>Please wait while we generate your document.</p>
+            </div>
           </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </mat-sidenav-content>

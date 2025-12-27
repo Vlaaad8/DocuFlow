@@ -9,6 +9,7 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 import { Template } from '../model/Template';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-templates',
@@ -25,7 +26,7 @@ export class TemplatesComponent implements OnInit {
   templateCategories!: string[];
   formGroup!: FormGroup
   errorMessage: string | null = null;
-  constructor(private service: TemplateService,private formBuilder: FormBuilder) { }
+  constructor(private service: TemplateService, private formBuilder: FormBuilder,private router: Router) { }
 
   ngOnInit() {
     this.loadTemplates();
@@ -34,9 +35,9 @@ export class TemplatesComponent implements OnInit {
 
   openUploadModal() {
     this.isModalOpen = true
-}
+  }
 
-onDrop($event: DragEvent) {
+  onDrop($event: DragEvent) {
     $event.preventDefault();
     $event.stopPropagation();
     this.isDragOver = false;
@@ -56,7 +57,7 @@ onDrop($event: DragEvent) {
     this.isDragOver = true;
   }
 
-    handleFileSelected($event: Event) {
+  handleFileSelected($event: Event) {
     const input = $event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
@@ -69,7 +70,7 @@ onDrop($event: DragEvent) {
   validateData(): void {
 
     this.service.validateTemplate(this.selectedFile!).subscribe({
-      next: (response : Template) => {
+      next: (response: Template) => {
         this.isTemplateValid = true;
       },
       error: (error) => {
@@ -93,20 +94,25 @@ onDrop($event: DragEvent) {
     });
     this.loadTemplateCategories();
   }
-  handleTemplateEvenet(action: String, template: Template): void{
-    if(action === 'Delete'){
-      console.log("Deleting template: ", template);
-      this.service.deleteTemplate(template.id).subscribe({next: () => {
-        this.templates = this.templates.filter(t => t.id !== template.id);
-      },
-      error: (error) => {
-        console.error('Error deleting template:', error);
-      }});
+  handleTemplateEvenet(action: String, template: Template): void {
+    if (action === 'Delete') {
+      this.service.deleteTemplate(template.id).subscribe({
+        next: () => {
+          this.templates = this.templates.filter(t => t.id !== template.id);
+        },
+        error: (error) => {
+          console.error('Error deleting template:', error);
+        }
+      });
     }
-    else if(action === 'Search'){
+    else if (action === 'Search') {
       console.log("Previewing template: ", template);
     }
-    else{
+    else if (action === 'Edit') {
+      console.log("Editing template: ", template);
+      this.router.navigate(['/template-creator', template.id]);
+    }
+    else {
       console.log("Unknown action: ", action);
     }
   }
@@ -133,17 +139,19 @@ onDrop($event: DragEvent) {
   submitTemplate(): void {
     const formData = this.formGroup.value;
     console.log('Submitting template with data:', formData);
-   this.service.uploadTemplate(this.selectedFile!, formData.name, formData.category, formData.description).subscribe({next: (response) => {
-      this.isModalOpen = false;
-      this.selectedFile = null;
-      this.isTemplateValid = false;
-      this.errorMessage = null;
-      this.loadTemplates();
-    },
-    error: (error) => {
-      this.errorMessage = 'An error occurred while uploading the template. Please try again.';
-      console.error('Error uploading template:', error);
-    }});
+    this.service.uploadTemplate(this.selectedFile!, formData.name, formData.category, formData.description).subscribe({
+      next: (response) => {
+        this.isModalOpen = false;
+        this.selectedFile = null;
+        this.isTemplateValid = false;
+        this.errorMessage = null;
+        this.loadTemplates();
+      },
+      error: (error) => {
+        this.errorMessage = 'An error occurred while uploading the template. Please try again.';
+        console.error('Error uploading template:', error);
+      }
+    });
   }
 
   public handleLeave(): void {

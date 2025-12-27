@@ -1,0 +1,22 @@
+.error{
+    background-color: #ef4444;
+    color: white;
+}
+.error-type{
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+.error-type  > span {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+span mat-icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+span mat-icon:hover {
+    background-color: #d1d5db;
+    
+}

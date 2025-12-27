@@ -10,7 +10,7 @@ import { ExtractedField } from '../model/ExtractedField';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { C } from '@angular/cdk/keycodes';
+
 
 @Component({
   selector: 'app-upload',
@@ -47,7 +47,8 @@ export class UploadComponent implements OnInit {
     fields: this.formBuilder.array([])
   });
 
-  this.buildFormsForFields(this.extractedFields);}
+  this.buildFormsForFields(this.extractedFields);
+}
 
   handleFileSelected($event: Event) {
     const input = $event.target as HTMLInputElement;

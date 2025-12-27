@@ -150,3 +150,45 @@
     .card-body .buttonSection button[type="submit"]:hover {
         background-color: #2563eb;
     }
+      .loading-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-container {
+        padding: 16px 32px;
+        margin: 16px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .loading-container h4 {
+        margin-top: 40px;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 0px;
+    }
+
+    .loading-container p {
+        color: #374151;
+        font-size: 16px;
+        font-weight: 420;
+    }
+    .info-panel {
+    padding: 16px;
+    background: white;
+    border-radius: 13px;
+    max-width: 1200px;
+    min-width: 300px;
+    margin: 16px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+}
+.info-panel h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}

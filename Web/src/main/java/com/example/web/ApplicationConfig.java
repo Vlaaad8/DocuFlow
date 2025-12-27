@@ -1,6 +1,7 @@
 package com.example.web;
 
 import com.example.*;
+import com.example.email.EmailPort;
 import com.example.jpa.*;
 import com.example.ocr.DocumentPort;
 import com.example.ocr.IdPort;
@@ -33,7 +34,7 @@ public class ApplicationConfig {
         return new MappingService(fieldMapperRepository, userRepository, userFieldValueRepository);
     }
     @Bean
-    public GeneratorService generatorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort) {
-        return new GeneratorService(templateRepository,userFieldValueRepository,userRepository,filledTemplateRepository,mappingPort);
+    public GeneratorService generatorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort, EmailPort emailPort) {
+        return new GeneratorService(templateRepository,userFieldValueRepository,userRepository,filledTemplateRepository,mappingPort,emailPort);
     }
 }

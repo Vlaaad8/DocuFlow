@@ -2,8 +2,10 @@ package com.example.web;
 
 
 import com.example.TemplateService;
+import com.example.dto.UpdateRequest;
 import com.example.template.Template;
 import com.example.template.TemplateCategory;
+import com.example.dto.HtmlRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +46,14 @@ public class TemplateController {
                             @RequestParam("description") String description,
                             @RequestParam("category") TemplateCategory category) throws IOException {
         this.templateService.uploadService(file.getInputStream(),name, description, category);
+    }
+    @GetMapping(value = "template/html", produces = "application/json")
+    public HtmlRequest getTemplateHtml(@RequestParam("id") int id) {
+        return this.templateService.getTemplateHTML(id);
+    }
+    @PutMapping(value="template")
+    public void updateTemplate(@RequestBody UpdateRequest updateRequest) {
+        this.templateService.updateTemplate(updateRequest.html(), updateRequest.fileName());
     }
 
 }

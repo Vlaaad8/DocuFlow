@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Template } from '../model/Template';
 
+export interface HtmlRequest {
+  content: string;
+  fileName: string;
+}
 
 const URL = 'http://localhost:8080/template';
 
@@ -35,4 +39,18 @@ export class TemplateService {
   public getTemplateCategories(): Observable<string[]> {
     return this.http.get<string[]>(`${URL}/category`);
   }
+  //TODO to redo
+
+
+public getTemplateHTMLById(templateId: number): Observable<HtmlRequest> {
+  return this.http.get<HtmlRequest>(`${URL}/html`, {
+    params: { id: templateId }
+  });
+}
+
+public editTemplateHTML(htmlContent: string, fileName: string): Observable<void> {
+  return this.http.put<void>(`${URL}`, { html: htmlContent, fileName: fileName });
+
+}
+
 }

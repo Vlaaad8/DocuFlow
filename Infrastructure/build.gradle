@@ -31,11 +31,15 @@ dependencies {
     // https://mvnrepository.com/artifact/org.docx4j/docx4j-core
     implementation("org.docx4j:docx4j-core:11.5.8")
     implementation "org.docx4j:docx4j-export-fo:11.5.8"
-    // JAXB RI (NECESAR pentru docx4j PDF)
     implementation "org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.8"
-
-    // Jakarta JAXB API (Java 21)
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
+    implementation "org.docx4j:docx4j-ImportXHTML-core:11.5.6"
+    implementation "org.jsoup:jsoup:1.17.2"
+// https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api
+    implementation("jakarta.mail:jakarta.mail-api:2.1.5")
+    // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
+    implementation("jakarta.activation:jakarta.activation-api:2.1.4")
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.12") // exemplu
 
 }
 

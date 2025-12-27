@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.converter.Convertors;
+import com.example.dto.HtmlRequest;
 import com.example.exceptions.TemplateValidationException;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
@@ -156,6 +158,30 @@ public class TemplateService {
         List<String> all = new ArrayList<>();
         Arrays.stream(TemplateCategory.values()).map(Enum::name).forEach(all::add);
         return all;
+    }
+
+    public HtmlRequest getTemplateHTML(int id){
+        Template template = this.templateRepository.getReferenceById(id);
+        Path path = Path.of(template.getStoragePath());
+
+        try(InputStream stream = Files.newInputStream(path)){
+                byte[] content = stream.readAllBytes();
+           return new HtmlRequest(Convertors.convertWordToHTML(content),path.toString());
+        }
+         catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateTemplate(String htmlContent,String fileName){
+
+        Path destination = Path.of(fileName);
+        try{
+        Convertors.convertHTMLToWord(htmlContent,destination);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 

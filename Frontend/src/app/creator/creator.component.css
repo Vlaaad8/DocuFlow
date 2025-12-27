@@ -1,11 +1,12 @@
 .sidenav-design {
-      width: 18%;
-      background: #ffffff;
-      border-right: 1px solid #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-    }
+    width: 18%;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+}
+
 .description-section {
     padding: 16px 32px;
 }
@@ -25,4 +26,114 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+}
+
+.editor {
+    padding: 16px 32px;
+    display: flex;
+}
+
+#editor {
+    width: 75%;
+}
+
+.edit-section {
+    width: 25%;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 24px;
+
+}
+
+.edit-section h3 {
+    font-size: 22px;
+    padding-bottom: 8px;
+    font-weight: 600;
+    border-bottom: 1px solid #c5cee0;
+}
+
+.label-display {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #c5cee0;
+}
+
+
+.template-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #374151;
+    border: none;
+    width: 100%;
+}
+
+.template-button {
+    background-color: #e0e7ff;
+}
+
+.loading-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-container {
+    padding: 16px 32px;
+    background-color: #ffffff;
+    border-radius: 14px;
+    min-width: 500px;
+    min-height: 300px;
+    margin: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+}
+
+.loading-container h4 {
+    margin-top: 40px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.loading-container p {
+    color: #374151;
+    font-size: 16px;
+    font-weight: 420;
+}
+
+.info-section h4 {
+    margin-top: 0px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.info-section p {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 420;
+    padding-top: 4px;
+    margin-top: 0px
+}
+
+.icon-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

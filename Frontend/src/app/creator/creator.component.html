@@ -6,20 +6,50 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-   <div class="description-section">
+    <div class="description-section">
       <div class="first-row">
         <h2>Template Creator</h2>
         <app-exit-button></app-exit-button>
       </div>
       <p>Create and customize your document templates here.</p>
     </div>
-<div class="editor">
-  <editor
-    [apiKey]="tinymceApiKey"
-    [init]="tinyInit"
-    [(ngModel)]="content">
-  </editor>
-</div>
 
+    <div class="editor" [style.visibility]="showEditor() ? 'visible' : 'hidden'">
+      <editor [apiKey]="tinymceApiKey" [init]="tinyInit" [(ngModel)]="content" id="editor" />
+      <div class="edit-section">
+        <h3>Creator Panel</h3>
+        <div class="info-section">
+          <div class="icon-title">
+            <mat-icon>touch_app</mat-icon>
+            <h4>Actions</h4>
+          </div>
+          <p>Take different actions regarding editing</p>
+        </div>
+        <div class="button-section">
+          <button type="button" class="template-button" (click)="handleEdit()">Save</button>
+          <button type="button" class="template-button" (click)="handleClear()">Preview</button>
+          <button type="button" class="template-button" (click)="handleClear()">Clear</button>
+        </div>
+        <div class="info-section">
+          <div class="icon-title"><mat-icon>design_services</mat-icon>
+            <h4>Fields</h4>
+          </div>
+          <p>Drag and drop fields to customize your template</p>
+        </div>
+        <div class="label-container">
+          <app-label-display></app-label-display>
+          <app-label-display></app-label-display>
+          <app-label-display></app-label-display>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-wrapper" *ngIf="!showEditor()">
+      <div class="loading-container">
+        <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
+        <h4>Loading editor...</h4>
+        <p>Please wait while we finish loading</p>
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

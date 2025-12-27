@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule]
+  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, MatIcon]
 })
 export class LoginComponent implements OnInit {
 

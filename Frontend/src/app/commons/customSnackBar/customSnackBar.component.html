@@ -1,0 +1,25 @@
+<ng-container *ngIf="data.type != 'error'; then confirm else error"></ng-container>
+
+<ng-template #error>
+  <div class="error-type">
+  <span>
+    <mat-icon>error</mat-icon>
+    {{data.message}}
+  </span>
+  <span matSnackBarAction>
+     <mat-icon (click)="onClose()">close_small</mat-icon>
+  </span>
+  </div>
+</ng-template>
+
+<ng-template #confirm>
+<div class="error-type">
+  <span>
+    <mat-icon>done_outline</mat-icon>
+    {{data.message}}
+  </span>
+  <span >
+     <mat-icon (click)="onClose()">close_small</mat-icon>
+  </span>
+  </div>
+</ng-template>

@@ -117,7 +117,8 @@
 }
 
 .preview-option:hover {
-    background: #f3f4f6;
+    background-color: #e0e7ff;
+    border-color: #c7d2fe;
 }
 
 .button-section .delete:hover {

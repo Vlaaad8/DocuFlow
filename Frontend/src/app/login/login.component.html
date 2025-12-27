@@ -12,11 +12,21 @@
       <form [formGroup]="formGroup" (ngSubmit)="onSignUp()">
         <div class="input-design">
           <label>Username or Email</label>
-          <input type="text" placeholder="name@docuflow.ro" formControlName="username">
+          <div class="input-wrapper">
+            <input type="text" placeholder="name@docuflow.ro" formControlName="username">
+            <div class="icon-design">
+              <mat-icon>email</mat-icon>
+            </div>
+          </div>
         </div>
         <div class="input-design">
           <label>Password</label>
-          <input type="password" formControlName="password">
+          <div class="input-wrapper">
+            <input type="password" formControlName="password">
+            <div class="icon-design">
+              <mat-icon>lock</mat-icon>
+            </div>
+          </div>
         </div>
 
         <button class="logButton">Sign in</button>

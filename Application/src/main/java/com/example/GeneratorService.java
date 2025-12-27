@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.dto.FieldValueDTO;
 import com.example.dto.GeneratorTemplateDTO;
+import com.example.email.EmailPort;
 import com.example.jpa.FilledTemplateRepository;
 import com.example.jpa.TemplateRepository;
 import com.example.jpa.UserFieldValueRepository;
@@ -30,13 +31,15 @@ public class GeneratorService {
 
     private final Path rootFolder = Paths.get("storage/generated");
     private final MappingPort mappingPort;
+    private final EmailPort emailPort;
 
-    public GeneratorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort) {
+    public GeneratorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort,EmailPort emailPort) {
         this.templateRepository = templateRepository;
         this.userFieldValueRepository = userFieldValueRepository;
         this.userRepository = userRepository;
         this.filledTemplateRepository = filledTemplateRepository;
         this.mappingPort = mappingPort;
+        this.emailPort = emailPort;
     }
 
     public void generateFile(int templateID, int userID) {
@@ -63,6 +66,7 @@ public class GeneratorService {
             User user = this.userRepository.getReferenceById(userID);
             FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
             filledTemplateRepository.save(filledTemplate);
+            this.emailPort.sendEmail(destination.toString(),user.getEmail(),user.getFirstName(),user.getLastName());
 
         } catch (IOException e) {
             e.printStackTrace();

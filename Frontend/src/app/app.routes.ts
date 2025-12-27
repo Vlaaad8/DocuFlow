@@ -25,5 +25,9 @@ export const routes: Routes = [{
 },
 {
   path: 'template-creator', component: CreatorComponent
+},
+{
+  path: 'template-creator/:id',
+  component: CreatorComponent
 }
    ];

@@ -1,0 +1,38 @@
+.label-container {
+    display: flex;
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.icon-container {
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.label-details {
+    margin-left: 12px;
+}
+
+.label-details h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.label-details p {
+    margin: 4px 0 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.label-container:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

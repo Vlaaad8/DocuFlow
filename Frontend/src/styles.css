@@ -42,3 +42,22 @@ a {
   flex-direction: column;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
+
+
+.success-snackbar, .error-snackbar {
+  .mdc-snackbar__surface {
+    background-color: var(--snack-bg) !important;
+    padding: 0 !important; 
+    border-radius: 8px !important;
+  }
+}
+
+.success-snackbar {
+  --snack-bg: #22c55e;
+  --snack-text: #ffffff;
+}
+
+.error-snackbar {
+  --snack-bg: #ef4444;
+  --snack-text: #ffffff;
+}

@@ -10,20 +10,23 @@ import { GenerateService } from '../services/generate.service';
 import { Field } from '../model/Field';
 import { FieldTemplate } from '../model/FieldTemplate';
 import { Template } from '../model/Template';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { SnackBarService } from '../services/snackBar.service';
 
 @Component({
   selector: 'app-generate',
   templateUrl: './generate.component.html',
   styleUrls: ['./generate.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, TemplateSelectorComponent, CommonModule, MatIconModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, TemplateSelectorComponent, CommonModule, MatIconModule, MatProgressSpinner]
 })
 export class GenerateComponent implements OnInit {
   isModalOpen: boolean = false;
   templates: GenerateTemplate[] = [];
   templateFields: FieldTemplate[] = [];
   selectedTemplateId: number | null = null;
+  modalStage : string  = 'presentation'; // presentation | loading 
 
-  constructor(private service: GenerateService) { }
+  constructor(private service: GenerateService,private snackBar: SnackBarService) { }
 
   ngOnInit() {
     this.loadTemplates();
@@ -71,14 +74,27 @@ export class GenerateComponent implements OnInit {
     console.log("Generating document with fields:", this.templateFields);
      const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     const userID = user.id;
+    this.modalStage = 'loading';
     this.service.generateDocument(this.selectedTemplateId!,userID).subscribe({
       next: () => {
         this.templateFields = [];
         this.isModalOpen = false;
         this.selectedTemplateId = null;
+        this.isModalOpen = false;
+        this.modalStage = 'presentation';
+        this.snackBar.showMessage("Document generated successfully!", "success");
         
       },
-      error: (error) => console.error("Error generating document:", error)
+      error: (error) => {console.error("Error generating document:", error)
+      this.snackBar.showMessage("Error generating document. Please try again.", "error");
+      this.templateFields = [];
+        this.isModalOpen = false;
+        this.selectedTemplateId = null;
+        this.isModalOpen = false;
+        this.modalStage = 'presentation';
+
+      }
+      
     });
   }
 

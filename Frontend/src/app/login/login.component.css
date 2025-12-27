@@ -1,5 +1,5 @@
 .logo-part {
-    width: 30%;
+    width: 60%;
     background-color: #3b82f6;
     box-shadow: 0 0 12px #3b82f6;
     height: 100vh;
@@ -110,4 +110,35 @@
 #signUp {
     color: #3b82f6;
     font-weight: 600;
+}
+.input-wrapper {
+    display: flex;
+    align-items:stretch;    
+}
+
+.input-design input, .input-design input:active,.input-design input:hover{
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.icon-design{
+    padding: 8px;
+    border-radius: 7px;
+    border: 2px solid #d1d5dbdc;
+        color: #374151;
+}
+.icon-design, .icon-design:active,.icon-design:hover{
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    height: auto;
+
+}
+.input-design input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+.input-design input:focus ~ .icon-design {
+    outline: none;
+    border-color: #3b82f6;
 }

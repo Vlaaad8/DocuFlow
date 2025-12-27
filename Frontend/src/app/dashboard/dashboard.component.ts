@@ -4,12 +4,13 @@ import { MatNavList } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule, MatToolbar } from '@angular/material/toolbar';
 import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
+import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent]
+  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent]
 })
 export class DashboardComponent implements OnInit {
   
