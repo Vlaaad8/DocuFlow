@@ -17,6 +17,7 @@
 
 .label-details {
     margin-left: 12px;
+    width: 100%;
 }
 
 .label-details h4 {
@@ -35,4 +36,16 @@
     border-color: #3b82f6;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.title p {
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 22px;
 }

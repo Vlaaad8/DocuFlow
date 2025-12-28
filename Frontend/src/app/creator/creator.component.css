@@ -6,7 +6,10 @@
     flex-direction: column;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
-
+mat-sidenav{
+    margin-right: 0px!important;
+    padding-right: 0px!important;
+}
 .description-section {
     padding: 16px 32px;
 }
@@ -43,6 +46,8 @@
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 12px 24px;
+    height: 600px;
+     overflow-y: auto;
 
 }
 
@@ -136,4 +141,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+.label-container{
+    cursor: grab;
 }

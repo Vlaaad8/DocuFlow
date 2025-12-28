@@ -32,11 +32,12 @@
     }
 
     .first-part {
-        width: 50%;
+        width: 20%;
     }
 
     .second-part {
-        width: 50%;
+        width: 80%;
+            flex-wrap: wrap;
     }
 
     .confirm-zone {
@@ -150,7 +151,8 @@
     .card-body .buttonSection button[type="submit"]:hover {
         background-color: #2563eb;
     }
-      .loading-wrapper {
+
+    .loading-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -178,17 +180,21 @@
         font-size: 16px;
         font-weight: 420;
     }
+
     .info-panel {
-    padding: 16px;
-    background: white;
-    border-radius: 13px;
-    max-width: 1200px;
-    min-width: 300px;
-    margin: 16px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
-}
-.info-panel h3 {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
+        padding: 16px;
+        background: white;
+        border-radius: 13px;
+        margin: 16px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
+    }
+
+    .info-panel h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .second-part app-template-selector {
+        flex: 1 1 0;
+    }

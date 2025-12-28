@@ -37,9 +37,7 @@
           <p>Drag and drop fields to customize your template</p>
         </div>
         <div class="label-container">
-          <app-label-display></app-label-display>
-          <app-label-display></app-label-display>
-          <app-label-display></app-label-display>
+          <app-label-display *ngFor="let field of fields" [field]="field" (dragStarted)="handleDrag($event)"></app-label-display>
         </div>
       </div>
     </div>

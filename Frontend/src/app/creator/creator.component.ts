@@ -9,10 +9,12 @@ import { TemplateService } from '../services/template.service';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { CommonModule } from '@angular/common';
 import { SnackBarService } from '../services/snackBar.service';
-import { MatChip, MatChipsModule } from "@angular/material/chips";
-import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
+import { MatChipsModule } from "@angular/material/chips";
+import { MatExpansionModule } from '@angular/material/expansion';
 import { LabelDisplayComponent } from "../commons/label-display/label-display.component";
 import { MatIconModule } from "@angular/material/icon";
+import { CreatorService } from '../services/creator.service';
+import { Field } from '../model/Field';
 
 
 const defaultContent = '<p>Create your template…</p>';
@@ -20,10 +22,10 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, MatProgressSpinner, CommonModule, MatChipsModule, MatAccordion, MatExpansionModule, LabelDisplayComponent, MatIconModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, MatProgressSpinner, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule]
 })
 export class CreatorComponent implements OnInit {
-@ViewChild(EditorComponent) editorComp?: EditorComponent;
+  @ViewChild(EditorComponent) editorComp?: EditorComponent;
   public tinymceApiKey = 'ahh7gcufunnecgtf6i7axfxi4w4l5i9x02pq73y13qi80z0e';
 
   private path: string | null = null;
@@ -31,6 +33,10 @@ export class CreatorComponent implements OnInit {
 
   public isEditorReady = false;
   private id: string | null = null;
+
+  public fields: Field[] = [];
+
+  public draggedContent: string = '';
 
   tinyInit = {
     height: 600,
@@ -44,15 +50,22 @@ export class CreatorComponent implements OnInit {
       editor.on('init', () => {
 
         this.isEditorReady = true;
+
+        editor.on('dragover', (e: any) => {
+          e.preventDefault();
+          console.log('Dropped content:');
+        });
+        
         console.log('Editor is ready');
         if (this.content != defaultContent)
           editor.setContent(this.content);
-      })
+      });
+
     }
   }
 
 
-  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService) { }
+  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -66,10 +79,20 @@ export class CreatorComponent implements OnInit {
           console.error('Error fetching template HTML:', error);
         }
       });
-
     }
+    this.serviceCreator.getFields().subscribe({
+      next: (fields) => {
+        this.fields = fields;
+        console.log('Fields fetched:', this.fields);
+      },
+      error: (error) => {
+        console.error('Error fetching fields:', error);
+      }
+    });
+
 
   }
+
   handleEdit(): void {
     this.service.editTemplateHTML(this.content, this.path!).subscribe({
       next: () => {
@@ -83,15 +106,19 @@ export class CreatorComponent implements OnInit {
 
   showEditor(): boolean {
     if (this.id == null) {
-      return this.isEditorReady;
+      return this.isEditorReady && (this.fields.length > 0);
     }
     else {
-      return this.isEditorReady && (this.content != defaultContent);
+      return this.isEditorReady && ((this.content != defaultContent) && (this.fields.length > 0));
     }
   }
   handleClear(): void {
     this.snackBar.showMessage('Clearing the editor will remove all unsaved changes. Are you sure?', 'success');
-  const html = this.editorComp?.editor?.getContent({ format: 'html' });
-  console.log(html);
+    const html = this.editorComp?.editor?.getContent({ format: 'html' });
+    console.log(html);
+  }
+
+  handleDrag(representation: string): void {
+    this.draggedContent = representation
   }
 }

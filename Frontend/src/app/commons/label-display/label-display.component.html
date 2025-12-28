@@ -1,9 +1,12 @@
-<div class="label-container" cdkDrag>
+<div class="label-container" draggable="true" (dragstart)="handleDrag($event)">
   <div class="icon-container">
-  <mat-icon>text_fields</mat-icon>
-  </div>  
+    <mat-icon>text_fields</mat-icon>
+  </div>
   <div class="label-details">
-    <h4>Label</h4>
-    <p >asasa</p>
+    <div class="title">
+      <h4>{{field.fieldName}}</h4>
+      <p *ngIf="field.required">*</p>
+    </div>
+    <p>{{field.representation}}</p>
   </div>
 </div>
