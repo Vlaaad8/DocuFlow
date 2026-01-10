@@ -10,6 +10,7 @@ import { ExtractedField } from '../model/ExtractedField';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SnackBarService } from '../services/snackBar.service';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class UploadComponent implements OnInit {
   currentStage: String = 'upload'; // upload, processing, results
   errorMessage: string | null = null;
   formGroup!: FormGroup;
-  constructor(private service: UploadService, private formBuilder: FormBuilder) { }
+  constructor(private service: UploadService, private formBuilder: FormBuilder,private snackBar: SnackBarService) { }
 
   get inputFormFields(): FormArray<FormGroup> {
     return this.formGroup.get('fields') as FormArray;
@@ -88,6 +89,7 @@ export class UploadComponent implements OnInit {
       this.currentStage = 'processing';
       this.service.extractData(this.selectedFile, this.selectedCategory).subscribe({
         next: (data: ExtractedField[]) => {
+          console.log(data);
           this.extractedFields = data;
           this.buildFormsForFields(this.extractedFields);
           this.currentStage = 'results';
@@ -112,15 +114,22 @@ export class UploadComponent implements OnInit {
     }
   }
   public handleBack(): void {
-    this.currentStage = 'upload';
-    this.selectedFile = null;
-    this.selectedCategory = null;
-    this.extractedFields = [];
+    this.clear();
   }
 
   public onSaveData(): void {
     const extractedData : ExtractedField[] = this.inputFormFields.value;
     console.log('Saved extracted data:', extractedData);
     this.service.saveExtractedData(extractedData);
+    this.snackBar.showMessage("Extracted data saved successfully!", "success");
+    this.clear();
+  }
+
+  public clear(): void {
+    this.errorMessage = null;
+    this.selectedFile = null;
+    this.selectedCategory = null;
+    this.extractedFields = [];
+    this.currentStage = 'upload';
   }
 }

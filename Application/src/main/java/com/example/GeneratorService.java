@@ -9,6 +9,7 @@ import com.example.jpa.UserFieldValueRepository;
 import com.example.jpa.UserRepository;
 import com.example.login.User;
 import com.example.ocr.MappingPort;
+import com.example.security.SignaturePort;
 import com.example.template.Field;
 import com.example.template.FilledTemplate;
 import com.example.template.Template;
@@ -32,14 +33,16 @@ public class GeneratorService {
     private final Path rootFolder = Paths.get("storage/generated");
     private final MappingPort mappingPort;
     private final EmailPort emailPort;
+    private final SignaturePort signaturePort;
 
-    public GeneratorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort,EmailPort emailPort) {
+    public GeneratorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort,EmailPort emailPort,SignaturePort signaturePort) {
         this.templateRepository = templateRepository;
         this.userFieldValueRepository = userFieldValueRepository;
         this.userRepository = userRepository;
         this.filledTemplateRepository = filledTemplateRepository;
         this.mappingPort = mappingPort;
         this.emailPort = emailPort;
+        this.signaturePort = signaturePort;
     }
 
     public void generateFile(int templateID, int userID) {
@@ -67,7 +70,7 @@ public class GeneratorService {
             FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
             filledTemplateRepository.save(filledTemplate);
             this.emailPort.sendEmail(destination.toString(),user.getEmail(),user.getFirstName(),user.getLastName());
-
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_7.p12","parola",destination.toString(),destination.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

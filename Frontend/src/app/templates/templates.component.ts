@@ -61,6 +61,7 @@ export class TemplatesComponent implements OnInit {
     const input = $event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.errorMessage = null;
       this.validateData();
     } else {
       this.selectedFile = null;

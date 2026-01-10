@@ -1,15 +1,12 @@
-
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
 }
 
 body {
@@ -20,4 +17,30 @@ body {
   font: var(--mat-sys-body-medium);
 
   margin: 0;
+}
+
+:root {
+  @include mat.tabs-overrides((active-indicator-color: #3b82f6,
+      active-hover-indicator-color: #3b82f6,
+      active-focus-indicator-color: #3b82f6,
+
+
+      active-indicator-height: 3px,
+
+      // label
+      active-label-text-color: #111827,
+      inactive-label-text-color: #6b7280,
+
+      // container / header
+
+      background-color: #ffffff,
+      foreground-color: #ffffff,
+      label-text-size: 16px,
+      label-text-font:500));
+
+  @include mat.progress-bar-overrides((active-indicator-color: #3b82f6,
+      track-color: #e0e0e0,
+      track-height: 12px,
+      active-indicator-height: 9px
+    ));
 }

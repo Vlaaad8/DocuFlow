@@ -109,7 +109,7 @@ export class CreatorComponent implements OnInit {
       return this.isEditorReady && (this.fields.length > 0);
     }
     else {
-      return this.isEditorReady && ((this.content != defaultContent) && (this.fields.length > 0));
+      return this.isEditorReady && ((this.content != "<p>Create your template&hellip;</p>") && (this.fields.length > 0));
     }
   }
   handleClear(): void {

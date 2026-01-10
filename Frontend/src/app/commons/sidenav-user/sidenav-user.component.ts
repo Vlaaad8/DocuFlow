@@ -41,5 +41,8 @@ export class SidenavUserComponent implements OnInit {
   handleTemplateCreator() : void {
       this.router.navigate(['template-creator']);
   }
+  handleProfile() : void {
+      this.router.navigate(['profile']);
+  }
 
 }

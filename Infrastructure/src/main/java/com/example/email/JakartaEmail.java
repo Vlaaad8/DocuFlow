@@ -36,10 +36,11 @@ public class JakartaEmail implements EmailPort {
             }
         });
         try {
+
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("no-reply@docuflow.social"));
             message.setRecipients(
-                    Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@yahoo.com"));
+                    Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@stud.ubbcluj.ro"));
             message.setSubject("Document Generation");
 
             String msg = "<p class=\"isSelectedEnd\">Dear " + firstName + " " + lastName + ",</p>\n" +

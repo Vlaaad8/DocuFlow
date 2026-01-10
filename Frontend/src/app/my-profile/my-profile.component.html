@@ -1,0 +1,103 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav-design">
+    <app-sidenav-user></app-sidenav-user>
+
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="description-section">
+      <div class="first-row">
+        <h2>Profile</h2>
+        <app-exit-button></app-exit-button>
+      </div>
+      <p>Manage your profile information and settings here</p>
+    </div>
+    <mat-tab-group class="tab-section">
+      <mat-tab label="Digital Signature">
+        <div class="tab-content">
+          <div class="card">
+            <div class="first">
+              <div class="card-info">
+                <mat-icon>fingerprint</mat-icon>
+                <div class="text-section">
+                  <div class="title-section">
+                    <h4>Qualified Electronic Signature</h4>
+                    <p>Powered by DSS European Commission</p>
+                  </div>
+                  <div class="status-section">
+                    {{certificate?.ou}}
+                  </div>
+                </div>
+              </div>
+              <div class=card-content>
+                <div class="info-section">
+                  <h5>Certificate Holder</h5>
+                  <p>{{certificate?.cn}}</p>
+                </div>
+                <div class="info-section">
+                  <h5>Issued By</h5>
+                  <p>{{certificate?.issuer}}</p>
+                </div>
+                <div class="info-section">
+                  <h5>Issuer City</h5>
+                  <p>{{certificate?.city}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="second-section">
+              <div class="time-section">
+                <div class="header">
+                  <p>Certificate Validity Timeline</p>
+                  <p style="color: #3b82f6;">{{certificate?.daysLeft}} days remaining</p>
+                </div>
+                <mat-progress-bar mode="determinate" [value]="determineProcent()"></mat-progress-bar>
+              </div>
+              <div class="card-content">
+                <div class="info-section dates-section">
+                  <div>
+                    <h5>Valid From</h5>
+                    <p>{{certificate?.validFrom}}</p>
+                  </div>
+                  <div>
+                    <h5>Valid To</h5>
+                    <p>{{certificate?.validTo}}</p>
+                  </div>
+                </div>
+                <div class="info-section">
+                  <h5>Email</h5>
+                  <p>{{certificate?.email}}</p>
+                </div>
+                        <div class="info-section">
+                  <h5>Serial Number</h5>
+                  <p>{{certificate?.serialHex}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Personal Information">
+        <div class="tab-content">
+            <div class="card">
+              <div class="info-section">
+                <h4>First Name</h4>
+                <p>{{user?.firstName}}</p>
+              </div>
+              <div class="info-section">
+                <h4>Last Name</h4>
+                <p>{{user?.lastName}}</p>
+              </div>
+              <div class="info-section">
+                <h4>Email Address</h4>
+                <p>{{user?.email}}</p>
+              </div>
+
+            </div>
+        </div>
+      </mat-tab>
+
+
+    </mat-tab-group>
+  </mat-sidenav-content>
+</mat-sidenav-container>

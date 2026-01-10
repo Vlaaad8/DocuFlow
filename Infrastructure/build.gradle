@@ -20,8 +20,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter:3.2.5'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.2.5'
     // https://mvnrepository.com/artifact/org.apache.tika/tika-core
-    implementation("org.apache.tika:tika-core:3.2.3")
-    implementation("org.apache.tika:tika-parsers-standard-package:3.2.3")
+    //implementation("org.apache.tika:tika-core:3.2.3")
+    //implementation("org.apache.tika:tika-parsers-standard-package:3.2.3")
+    implementation("org.apache.tika:tika-core:2.9.2")
+    implementation("org.apache.tika:tika-parsers-standard-package:2.9.2")
 // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.8")
     // https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad
@@ -29,20 +31,61 @@ dependencies {
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation("com.itextpdf:itextpdf:5.5.13.4")
     // https://mvnrepository.com/artifact/org.docx4j/docx4j-core
-    implementation("org.docx4j:docx4j-core:11.5.8")
-    implementation "org.docx4j:docx4j-export-fo:11.5.8"
-    implementation "org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.8"
+    implementation("org.docx4j:docx4j-core:11.5.8") {
+        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
+        exclude group: "org.apache.pdfbox", module: "pdfbox"
+        exclude group: "org.apache.pdfbox", module: "fontbox"
+    }
+    implementation("org.docx4j:docx4j-export-fo:11.5.8") {
+        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
+        exclude group: "org.apache.pdfbox", module: "pdfbox"
+        exclude group: "org.apache.pdfbox", module: "fontbox"
+    }
+    implementation("org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.8") {
+        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
+        exclude group: "org.apache.pdfbox", module: "pdfbox"
+        exclude group: "org.apache.pdfbox", module: "fontbox"
+    }
+    implementation("org.docx4j:docx4j-ImportXHTML-core:11.5.6") {
+        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
+        exclude group: "org.apache.pdfbox", module: "pdfbox"
+        exclude group: "org.apache.pdfbox", module: "fontbox"
+        exclude group: "io.github.openhtmltopdf", module: "openhtmltopdf-pdfbox"
+        exclude group: "com.openhtmltopdf", module: "openhtmltopdf-pdfbox"
+    }
+    implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10")
+    implementation("com.openhtmltopdf:openhtmltopdf-core:1.0.10")
+
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
-    implementation "org.docx4j:docx4j-ImportXHTML-core:11.5.6"
+    implementation("org.docx4j:docx4j-ImportXHTML-core:11.5.6") {
+        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
+        exclude group: "org.apache.pdfbox", module: "xmpbox"
+    }
+
     implementation "org.jsoup:jsoup:1.17.2"
 // https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api
     implementation("jakarta.mail:jakarta.mail-api:2.1.5")
     // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
     implementation("jakarta.activation:jakarta.activation-api:2.1.4")
-    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.12") // exemplu
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.12")
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    implementation("org.bouncycastle:bcprov-jdk18on:1.83")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
+    implementation 'eu.europa.ec.joinup.sd-dss:dss-pades-pdfbox:6.1'
+    implementation 'eu.europa.ec.joinup.sd-dss:dss-token:6.1'
+    implementation 'eu.europa.ec.joinup.sd-dss:dss-service:6.1'
+// https://mvnrepository.com/artifact/eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons
+    implementation("eu.europa.ec.joinup.sd-dss:dss-utils-apache-commons:6.1")
 
 }
 
 test {
     useJUnitPlatform()
+}
+configurations.configureEach {
+    resolutionStrategy {
+        force "org.apache.pdfbox:pdfbox:2.0.30"
+        force "org.apache.pdfbox:fontbox:2.0.30"
+        force "org.apache.pdfbox:xmpbox:2.0.30"
+    }
 }

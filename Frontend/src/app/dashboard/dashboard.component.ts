@@ -5,6 +5,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule, MatToolbar } from '@angular/material/toolbar';
 import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
+import { DashboardService } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,10 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 })
 export class DashboardComponent implements OnInit {
   
-  constructor() { }
+  constructor(private service: DashboardService) {
+
+    
+   }
 
   ngOnInit() {
   }

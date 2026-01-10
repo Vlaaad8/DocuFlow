@@ -18,7 +18,8 @@
     </div>
 
     <div *ngIf="isModalOpen" class="modal-open">
-      <ng-container *ngIf="selectedFile!=null && isTemplateValid; then templateDetails ; else uploadFile"></ng-container>
+      <ng-container
+        *ngIf="selectedFile!=null && isTemplateValid; then templateDetails ; else uploadFile"></ng-container>
 
       <ng-template #uploadFile>
         <div class="upload-card">
@@ -34,8 +35,8 @@
             </div>
           </div>
 
-          <div class="upload-body">
-            <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
+          <div class="upload-body" >
+            <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()" *ngIf="selectedFile==null"
               (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
               <div class="drop-zone">
                 <mat-icon class="upload-icon">backup</mat-icon>
@@ -45,6 +46,14 @@
               <input #fileInput type="file" accept=".pdf,.doc,.docx,.txt" (change)="handleFileSelected($event)"
                 style="visibility: hidden;">
             </div>
+             <div >
+        <div class="loading-zone" *ngIf="selectedFile!=null">
+          <mat-spinner diameter="80" strokeWidth="8" class="custom-spinner"></mat-spinner>
+          <h4>Validating template...</h4>
+          <p>Please wait while we process your request</p>
+        </div>
+      </div>
+            
             <div class="info">
               Template Requirements:
               <ul>
@@ -54,6 +63,7 @@
               </ul>
             </div>
           </div>
+
         </div>
       </ng-template>
 
@@ -63,11 +73,11 @@
             <h3>Template Details</h3>
             <mat-icon (click)="isModalOpen = false">close</mat-icon>
           </div>
-          <div class="form-zone" >
+          <div class="form-zone">
             <form [formGroup]="formGroup" (ngSubmit)="submitTemplate()">
               <div class="input-design">
                 <label>Template Name</label>
-                <input type="text" formControlName="name"/>
+                <input type="text" formControlName="name" />
               </div>
               <div class="input-design">
                 <label>Description</label>
@@ -92,7 +102,7 @@
     <ng-template #showTemplates>
       <div class="displayTemplates">
         <app-template-container *ngFor="let template of templates" [template]="template"
-          (event)="handleTemplateEvenet($event,template)"class="templateCard"> </app-template-container>
+          (event)="handleTemplateEvenet($event,template)" class="templateCard"> </app-template-container>
       </div>
     </ng-template>
     <ng-template #loadingScreen>

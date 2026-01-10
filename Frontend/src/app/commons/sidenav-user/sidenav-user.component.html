@@ -20,7 +20,7 @@
   </div>
 
   <div class="user-section">
-    <div class="user-card">
+    <div class="user-card" (click)="handleProfile()">
       <img [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.firstName + user.lastName"
         [alt]="user.firstName" class="user-avatar" />
       <div class="user-specs">

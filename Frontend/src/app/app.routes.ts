@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { TemplatesComponent } from './templates/templates.component';
 import { GenerateComponent } from './generate/generate.component';
 import { CreatorComponent } from './creator/creator.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 export const routes: Routes = [{
   path: 'dashboard',component: DashboardComponent,
@@ -29,5 +30,8 @@ export const routes: Routes = [{
 {
   path: 'template-creator/:id',
   component: CreatorComponent
+},
+{
+  path: 'profile', component:MyProfileComponent
 }
    ];

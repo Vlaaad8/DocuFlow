@@ -49,7 +49,7 @@ public class AzureIDAdapter implements IdPort {
             for (AnalyzedDocument doc : result.getDocuments()) {
 
                 Map<String, DocumentField> fields = doc.getFields();
-
+                //TODO DocumentNumber is not processed ok
                 fields.forEach((key, field) -> {
                     String value = null;
                     if (field.getType() == STRING) {
@@ -60,7 +60,10 @@ public class AzureIDAdapter implements IdPort {
                         value = field.getValueDate().toString();
                     } else if (field.getType() == ADDRESS) {
                         //TODO split into sections and to make it work as a whole - temp disabled
-                        //value = String.valueOf(field.getValueAddress());
+                        AddressValue address = field.getValueAddress();
+                        if(address.getCity() != null){
+
+                        }
                     }
                     //TODO MachineReadableZone - very important , can double check data and provides me with relevant information
                     if (value != null) {
