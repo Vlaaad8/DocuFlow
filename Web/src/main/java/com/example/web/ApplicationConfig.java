@@ -41,7 +41,8 @@ public class ApplicationConfig {
     public GeneratorService generatorService(TemplateRepository templateRepository, UserFieldValueRepository userFieldValueRepository, UserRepository userRepository, FilledTemplateRepository filledTemplateRepository, MappingPort mappingPort, EmailPort emailPort, SignaturePort signaturePort) {
         return new GeneratorService(templateRepository,userFieldValueRepository,userRepository,filledTemplateRepository,mappingPort,emailPort,signaturePort);
     }
-    @Bean UserService userService(UserRepository userRepository, CertificatePort certificatePort) {
+    @Bean
+    UserService userService(UserRepository userRepository, CertificatePort certificatePort) {
         return new UserService(userRepository, certificatePort);
     }
     @Bean

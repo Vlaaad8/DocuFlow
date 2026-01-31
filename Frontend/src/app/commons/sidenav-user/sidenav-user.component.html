@@ -18,6 +18,9 @@
   <div [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplateCreator()">
     <mat-icon class="icon-design">create</mat-icon>Template Creator
   </div>
+    <div [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleHumanResource()">
+    <mat-icon class="icon-design">person_3</mat-icon>Human Resource
+  </div>
 
   <div class="user-section">
     <div class="user-card" (click)="handleProfile()">

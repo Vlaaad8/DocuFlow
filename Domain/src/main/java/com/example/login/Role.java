@@ -1,5 +1,14 @@
 package com.example.login;
 
 public enum Role {
-    Employee, Manager
+    Employee,
+    Manager,
+    Financial,
+    Law,
+    HumanResources,
+    IT,
+    CEO,
+    Marketing,
+    Sales,
+    Support
 }

@@ -1,0 +1,25 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav-design">
+    <app-sidenav-user [selectedHumanResourceTab]="true"></app-sidenav-user>
+
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="description-section">
+      <div class="first-row">
+        <h2>Human Resource</h2>
+        <app-exit-button></app-exit-button>
+      </div>
+      <p>Manage the organization's employees and related resources here.</p>
+    </div>
+    <div class="content">
+      <div class="network-container">
+      <div #network></div>
+      </div>
+      <div class="info-container">
+        aaa
+        </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

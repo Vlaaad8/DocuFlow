@@ -31,8 +31,11 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@tinymce/tinymce-angular": "^9.1.1",
+    "d3": "^7.9.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "vis-data": "^8.0.3",
+    "vis-network": "^10.0.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
