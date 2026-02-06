@@ -8,6 +8,9 @@
     font-size: 14px;
     cursor: pointer;
 }
+
 .exitButton:hover {
     background: #fecaca;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
 }

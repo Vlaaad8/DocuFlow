@@ -44,6 +44,8 @@
 
 .upload-button:hover {
     background-color: #2563eb;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
 }
 
 .modal-open {
@@ -165,7 +167,7 @@
 
 .buttonSection {
     display: flex;
-    gap: 10px;
+    gap: 25px;
 }
 
 .exitButton {
@@ -298,17 +300,20 @@
     color: #374151;
     border: none;
 }
+
 .upload-card .buttonSection button[type="submit"] {
     background-color: #3b82f6;
     color: white;
 }
-textarea{
-    resize:none
+
+textarea {
+    resize: none
 }
-.loading-zone{
+
+.loading-zone {
 
 
-        padding: 16px 32px;
+    padding: 16px 32px;
     background-color: #ffffff;
     border-radius: 14px;
 
@@ -319,6 +324,7 @@ textarea{
     flex-direction: column;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.09);
 }
+
 .loading-zone h4 {
     margin-top: 40px;
     font-size: 22px;

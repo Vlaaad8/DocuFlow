@@ -4,9 +4,7 @@ import com.example.HumanResourcesService;
 import com.example.login.Relation;
 import com.example.login.User;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +24,9 @@ public class HumanResourcesController {
     @GetMapping("hr/relations")
     public List<Relation> getAllRelations() {
         return humanResourcesService.getAllRelations();
+    }
+    @PostMapping("hr/relation")
+    public void saveRelation(@RequestParam("bossID") int bossID, @RequestParam("subordinateID") int subordinateID) {
+        humanResourcesService.saveRelation(bossID, subordinateID);
     }
 }

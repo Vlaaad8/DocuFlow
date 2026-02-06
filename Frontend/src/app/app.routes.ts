@@ -7,6 +7,7 @@ import { GenerateComponent } from './generate/generate.component';
 import { CreatorComponent } from './creator/creator.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { HumanResourceComponent } from './humanResource/humanResource.component';
+import { ApprovalFlowComponent } from './approvalFlow/approvalFlow.component';
 
 export const routes: Routes = [{
   path: 'dashboard',component: DashboardComponent,
@@ -36,5 +37,6 @@ export const routes: Routes = [{
   path: 'profile', component:MyProfileComponent
 }
 ,
-{path: 'human-resource', component:HumanResourceComponent}
+{path: 'human-resource', component:HumanResourceComponent},
+{path: 'approval-flows',component:ApprovalFlowComponent}
    ];

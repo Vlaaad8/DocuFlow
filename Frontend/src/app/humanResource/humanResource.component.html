@@ -9,17 +9,58 @@
     <div class="description-section">
       <div class="first-row">
         <h2>Human Resource</h2>
-        <app-exit-button></app-exit-button>
+        <div class="buttonSection">
+          <button class="upload-button"><mat-icon>add</mat-icon>Register User</button>
+          <app-exit-button></app-exit-button>
+        </div>
       </div>
       <p>Manage the organization's employees and related resources here.</p>
     </div>
     <div class="content">
       <div class="network-container">
-      <div #network></div>
+        <div #network></div>
       </div>
       <div class="info-container">
-        aaa
+        <div class="edit-section">
+          <h3>Resource Panel</h3>
+          <div class="info-section">
+            <div class="icon-title"><mat-icon>design_services</mat-icon>
+              <h4>Actions</h4>
+            </div>
+            <p>Add or remove connections between employees in the network graph.</p>
+            <div class="button-section">
+              <button type="button" [ngClass]="{'template-button': true, 'active': addEdgeMode}"
+                (click)="toggleAddEdge()">Add Edge</button>
+              <button type="button" [ngClass]="{'template-button': true, 'active': removeEdgeMode}"
+                (click)="toggleRemoveEdge()">Remove Edge</button>
+            </div>
+          </div>
+          <div class="info-section">
+            <div class="icon-title">
+              <mat-icon>landscape</mat-icon>
+              <h4>Legend</h4>
+            </div>
+            <ul class="legend-list">
+              <div>
+                <li class="role-ceo">CEO</li>
+                <li class="role-manager">Manager</li>
+                <li class="role-finance">Finance</li>
+                <li class="role-law">Law</li>
+                <li class="role-hr">HR</li>
+              </div>
+              <div>
+                <li class="role-it">IT</li>
+                <li class="role-marketing">Marketing</li>
+                <li class="role-sales">Sales</li>
+                <li class="role-support">Support</li>
+                <li class="role-employee">Employee</li>
+              </div>
+            </ul>
+          </div>
+
+
         </div>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

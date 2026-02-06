@@ -8,10 +8,81 @@
   <mat-sidenav-content>
     <div class="description-section">
       <div class="first-row">
-        <h2>Dashboard</h2>
+        <div>
+          <h2>Welcome back, {{user.firstName}}! 👋</h2>
+          <p>Here's a quick overview of your dashboard.</p>
+        </div>
         <app-exit-button></app-exit-button>
       </div>
-      <p>View your dashboard overview and recent activities here</p>
+    </div>
+    <div class="container">
+      <div class="stats-container">
+        <div class="card">
+          <mat-icon class="card-icon">adf_scanner</mat-icon>
+          <div class="card-info">
+            <p>125</p>
+            <h3>Total Templates</h3>
+          </div>
+        </div>
+        <div class="card">
+          <mat-icon class="card-icon generated">assignment_add</mat-icon>
+          <div class="card-info">
+            <p>125</p>
+            <h3>Generated Documents</h3>
+          </div>
+        </div>
+        <div class="card">
+          <mat-icon class="card-icon pending">pending_actions</mat-icon>
+          <div class="card-info">
+            <p>125</p>
+            <h3>Pending Approvals</h3>
+          </div>
+        </div>
+        <div class="card">
+          <mat-icon class="card-icon received">approval_delegation</mat-icon>
+          <div class="card-info">
+            <p>125</p>
+            <h3>Received Approvals</h3>
+          </div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-section">
+          <div class="title">
+            <div>
+              <h3>Document Generation Results</h3>
+              <p>See document proportion over time.</p>
+            </div>
+            <div>
+              <ul class="legend-list">
+                <li class="role-accept">Accepted</li>
+                <li class="role-pending">Pending</li>
+                <li class="role-reject">Rejected</li>
+              </ul>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="activityChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-section">
+          <div class="title">
+            <div>
+              <h3>Document Generation Trends</h3>
+              <p>See document proportion over time.</p>
+            </div>
+            <div>
+              <ul class="legend-list">
+                <li class="role-accept">Requested</li>
+                <li class="role-reject">Accepted</li>
+              </ul>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="dailyChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

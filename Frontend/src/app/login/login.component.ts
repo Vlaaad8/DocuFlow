@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
         console.log('Login successful:', user);
         sessionStorage.setItem('loggedInUser', JSON.stringify(user));
         this.loading = false;
-        this.router.navigate(['upload']);
+        this.router.navigate(['dashboard']);
       }
       else{
         console.error('Invalid credentials');
@@ -42,7 +42,8 @@ export class LoginComponent implements OnInit {
     },
       error: (error) => {
         console.error('Login failed:', error);
-  }
+        this.loading = false;
+      }
 });
   }
 }

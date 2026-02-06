@@ -21,4 +21,7 @@ export class HrService {
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(URL + '/users');
   }
+  public addRelation(bossID: number, subordinateID: number): Observable<void> {
+    return this.http.post<void>(`${URL}/relation?bossID=${bossID}&subordinateID=${subordinateID}`, {});
+  }
 }

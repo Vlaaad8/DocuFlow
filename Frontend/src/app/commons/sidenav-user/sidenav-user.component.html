@@ -8,18 +8,24 @@
   </div>
   <div [ngClass]="selectedUploadTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleUpload()"><mat-icon
       class="icon-design">document_scanner</mat-icon>Upload Document
-    </div>
+  </div>
   <div [ngClass]="selectedGenerateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleGenerate()">
     <mat-icon class="icon-design">file_present</mat-icon>Generate Document
   </div>
   <div [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
     <mat-icon class="icon-design">attach_file_add</mat-icon>Template Manager
   </div>
-  <div [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplateCreator()">
+  <div [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'"
+    (click)="handleTemplateCreator()">
     <mat-icon class="icon-design">create</mat-icon>Template Creator
   </div>
-    <div [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleHumanResource()">
+  <div [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
+    (click)="handleHumanResource()">
     <mat-icon class="icon-design">person_3</mat-icon>Human Resource
+  </div>
+  <div [ngClass]="selectedApprovalFlowsTab ? 'dashboard-item selected' : 'dashboard-item'"
+    (click)="handleApprovalFlows()">
+    <mat-icon class="icon-design">add_link</mat-icon>Approval Flows
   </div>
 
   <div class="user-section">
@@ -32,3 +38,4 @@
       </div>
     </div>
   </div>
+</div>
