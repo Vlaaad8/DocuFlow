@@ -5,17 +5,6 @@ import {
   ɵɵdefineNgModule
 } from "./chunk-BF7FI6KT.js";
 
-// node_modules/@angular/cdk/fesm2022/test-environment.mjs
-function _isTestEnvironment() {
-  return (
-    // @ts-ignore
-    typeof __karma__ !== "undefined" && !!__karma__ || // @ts-ignore
-    typeof jasmine !== "undefined" && !!jasmine || // @ts-ignore
-    typeof jest !== "undefined" && !!jest || // @ts-ignore
-    typeof Mocha !== "undefined" && !!Mocha
-  );
-}
-
 // node_modules/@angular/cdk/fesm2022/platform.mjs
 var PlatformModule = class _PlatformModule {
   static ɵfac = function PlatformModule_Factory(__ngFactoryType__) {
@@ -32,8 +21,4 @@ var PlatformModule = class _PlatformModule {
     args: [{}]
   }], null, null);
 })();
-
-export {
-  _isTestEnvironment
-};
-//# sourceMappingURL=chunk-JGCB5CIF.js.map
+//# sourceMappingURL=chunk-GSPN5EW5.js.map

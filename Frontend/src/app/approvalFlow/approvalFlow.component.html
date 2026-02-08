@@ -9,8 +9,8 @@
     <div class="description-section">
       <div class="first-row">
         <h2>Approval Flows</h2>
-       <div class="buttonSection">
-          <button class="upload-button" (click)="openCreateModal()"><mat-icon>upload</mat-icon>Upload Template</button>
+        <div class="buttonSection">
+          <button class="upload-button" (click)="openCreateModal()"><mat-icon>add</mat-icon>Create Flow</button>
           <app-exit-button></app-exit-button>
         </div>
       </div>
@@ -18,3 +18,38 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+
+
+<ng-template #createFlowDialog>
+  <div class="upload-card">
+
+    <div class="card-header">
+      <h3>Create an approval flow</h3>
+      <mat-icon (click)="closeCreateModal()" class="close-button">close</mat-icon>
+    </div>
+    <mat-dialog-content>
+      <div class="form-zone">
+        <form>
+          <div class="input-design">
+            <label>Name</label>
+            <input type="text" formControlName="name" />
+          </div>
+          <div class="input-design">
+            <label>Category</label>
+            <select formControlName="category">
+              <option *ngFor="let category of templateCategories" [value]="category">{{category}}</option>
+            </select>
+          </div>
+          <div class="add-more">
+            <mat-icon>add</mat-icon><h4>Add step</h4>
+          </div>
+          <div class="buttonSection">
+            <button type="submit">Add Template</button>
+            <button type="button" (click)="closeCreateModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </mat-dialog-content>
+  </div>
+</ng-template>

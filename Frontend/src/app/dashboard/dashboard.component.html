@@ -12,7 +12,10 @@
           <h2>Welcome back, {{user.firstName}}! 👋</h2>
           <p>Here's a quick overview of your dashboard.</p>
         </div>
+        <div class="buttonSection">
+          <div matBadge="15" class="notificationButton" matBadgeColor="warn"><mat-icon >notifications_active</mat-icon></div>
         <app-exit-button></app-exit-button>
+        </div>
       </div>
     </div>
     <div class="container">
@@ -20,28 +23,28 @@
         <div class="card">
           <mat-icon class="card-icon">adf_scanner</mat-icon>
           <div class="card-info">
-            <p>125</p>
+            <p>{{dashboardData.totalTemplates}}</p>
             <h3>Total Templates</h3>
           </div>
         </div>
         <div class="card">
           <mat-icon class="card-icon generated">assignment_add</mat-icon>
           <div class="card-info">
-            <p>125</p>
+            <p>{{dashboardData.totalGeneratedDocuments}}</p>
             <h3>Generated Documents</h3>
           </div>
         </div>
         <div class="card">
           <mat-icon class="card-icon pending">pending_actions</mat-icon>
           <div class="card-info">
-            <p>125</p>
+            <p>{{dashboardData.pendingApprovals}}</p>
             <h3>Pending Approvals</h3>
           </div>
         </div>
         <div class="card">
           <mat-icon class="card-icon received">approval_delegation</mat-icon>
           <div class="card-info">
-            <p>125</p>
+            <p>{{dashboardData.receivedApprovals}}</p>
             <h3>Received Approvals</h3>
           </div>
         </div>

@@ -5,10 +5,12 @@ import com.example.template.UserFieldValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface UserFieldValueRepository extends JpaRepository<UserFieldValue, Integer> {
 
     Optional<UserFieldValue> findByUser_IdAndField_id(int userID, int fieldID);

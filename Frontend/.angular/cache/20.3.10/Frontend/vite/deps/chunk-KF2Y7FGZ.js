@@ -2,7 +2,7 @@ import {
   Platform,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-3P47QPBN.js";
+} from "./chunk-FPNVPXKF.js";
 import {
   BidiModule
 } from "./chunk-I77MDKE2.js";
@@ -1975,6 +1975,14 @@ var A11yModule = class _A11yModule {
   }], () => [], null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/keycodes.mjs
+function hasModifierKey(event, ...modifiers) {
+  if (modifiers.length) {
+    return modifiers.some((modifier) => event[modifier]);
+  }
+  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
+
 // node_modules/@angular/cdk/fesm2022/id-generator.mjs
 var counters = {};
 var _IdGenerator = class __IdGenerator {
@@ -2009,14 +2017,6 @@ var _IdGenerator = class __IdGenerator {
     }]
   }], null, null);
 })();
-
-// node_modules/@angular/cdk/fesm2022/keycodes.mjs
-function hasModifierKey(event, ...modifiers) {
-  if (modifiers.length) {
-    return modifiers.some((modifier) => event[modifier]);
-  }
-  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
-}
 
 // node_modules/@angular/cdk/fesm2022/typeahead.mjs
 var DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS = 200;
@@ -3163,6 +3163,7 @@ export {
   UP_ARROW,
   DOWN_ARROW,
   DELETE,
+  _getFocusedElementPierceShadowDom,
   _getEventTarget,
   normalizePassiveListenerOptions,
   FocusMonitor,
@@ -3176,9 +3177,11 @@ export {
   InteractivityChecker,
   FocusTrapFactory,
   LiveAnnouncer,
-  _IdGenerator,
+  A11yModule,
   hasModifierKey,
+  _IdGenerator,
   FocusKeyManager,
+  AriaDescriber,
   MatCommonModule
 };
-//# sourceMappingURL=chunk-S2QM4M6G.js.map
+//# sourceMappingURL=chunk-KF2Y7FGZ.js.map

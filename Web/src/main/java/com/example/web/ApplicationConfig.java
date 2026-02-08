@@ -53,4 +53,9 @@ public class ApplicationConfig {
     public ProfileService profileService(CertificatePort certificatePort){
         return new ProfileService(certificatePort);
     }
+
+    @Bean
+    DashboardService dashboardService(TemplateRepository templateRepository, FilledTemplateRepository filledTemplateRepository) {
+        return new DashboardService(templateRepository, filledTemplateRepository);
+    }
 }

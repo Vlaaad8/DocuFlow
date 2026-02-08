@@ -25,7 +25,7 @@
         <div class="upload-card">
           <div class="card-header">
             <h3>Upload Template</h3>
-            <mat-icon (click)="handleLeave()">close</mat-icon>
+            <mat-icon (click)="handleLeave()" class="close-button">close</mat-icon>
           </div>
           <div class="error-section" *ngIf="errorMessage">
             <mat-icon>error</mat-icon>
@@ -71,7 +71,7 @@
         <div class="upload-card">
           <div class="card-header">
             <h3>Template Details</h3>
-            <mat-icon (click)="isModalOpen = false">close</mat-icon>
+            <mat-icon (click)="isModalOpen = false" class="close-button">close</mat-icon>
           </div>
           <div class="form-zone">
             <form [formGroup]="formGroup" (ngSubmit)="submitTemplate()">

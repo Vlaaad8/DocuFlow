@@ -161,3 +161,19 @@ span {
 .role-accept::before      { background-color: rgba(75, 192, 192, 0.2); border: 2px solid  rgba(75, 192, 192, 1); } 
 .role-pending::before  { background-color: rgba(255, 206, 86, 0.2); border: 2px solid  rgba(255, 206, 86, 1); } 
 .role-reject::before       { background-color: rgba(255, 99, 132, 0.2); border: 2px solid  rgba(255, 99, 132, 1); } 
+
+.buttonSection {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+.notificationButton {
+    background-color: #f0f4f8;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.notificationButton mat-icon{
+    color: #374151;
+}

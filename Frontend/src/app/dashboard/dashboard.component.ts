@@ -7,19 +7,22 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 import { DashboardService } from '../services/dashboard.service';
 import { User } from '../model/User';
 import Chart, { Legend } from 'chart.js/auto';
+import { DashboardData } from '../model/dashboardData';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent]
+  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent,MatBadgeModule]
 })
 export class DashboardComponent implements OnInit {
   
   public chart! : Chart;
   public dailyChart! : Chart;
   public user!: User;
+  public dashboardData!: DashboardData;
 
   constructor(private service: DashboardService) {
         sessionStorage.getItem('loggedInUser')
@@ -30,6 +33,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.chart = new Chart('activityChart', this.getChartConfig());
     this.dailyChart = new Chart('dailyChart', this.getChartConfigLine());
+    this.service.getDashboardData(this.user.id).subscribe({
+      next: (data) => {
+        this.dashboardData = data;
+      },
+      error: (err) => {
+        console.error('Error fetching dashboard data:', err);
+      }
+    });
   }
 
   getChartConfig() : any {
