@@ -1,0 +1,13 @@
+<div class="approval-step" [formGroup]="group">
+  <div class="number-section">
+    <h4>{{ stepNumber }} </h4>
+  </div>
+  <div class="input-design">
+    <select formControlName="role">
+      <option *ngFor="let role of roleOptions" [value]="role">{{ role }}</option>
+    </select>
+  </div>
+  <div class="delete-button" (click)="handleDelete()">
+    <mat-icon>delete</mat-icon>
+  </div>
+</div>

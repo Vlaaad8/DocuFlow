@@ -77,8 +77,7 @@
 }
 
 .input-design input[type="text"],
-.input-design select,
-.input-design textarea {
+.input-design select {
     padding: 8px;
     font-size: 14px;
     border-radius: 7px;
@@ -100,7 +99,7 @@
     margin-bottom: 22px;
 }
 
-upload-card .buttonSection {
+.upload-card .buttonSection {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -139,7 +138,12 @@ upload-card .buttonSection {
     border: 2.5px dashed #d1d5dbdc;
     border-radius: 10px;
     margin-bottom: 15px;
-    color:#6b7280
+    color:#6b7280;
+    padding: 5px;
+    
+}
+.add-more h4{
+    margin: 0;
 }
 .add-more:hover {
         transform: translateY(-2px);
@@ -156,3 +160,11 @@ upload-card .buttonSection {
     background-color: #fee2e2;
     border-radius: 8px;
 }
+.form-zone h5{
+    font-size: 14px;
+    font-weight: 600;
+}
+.content{
+    padding: 16px 32px;
+}
+

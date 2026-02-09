@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-//TODO sa stochez undeva dependentele intre roluri , iar clasa Relationship sa fie pentru persoane practic , cand o sa fac un chain sa verific daca el este posibil dupa regulile ierarhice, sa nu las HR sa faca o prostie daca regulile ierarhice contrazic ce face el
+
 @Service
 @AllArgsConstructor
 public class HumanResourcesService {

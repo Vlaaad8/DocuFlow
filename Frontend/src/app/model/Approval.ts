@@ -4,3 +4,9 @@ export interface ApprovalChainStep{
     role: string,
     reference: number
 }
+
+export interface ApprovalChain{
+    id: number,
+    name: string,
+    steps: ApprovalChainStep[]
+}

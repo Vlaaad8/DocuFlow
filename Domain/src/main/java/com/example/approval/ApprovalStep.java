@@ -27,4 +27,5 @@ public class ApprovalStep {
 
     @ManyToOne
     private ApprovalChain approvalChain;
+
 }

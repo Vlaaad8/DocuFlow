@@ -27,7 +27,7 @@ export class UploadComponent implements OnInit {
   currentStage: String = 'upload'; // upload, processing, results
   errorMessage: string | null = null;
   formGroup!: FormGroup;
-  constructor(private service: UploadService, private formBuilder: FormBuilder,private snackBar: SnackBarService) { }
+  constructor(private service: UploadService, private formBuilder: FormBuilder, private snackBar: SnackBarService) { }
 
   get inputFormFields(): FormArray<FormGroup> {
     return this.formGroup.get('fields') as FormArray;
@@ -44,12 +44,13 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  ngOnInit() {  this.formGroup = this.formBuilder.group({
-    fields: this.formBuilder.array([])
-  });
+  ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      fields: this.formBuilder.array([])
+    });
 
-  this.buildFormsForFields(this.extractedFields);
-}
+    this.buildFormsForFields(this.extractedFields);
+  }
 
   handleFileSelected($event: Event) {
     const input = $event.target as HTMLInputElement;
@@ -118,7 +119,7 @@ export class UploadComponent implements OnInit {
   }
 
   public onSaveData(): void {
-    const extractedData : ExtractedField[] = this.inputFormFields.value;
+    const extractedData: ExtractedField[] = this.inputFormFields.value;
     console.log('Saved extracted data:', extractedData);
     this.service.saveExtractedData(extractedData);
     this.snackBar.showMessage("Extracted data saved successfully!", "success");

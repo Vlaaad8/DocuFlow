@@ -82,6 +82,8 @@ export class CreatorComponent implements OnInit {
     }
     this.serviceCreator.getFields().subscribe({
       next: (fields) => {
+        fields.sort((a, b) => a.required === b.required ? 0 : a.required ? -1 : 1);
+        
         this.fields = fields;
         console.log('Fields fetched:', this.fields);
       },

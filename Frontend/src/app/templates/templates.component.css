@@ -163,7 +163,9 @@
     gap: 16px;
     padding: 16px 32px;
     flex-wrap: wrap;
+    justify-content: space-evenly;
 }
+
 
 .buttonSection {
     display: flex;
@@ -181,9 +183,6 @@
     cursor: pointer;
 }
 
-.displayTemplates app-template-container {
-    flex: 1 1 0;
-}
 
 .loading-wrapper {
     display: flex;

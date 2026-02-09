@@ -8,6 +8,11 @@
     margin: 10px 0;
 }
 
+.label-container:hover {
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+}
+
 .icon-container {
     background: #eff6ff;
     color: #1e40af;
@@ -44,6 +49,7 @@
     align-items: center;
     width: 100%;
 }
+
 .title p {
     color: #ef4444;
     font-weight: 600;

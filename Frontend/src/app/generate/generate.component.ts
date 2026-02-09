@@ -37,6 +37,7 @@ export class GenerateComponent implements OnInit {
     const userID = user.id;
     this.service.getTemplates(userID).subscribe({
       next: (data) => {
+        data.sort((a,b) => a.canGenerate === b.canGenerate ? 0 : a.canGenerate ? -1 : 1);
         this.templates = data;
         console.log("Templates loaded:", this.templates);
       },
