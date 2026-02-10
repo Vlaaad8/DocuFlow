@@ -1,8 +1,7 @@
 export interface ApprovalChainStep{
     id: number,
-    order: number,
-    role: string,
-    reference: number
+    stepNumber: number,
+    approverRole: string,
 }
 
 export interface ApprovalChain{

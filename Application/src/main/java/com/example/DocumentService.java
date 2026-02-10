@@ -3,12 +3,14 @@ package com.example;
 import com.example.ocr.DocumentPort;
 import com.example.ocr.ExtractedField;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 //TODO validari riguroase care sa urmareasca datele mele
+@Service
 @AllArgsConstructor
 public class DocumentService {
 

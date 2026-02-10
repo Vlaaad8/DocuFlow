@@ -5,11 +5,13 @@ import com.example.ocr.ExtractedField;
 import com.example.ocr.IdPort;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.AnyKeyJavaClass;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+@Service
 @AllArgsConstructor
 public class IdService {
 

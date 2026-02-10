@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.dto.UserDTO;
+import com.example.dtoMapper.UserMapper;
 import com.example.jpa.UserRepository;
 import com.example.login.User;
 import com.example.security.CertificatePort;
@@ -14,8 +16,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CertificatePort certificatePort;
+    private final UserMapper userMapper;
 
-    public User login(String value,String password) {
+    public UserDTO login(String value, String password) {
         User user =this.userRepository.login(password,value).orElse(null);
         if(user != null){
             try {
@@ -23,7 +26,7 @@ public class UserService {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return user;
+            return userMapper.toUserDTO(user);
         }
         return null;
     }

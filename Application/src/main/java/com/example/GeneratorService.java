@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.dto.FieldValueDTO;
+import com.example.dto.UserFieldValueDTO;
 import com.example.dto.GeneratorTemplateDTO;
 import com.example.email.EmailPort;
 import com.example.jpa.FilledTemplateRepository;
@@ -96,12 +96,12 @@ public class GeneratorService {
         return true;
     }
 
-    public List<FieldValueDTO> getTemplateValues(int  templateId, int userID) {
+    public List<UserFieldValueDTO> getTemplateValues(int  templateId, int userID) {
         Template template = this.templateRepository.getReferenceById(templateId);
         List<UserFieldValue> userFilledFields = this.userFieldValueRepository.findForUserAndTemplate(userID, template.getId());
-        List<FieldValueDTO> fieldValueDTOs = new ArrayList<>();
+        List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
         for (UserFieldValue userFieldValue : userFilledFields) {
-            FieldValueDTO fieldValueDTO = new FieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue());
+            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue());
             fieldValueDTOs.add(fieldValueDTO);
         }
         return fieldValueDTOs;

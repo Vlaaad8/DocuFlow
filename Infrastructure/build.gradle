@@ -76,6 +76,9 @@ dependencies {
     implementation 'eu.europa.ec.joinup.sd-dss:dss-service:6.1'
 // https://mvnrepository.com/artifact/eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons
     implementation("eu.europa.ec.joinup.sd-dss:dss-utils-apache-commons:6.1")
+    // Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+    implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
 }
 

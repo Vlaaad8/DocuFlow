@@ -81,13 +81,14 @@
     padding: 8px;
     color: #ffffff;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
     cursor: pointer;
 
 }
 .logButton:hover {
     background-color: #2876f4;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
     box-shadow: 0 10px 22px rgba(59, 130, 246, 0.45);
 }
 .info-section {
@@ -153,3 +154,32 @@
     }
 }
 
+ .error-section {
+        padding: 8px;
+        max-width: 1200px;
+        background: #fef2f2;
+        border: 2px solid #fecaca;
+        border-radius: 12px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #991b1b;
+        border-left: 4px solid #991b1b;
+    }
+
+    .error-section p {
+        font-weight: 500;
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .action-zone {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .action-zone mat-icon {
+        cursor: pointer;
+    }

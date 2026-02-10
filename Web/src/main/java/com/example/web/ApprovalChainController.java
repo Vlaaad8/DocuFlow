@@ -1,10 +1,14 @@
 package com.example.web;
 
 import com.example.ApprovalChainService;
+import com.example.approval.ApprovalChain;
+import com.example.dto.ApprovalChainDTO;
 import com.example.dto.ChainRequest;
 import com.example.login.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -22,5 +26,9 @@ public class ApprovalChainController {
     public void createApprovalChain(@RequestBody ChainRequest chain){
         this.approvalChainService.createApprovalChain(chain);
 
+    }
+    @GetMapping("approvalChain")
+    public List<ApprovalChainDTO> getAllApprovalChains(){
+        return this.approvalChainService.getAllApprovalChains();
     }
 }

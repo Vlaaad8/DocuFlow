@@ -9,8 +9,10 @@ import { ApprovalstepComponent } from "../commons/approvalstep/approvalstep.comp
 import { CommonModule } from '@angular/common';
 import { ApprovalFlowService } from '../services/approvalFlow.service';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ApprovalChainStep } from '../model/Approval';
+import { ApprovalChain, ApprovalChainStep } from '../model/Approval';
 import { ApprovalChainComponent } from "../commons/approval-chain/approval-chain.component";
+import { App } from '../app';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-approvalFlow',
@@ -23,18 +25,45 @@ export class ApprovalFlowComponent implements OnInit {
   @ViewChild('createFlowDialog') createFlowDialog: any;
 
   formGroup!: FormGroup;
+  chains! : ApprovalChain[];
+
   constructor(private dialog: MatDialog, private service: ApprovalFlowService, private formBuilder: FormBuilder) { }
   public roles!: string[];
 
   ngOnInit() {
+    // forkJoin({
+    //   roles: this.service.getRoles(),
+    //   chains: this.service.getFlows()
+    // }).subscribe({
+    //   next: (response) => {
+    //     this.roles = response.roles;
+    //     this.chains = response.chains;
+    //     console.log(this.chains);
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //   }
+    // });
+   
     this.service.getRoles().subscribe({
       next: (response) => {
         this.roles = response;
+        console.log(this.roles);
       },
       error: (error) => {
         console.log(error);
       }
-    })
+    });
+    this.service.getFlows().subscribe({
+      next: (response) => {
+        this.chains = response;
+        console.log(this.chains);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
     this.formGroup = this.formBuilder.group({
       name: [''],
       steps: this.formBuilder.array([])
@@ -52,8 +81,8 @@ export class ApprovalFlowComponent implements OnInit {
     for (const step of list) {
       this.inputFormSteps.push(this.formBuilder.group({
         id: [0],
-        role: [step.role],
-        order: [step.order],
+        approverRole: [step.approverRole],
+        stepNumber: [step.stepNumber],
         approvalChain: [0]
       }));
     }
@@ -67,14 +96,14 @@ export class ApprovalFlowComponent implements OnInit {
   }
   addStep(): void {
     this.inputFormSteps.push(this.formBuilder.group({
-      role: [null],
+      approverRole: [null],
     }));
   }
   handleStepNumberChange(stepNumber: number): void {
     this.inputFormSteps.removeAt(stepNumber - 1);
     for (let i = stepNumber - 1; i < this.inputFormSteps.length; i++) {
-      const currentOrder = this.inputFormSteps.at(i).get('order')?.value;
-      this.inputFormSteps.at(i).get('order')?.setValue(currentOrder - 1);
+      const currentOrder = this.inputFormSteps.at(i).get('stepNumber')?.value;
+      this.inputFormSteps.at(i).get('stepNumber')?.setValue(currentOrder - 1);
     }
 
   }

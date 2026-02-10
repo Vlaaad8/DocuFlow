@@ -1,7 +1,7 @@
 <div class="container">
   <div class="container-header">
     <div class="info-section">
-      <h4>Approval Chain</h4>
+      <h4>{{ approvalChain.name }}</h4>
       <p class="category">CATEGORY</p>
     </div>
     <div class="button-section">
@@ -14,6 +14,19 @@
     <div class="chain-details">
       <div class="chain-name">
         <h3>aaaa</h3>
+        <div class="step-container">
+          <div class="steps-visualization" *ngFor="let step of approvalChain.steps">
+            <div class="step-item">
+              <div class="step-badge" [title]="step.approverRole"  [class]="step.approverRole">
+                {{ getRoleAbbreviation(step.approverRole) }}
+              </div>
+              <div class="step-label">
+                <span class="step-role">{{ step.approverRole }}</span>
+              </div>
+              <div *ngIf="true" class="step-arrow">→</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

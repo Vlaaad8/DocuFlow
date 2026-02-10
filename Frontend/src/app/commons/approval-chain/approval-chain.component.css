@@ -1,12 +1,14 @@
-.container{
+.container {
     background: #ffffff;
     border-radius: 10px;
     border: 2px solid #ebedf0;
 }
-.container:hover{
+
+.container:hover {
     cursor: pointer;
 }
-.container-header{
+
+.container-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,25 +17,29 @@
     padding: 12px 16px;
     border-radius: 10px;
 }
-.button-section{
+
+.button-section {
     display: flex;
     gap: 10px;
 }
-.button-section div{
+
+.button-section div {
     background-color: #fff;
     border-radius: 6px;
     border: 1px solid #e5e7eb;
     padding: 4px 6px;
     color: #6b7280;
 }
-.button-section div:hover{
+
+.button-section div:hover {
     background-color: #f3f4f6;
     color: black;
     cursor: pointer;
     transform: translateY(-2px);
     transition: all 0.25s ease;
-    
+
 }
+
 .category {
     padding: 6px 12px;
     background: #dbeafe;
@@ -41,4 +47,128 @@
     border-radius: 4px;
     font-size: 14px;
     font-weight: 700;
+}
+
+.container-content {
+    padding: 12px 16px;
+}
+
+.steps-visualization {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.step-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1e40af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    
+}
+
+.step-item.required .step-badge {
+    background: #fee2e2;
+    color: #991b1b;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fecaca;
+    
+}
+.CEO {
+    background-color: #f2a5a0;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;
+    color: white;
+}
+
+.Manager{
+    background-color: #9fe0b7; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe0b7;
+    color: #1f2937;
+}
+.Employee{
+    background-color: #d1d5db; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d1d5db;
+    color: #1f2937;
+}
+.HumanResource{
+    background-color: #d7b5e6; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d7b5e6;
+    color: #1f2937;
+}
+.IT{
+    background-color: #a7cbee; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #a7cbee;
+    color: #1f2937;
+}
+.Finance{
+    background-color: #86efac; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #86efac;
+    color: #1f2937;
+}
+.Law{
+    background-color: #fcd34d; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fcd34d;
+    color: #1f2937;
+}
+
+.Sales{
+    background-color: #fde3b5; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fde3b5;
+    color: #1f2937;
+}
+.Support{
+    background-color: #9fe4ef;  
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe4ef;
+    color: #1f2937;
+}
+
+.Marketing{
+    background-color: #fdba74; 
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fdba74;
+    color: #1f2937;
+}
+
+
+.step-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 80px;
+}
+
+.step-role {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.step-badge-text {
+    font-size: 10px;
+    color: #dc2626;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.step-arrow {
+    color: #d1d5db;
+    font-size: 16px;
+}
+.step-container{
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

@@ -8,10 +8,12 @@ import com.example.ocr.ExtractedField;
 import com.example.template.Field;
 import com.example.template.UserFieldValue;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 public class MappingService {
 
     private final FieldMapperRepository fieldMapperRepository;

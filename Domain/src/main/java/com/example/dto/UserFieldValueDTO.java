@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FieldValueDTO {
+public class UserFieldValueDTO {
     String name;
     String value;
 }

@@ -6,11 +6,19 @@
     <div class="login-container">
       <div class="info-section">
         <div class="header-section">
-        <h3>Sign in</h3>
+          <h3>Sign in</h3>
           <mat-spinner diameter="30" strokeWidth="4" class="custom-spinner" *ngIf="loading"></mat-spinner>
         </div>
         <p>Sign in into your account to proceed</p>
+         <div class="error-section" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        <div class="action-zone">
+          <p>{{errorMessage}}</p>
+          <mat-icon (click)="errorMessage = null">close</mat-icon>
+        </div>
       </div>
+      </div>
+     
       <form [formGroup]="formGroup" (ngSubmit)="onSignUp()">
         <div class="input-design">
           <label>Username or Email</label>

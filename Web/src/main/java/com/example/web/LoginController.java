@@ -1,6 +1,7 @@
 package com.example.web;
 
 import com.example.UserService;
+import com.example.dto.UserDTO;
 import com.example.login.User;
 import com.example.web.requests.LoginRequest;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class LoginController {
     private final UserService userService;
 
     @PostMapping("login")
-    public User login(@RequestBody LoginRequest loginRequest) {
+    public UserDTO login(@RequestBody LoginRequest loginRequest) {
         return  this.userService.login(loginRequest.username(), loginRequest.password());
     }
 }

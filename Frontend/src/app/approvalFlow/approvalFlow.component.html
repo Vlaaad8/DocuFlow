@@ -17,7 +17,7 @@
       <p>Create and manage your approval flows here</p>
     </div>
     <div class="content">
-      <app-approval-chain></app-approval-chain>
+      <app-approval-chain *ngFor="let chain of chains" [approvalChain]="chain"></app-approval-chain>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

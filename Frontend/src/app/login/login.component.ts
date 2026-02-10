@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,private service: LoginService,private formBuilder: FormBuilder) { }
   public loading: boolean = false;
   formGroup!: FormGroup
+   errorMessage: string | null = null;
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -30,18 +31,17 @@ export class LoginComponent implements OnInit {
     this.service.login(formData.username, formData.password).subscribe({
       next: (user) => {
         if (user != null) {
-        console.log('Login successful:', user);
         sessionStorage.setItem('loggedInUser', JSON.stringify(user));
         this.loading = false;
         this.router.navigate(['dashboard']);
       }
       else{
-        console.error('Invalid credentials');
+        this.errorMessage = 'Invalid username or password.';
         this.loading = false;
       }
     },
       error: (error) => {
-        console.error('Login failed:', error);
+        this.errorMessage = 'An error occurred during login.';
         this.loading = false;
       }
 });
