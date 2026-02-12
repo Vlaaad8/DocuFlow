@@ -9,13 +9,15 @@ import { User } from '../model/User';
 import Chart, { Legend } from 'chart.js/auto';
 import { DashboardData } from '../model/dashboardData';
 import { MatBadgeModule } from '@angular/material/badge';
+import { LoadingComponent } from "../commons/loading/loading.component";
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent,MatBadgeModule]
+  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent, MatBadgeModule, LoadingComponent,CommonModule]
 })
 export class DashboardComponent implements OnInit {
   
@@ -23,6 +25,8 @@ export class DashboardComponent implements OnInit {
   public dailyChart! : Chart;
   public user!: User;
   public dashboardData!: DashboardData;
+
+  public status: string = 'loading' // 'loading' , 'present' 
 
   constructor(private service: DashboardService) {
         sessionStorage.getItem('loggedInUser')

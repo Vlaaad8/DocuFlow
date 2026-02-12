@@ -1,7 +1,7 @@
 package com.example.dtoMapper;
 
 import com.example.approval.ApprovalStep;
-import com.example.dto.ApprovalStepDTO;
+import com.example.dto.Approval.ApprovalStepDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

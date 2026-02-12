@@ -2,10 +2,11 @@ package com.example.web;
 
 
 import com.example.TemplateService;
-import com.example.dto.UpdateRequest;
-import com.example.template.Template;
-import com.example.template.TemplateCategory;
+import com.example.dto.Approval.ApprovalChainOptionDTO;
 import com.example.dto.HtmlRequest;
+import com.example.dto.TemplateDTO;
+import com.example.dto.UpdateRequest;
+import com.example.template.TemplateCategory;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,7 @@ public class TemplateController {
     }
 
     @GetMapping("template")
-    public List<Template> getTemplates() {
+    public List<TemplateDTO> getTemplates() {
         return this.templateService.getTemplates();
     }
 
@@ -44,16 +45,24 @@ public class TemplateController {
     public void addTemplate(@RequestParam("file") MultipartFile file,
                             @RequestParam("name") String name,
                             @RequestParam("description") String description,
-                            @RequestParam("category") TemplateCategory category) throws IOException {
-        this.templateService.uploadService(file.getInputStream(),name, description, category);
+                            @RequestParam("category") TemplateCategory category,
+                            @RequestParam("approvalFlow") int approvalFlowID) throws IOException {
+        this.templateService.uploadService(file.getInputStream(), name, description, category,approvalFlowID);
     }
+
     @GetMapping(value = "template/html", produces = "application/json")
     public HtmlRequest getTemplateHtml(@RequestParam("id") int id) {
         return this.templateService.getTemplateHTML(id);
     }
-    @PutMapping(value="template")
+
+    @PutMapping(value = "template")
     public void updateTemplate(@RequestBody UpdateRequest updateRequest) {
         this.templateService.updateTemplate(updateRequest.html(), updateRequest.fileName());
+    }
+
+    @GetMapping(value="template/approvalFlows")
+    public List<ApprovalChainOptionDTO> getApprovalFlows(){
+        return this.templateService.getApprovalChains();
     }
 
 }

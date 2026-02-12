@@ -2,6 +2,7 @@ package com.example.approval;
 
 
 import com.example.login.User;
+import com.example.template.FilledTemplate;
 import com.example.template.Template;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,11 +24,8 @@ public class ApprovalRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    private Template template;
-
-    @ManyToOne
-    private User requester;
+    @OneToOne
+    private FilledTemplate template;
 
     @ManyToOne
     private ApprovalChain approvalChain;
@@ -35,10 +33,14 @@ public class ApprovalRequest {
     @Enumerated(EnumType.STRING)
     private ApprovalRequestStatus status;
 
+    @Column(nullable = false)
     int currentStep;
 
     @OneToMany(mappedBy = "approvalRequest", cascade = CascadeType.ALL)
     List<Approval> steps;
+
+
+
 
 
 

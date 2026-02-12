@@ -20,7 +20,7 @@ export class ApprovalFlowService {
   public saveFlow(flowData: any): Observable<void> {
     const body = {
         name: flowData.name,
-        roles: flowData.steps.map((s: any) => s.role)
+        roles: flowData.steps.map((s: any) => s.approverRole)
       
     };
     console.log(body);

@@ -1,8 +1,14 @@
 package com.example;
 
+import com.example.approval.ApprovalChain;
 import com.example.converter.Convertors;
+import com.example.dto.Approval.ApprovalChainOptionDTO;
 import com.example.dto.HtmlRequest;
+import com.example.dto.TemplateDTO;
+import com.example.dtoMapper.ApprovalChainMapper;
+import com.example.dtoMapper.TemplateMapper;
 import com.example.exceptions.TemplateValidationException;
+import com.example.jpa.ApprovalChainRepository;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
 import com.example.template.*;
@@ -21,11 +27,15 @@ public class TemplateService {
     private final TemplateTextPort textPort;
     private final FieldRepository fieldRepository;
     private final TemplateRepository templateRepository;
+    private final ApprovalChainRepository approvalChainRepository;
+    private final ApprovalChainMapper approvalChainMapper;
+    private final TemplateMapper templateMapper;
 
     private final Path rootFolder = Paths.get("storage");
 
 
-    public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory) {
+    public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory,int approvalFlowID) {
+
         try {
             Files.createDirectories(rootFolder);
 
@@ -44,7 +54,8 @@ public class TemplateService {
 
             String extractedText = textPort.extract(new FileInputStream(path));
             Set<Field> fields = extractFields(extractedText);
-            Template template = new Template(name, templateCategory, description, path, fields);
+            ApprovalChain approvalFlow = this.approvalChainRepository.getReferenceById(approvalFlowID);
+            Template template = new Template(name, templateCategory, description, path, fields,approvalFlow);
 
             templateRepository.save(template);
         }catch (IOException e) {
@@ -150,8 +161,8 @@ public class TemplateService {
         return fields;
     }
 
-    public List<Template> getTemplates() {
-        return templateRepository.findAll();
+    public List<TemplateDTO> getTemplates() {
+        return templateRepository.findAll().stream().map(templateMapper::toTemplateDTO).toList();
     }
 
     public List<String> getTemplateCategories(){
@@ -182,6 +193,10 @@ public class TemplateService {
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<ApprovalChainOptionDTO> getApprovalChains(){
+        return this.approvalChainRepository.findAll().stream().map(approvalChainMapper::toApprovalChainOption).toList();
     }
 
 

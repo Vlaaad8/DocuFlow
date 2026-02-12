@@ -5,13 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApprovalStepDTO {
+public class TemplateDTO {
     private int id;
-    private int stepNumber;
-    private String approverRole;
-
+    private String name;
+    private String category;
+    private String description;
+    private Set<FieldDTO> fields;
 }

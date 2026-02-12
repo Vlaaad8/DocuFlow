@@ -18,6 +18,8 @@
         </div>
       </div>
     </div>
+    <ng-container *ngIf="status === 'loading' ; then loading ; else presenting"></ng-container>
+    <ng-template #presenting>
     <div class="container">
       <div class="stats-container">
         <div class="card">
@@ -87,5 +89,9 @@
         </div>
       </div>
     </div>
+    </ng-template>
+    <ng-template #loading>
+      <app-loading title="Loading dashboard..." message="Please wait while we fetch your data"></app-loading>
+    </ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

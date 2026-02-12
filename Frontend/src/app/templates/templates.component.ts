@@ -6,27 +6,31 @@ import { CommonModule } from '@angular/common';
 import { TemplateContainerComponent } from "../commons/template-container/template-container.component";
 import { TemplateService } from '../services/template.service';
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
-import { Template } from '../model/Template';
+import { ApprovalFlowTemplate, Template } from '../model/Template';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingComponent } from "../commons/loading/loading.component";
 
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
   styleUrls: ['./templates.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent, MatProgressSpinner, ReactiveFormsModule]
+  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent, MatProgressSpinner, ReactiveFormsModule, LoadingComponent]
 })
 export class TemplatesComponent implements OnInit {
+
   selectedFile: File | null = null;
   isModalOpen: boolean = false;
   isDragOver: boolean = false;
   isTemplateValid: boolean = false;
   templates: Template[] = [];
   templateCategories!: string[];
+  approvalFlows!: ApprovalFlowTemplate[];
   formGroup!: FormGroup
   errorMessage: string | null = null;
-  constructor(private service: TemplateService, private formBuilder: FormBuilder,private router: Router) { }
+
+  constructor(private service: TemplateService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.loadTemplates();
@@ -94,6 +98,7 @@ export class TemplatesComponent implements OnInit {
       }
     });
     this.loadTemplateCategories();
+    this.loadApprovalFlows();
   }
   handleTemplateEvenet(action: String, template: Template): void {
     if (action === 'Delete') {
@@ -129,18 +134,31 @@ export class TemplatesComponent implements OnInit {
       }
     });
   }
+  loadApprovalFlows(): void {
+    this.service.getApprovalFlows().subscribe({
+      next: (response) => {
+        this.approvalFlows = response;
+        console.log('Approval flows loaded successfully:', response);
+      }
+      ,error: (error) => {
+        console.error('Error loading approval flows:', error);
+      }
+    });
+  }
+
   initializeForm(): void {
     this.formGroup = this.formBuilder.group({
       name: [''],
       category: [''],
-      description: ['']
+      description: [''],
+      approvalFlow: ['']
     });
   }
 
   submitTemplate(): void {
     const formData = this.formGroup.value;
     console.log('Submitting template with data:', formData);
-    this.service.uploadTemplate(this.selectedFile!, formData.name, formData.category, formData.description).subscribe({
+    this.service.uploadTemplate(this.selectedFile!, formData.name, formData.category, formData.description, formData.approvalFlow ).subscribe({
       next: (response) => {
         this.isModalOpen = false;
         this.selectedFile = null;

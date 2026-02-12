@@ -4,9 +4,6 @@ import {
   coerceNumberProperty
 } from "./chunk-FPNVPXKF.js";
 import {
-  BidiModule
-} from "./chunk-I77MDKE2.js";
-import {
   APP_ID,
   ApplicationRef,
   CSP_NONCE,
@@ -65,6 +62,15 @@ import {
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
 
+// node_modules/@angular/cdk/fesm2022/fake-event-detection.mjs
+function isFakeMousedownFromScreenReader(event) {
+  return event.buttons === 0 || event.detail === 0;
+}
+function isFakeTouchstartFromScreenReader(event) {
+  const touch = event.touches && event.touches[0] || event.changedTouches && event.changedTouches[0];
+  return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) && (touch.radiusY == null || touch.radiusY === 1);
+}
+
 // node_modules/@angular/cdk/fesm2022/keycodes2.mjs
 var BACKSPACE = 8;
 var TAB = 9;
@@ -89,15 +95,6 @@ var A = 65;
 var Z = 90;
 var META = 91;
 var MAC_META = 224;
-
-// node_modules/@angular/cdk/fesm2022/fake-event-detection.mjs
-function isFakeMousedownFromScreenReader(event) {
-  return event.buttons === 0 || event.detail === 0;
-}
-function isFakeTouchstartFromScreenReader(event) {
-  const touch = event.touches && event.touches[0] || event.changedTouches && event.changedTouches[0];
-  return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) && (touch.radiusY == null || touch.radiusY === 1);
-}
 
 // node_modules/@angular/cdk/fesm2022/shadow-dom.mjs
 var shadowDomIsSupported;
@@ -1134,6 +1131,12 @@ var ObserversModule = class _ObserversModule {
 })();
 
 // node_modules/@angular/cdk/fesm2022/a11y-module.mjs
+var IsFocusableConfig = class {
+  /**
+   * Whether to count an element as focusable even if it is not currently visible.
+   */
+  ignoreVisibility = false;
+};
 var InteractivityChecker = class _InteractivityChecker {
   _platform = inject(Platform);
   constructor() {
@@ -1975,14 +1978,6 @@ var A11yModule = class _A11yModule {
   }], () => [], null);
 })();
 
-// node_modules/@angular/cdk/fesm2022/keycodes.mjs
-function hasModifierKey(event, ...modifiers) {
-  if (modifiers.length) {
-    return modifiers.some((modifier) => event[modifier]);
-  }
-  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
-}
-
 // node_modules/@angular/cdk/fesm2022/id-generator.mjs
 var counters = {};
 var _IdGenerator = class __IdGenerator {
@@ -2081,6 +2076,14 @@ var Typeahead = class {
     });
   }
 };
+
+// node_modules/@angular/cdk/fesm2022/keycodes.mjs
+function hasModifierKey(event, ...modifiers) {
+  if (modifiers.length) {
+    return modifiers.some((modifier) => event[modifier]);
+  }
+  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
 
 // node_modules/@angular/cdk/fesm2022/list-key-manager.mjs
 var ListKeyManager = class {
@@ -2410,6 +2413,19 @@ var ListKeyManager = class {
         this._activeItemIndex.set(newIndex);
         this._typeahead?.setCurrentSelectedItemIndex(newIndex);
       }
+    }
+  }
+};
+
+// node_modules/@angular/cdk/fesm2022/activedescendant-key-manager.mjs
+var ActiveDescendantKeyManager = class extends ListKeyManager {
+  setActiveItem(index) {
+    if (this.activeItem) {
+      this.activeItem.setInactiveStyles();
+    }
+    super.setActiveItem(index);
+    if (this.activeItem) {
+      this.activeItem.setActiveStyles();
     }
   }
 };
@@ -2744,6 +2760,10 @@ var TREE_KEY_MANAGER = new InjectionToken("tree-key-manager", {
   providedIn: "root",
   factory: TREE_KEY_MANAGER_FACTORY
 });
+var TREE_KEY_MANAGER_FACTORY_PROVIDER = {
+  provide: TREE_KEY_MANAGER,
+  useFactory: TREE_KEY_MANAGER_FACTORY
+};
 
 // node_modules/@angular/cdk/fesm2022/a11y.mjs
 var ID_DELIMITER = " ";
@@ -2770,6 +2790,7 @@ function getAriaReferenceIds(el, attr) {
   const attrValue = el.getAttribute(attr);
   return attrValue?.match(/\S+/g) ?? [];
 }
+var MESSAGES_CONTAINER_ID = "cdk-describedby-message-container";
 var CDK_DESCRIBEDBY_ID_PREFIX = "cdk-describedby-message";
 var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
 var nextId = 0;
@@ -2950,6 +2971,32 @@ function setMessageId(element, serviceId) {
     element.id = `${CDK_DESCRIBEDBY_ID_PREFIX}-${serviceId}-${nextId++}`;
   }
 }
+var NoopTreeKeyManager = class {
+  _isNoopTreeKeyManager = true;
+  // Provide change as required by TreeKeyManagerStrategy. NoopTreeKeyManager is a "noop"
+  // implementation that does not emit to streams.
+  change = new Subject();
+  destroy() {
+    this.change.complete();
+  }
+  onKeydown() {
+  }
+  getActiveItemIndex() {
+    return null;
+  }
+  getActiveItem() {
+    return null;
+  }
+  focusItem() {
+  }
+};
+function NOOP_TREE_KEY_MANAGER_FACTORY() {
+  return () => new NoopTreeKeyManager();
+}
+var NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER = {
+  provide: TREE_KEY_MANAGER,
+  useFactory: NOOP_TREE_KEY_MANAGER_FACTORY
+};
 var ConfigurableFocusTrap = class extends FocusTrap {
   _focusTrapManager;
   _inertStrategy;
@@ -3121,37 +3168,6 @@ var ConfigurableFocusTrapFactory = class _ConfigurableFocusTrapFactory {
   }], () => [], null);
 })();
 
-// node_modules/@angular/material/fesm2022/common-module.mjs
-var MATERIAL_SANITY_CHECKS = new InjectionToken("mat-sanity-checks", {
-  providedIn: "root",
-  factory: () => true
-});
-var MatCommonModule = class _MatCommonModule {
-  constructor() {
-    inject(HighContrastModeDetector)._applyBodyHighContrastModeCssClasses();
-  }
-  static ɵfac = function MatCommonModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _MatCommonModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _MatCommonModule,
-    imports: [BidiModule],
-    exports: [BidiModule]
-  });
-  static ɵinj = ɵɵdefineInjector({
-    imports: [BidiModule, BidiModule]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(MatCommonModule, [{
-    type: NgModule,
-    args: [{
-      imports: [BidiModule],
-      exports: [BidiModule]
-    }]
-  }], () => [], null);
-})();
-
 export {
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
@@ -3166,6 +3182,11 @@ export {
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
   normalizePassiveListenerOptions,
+  INPUT_MODALITY_DETECTOR_OPTIONS,
+  INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS,
+  InputModalityDetector,
+  FocusMonitorDetectionMode,
+  FOCUS_MONITOR_DEFAULT_OPTIONS,
   FocusMonitor,
   CdkMonitorFocus,
   _CdkPrivateStyleLoader,
@@ -3174,14 +3195,41 @@ export {
   MediaMatcher,
   BreakpointObserver,
   CdkObserveContent,
+  IsFocusableConfig,
   InteractivityChecker,
+  FocusTrap,
   FocusTrapFactory,
+  CdkTrapFocus,
+  LIVE_ANNOUNCER_ELEMENT_TOKEN,
+  LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
+  LIVE_ANNOUNCER_DEFAULT_OPTIONS,
   LiveAnnouncer,
+  CdkAriaLive,
+  HighContrastMode,
+  HighContrastModeDetector,
   A11yModule,
-  hasModifierKey,
   _IdGenerator,
+  hasModifierKey,
+  ListKeyManager,
+  ActiveDescendantKeyManager,
   FocusKeyManager,
+  TreeKeyManager,
+  TREE_KEY_MANAGER_FACTORY,
+  TREE_KEY_MANAGER,
+  TREE_KEY_MANAGER_FACTORY_PROVIDER,
+  addAriaReferencedId,
+  removeAriaReferencedId,
+  getAriaReferenceIds,
+  MESSAGES_CONTAINER_ID,
+  CDK_DESCRIBEDBY_ID_PREFIX,
+  CDK_DESCRIBEDBY_HOST_ATTRIBUTE,
   AriaDescriber,
-  MatCommonModule
+  NoopTreeKeyManager,
+  NOOP_TREE_KEY_MANAGER_FACTORY,
+  NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER,
+  ConfigurableFocusTrap,
+  EventListenerFocusTrapInertStrategy,
+  FOCUS_TRAP_INERT_STRATEGY,
+  ConfigurableFocusTrapFactory
 };
-//# sourceMappingURL=chunk-KF2Y7FGZ.js.map
+//# sourceMappingURL=chunk-2ET2YIZY.js.map

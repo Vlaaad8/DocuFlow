@@ -1,0 +1,121 @@
+.info-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+}
+.first-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0;
+}
+.icon-title{
+    display: flex;  
+    align-items: center;
+    border-radius: 8px;
+    padding: 16px;
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.description-title{
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+.Pending{
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+
+
+.text-section h3 {
+    margin : 0;
+    font-size: 18px;
+    font-weight: 600;
+    padding-top: 3px;
+}
+
+.text-section p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 10px;
+}
+.content{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.content button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 9px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    color: #6b7280;
+
+}
+.content button.approve{
+    color: #065f46;
+}
+.content button.reject{
+    color: #b91c1c;
+}
+.content button.preview{
+    color: #6b7280;
+}
+.content button.approve:hover {
+    background-color: #d1fae5;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+}
+.content button.reject:hover {
+    background-color: #ffd7d7;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+}
+.content button.preview:hover {
+    background-color: #f3f4f6;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+}
+.container{
+    padding: 16px 32px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid #ebedf0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.time-info span{
+    
+font-weight: bold;
+color:#000;
+}
+.time-info{
+    font-size: 14px;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+.time-info p{
+    margin-top: 0;
+}

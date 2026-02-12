@@ -14,13 +14,7 @@
       <p>Create and customize your document templates here.</p>
     </div>
 
-    <div class="loading-wrapper" *ngIf="!showEditor()">
-      <div class="loading-container">
-        <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
-        <h4>Loading editor...</h4>
-        <p>Please wait while we finish loading</p>
-      </div>
-    </div>
+    <app-loading *ngIf="!showEditor()" title="Loading editor..." message="Please wait while we finish loading"></app-loading>
 
     <div class="editor" [style.visibility]="showEditor() ? 'visible' : 'hidden'">
       <editor [apiKey]="tinymceApiKey" [init]="tinyInit" [(ngModel)]="content" id="editor" />

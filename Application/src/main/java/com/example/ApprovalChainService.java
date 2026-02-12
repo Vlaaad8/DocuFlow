@@ -2,7 +2,7 @@ package com.example;
 
 import com.example.approval.ApprovalChain;
 import com.example.approval.ApprovalStep;
-import com.example.dto.ApprovalChainDTO;
+import com.example.dto.Approval.ApprovalChainDTO;
 import com.example.dto.ChainRequest;
 import com.example.dtoMapper.ApprovalChainMapper;
 import com.example.jpa.ApprovalChainRepository;

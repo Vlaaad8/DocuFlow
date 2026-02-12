@@ -1,0 +1,33 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav-design">
+    <app-sidenav-user [selectedRequestsTab]="true"></app-sidenav-user>
+
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="description-section">
+      <div class="first-row">
+        <h2>Requests Manager</h2>
+        <app-exit-button></app-exit-button>
+      </div>
+      <p>Manage and review your document requests here.</p>
+    </div>
+    <div class="container">
+      <mat-tab-group class="tab-section">
+        <mat-tab label="Pending Requests">
+          <div class="tab-content">
+            <p>Here you can view and manage your pending document requests.</p>
+            <app-document-approval></app-document-approval>
+          </div>
+        </mat-tab>
+        <mat-tab label="My Requests">
+          <div class="tab-section">
+            <p>Here you can view your approved document requests.</p>
+          </div>
+        </mat-tab>
+       
+      </mat-tab-group>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

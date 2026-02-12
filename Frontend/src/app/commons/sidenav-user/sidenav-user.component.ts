@@ -20,7 +20,7 @@ export class SidenavUserComponent implements OnInit {
     @Input() selectemTemplteCreator: boolean = false;
     @Input() selectedHumanResourceTab: boolean = false;
     @Input() selectedApprovalFlowsTab: boolean = false;
-
+    @Input() selectedRequestsTab: boolean = false;
 
     public user!: User;
 
@@ -53,5 +53,8 @@ export class SidenavUserComponent implements OnInit {
     }
     handleApprovalFlows(): void {
         this.router.navigate(['approval-flows']);
+    }
+    handleRequests(): void {
+        this.router.navigate(['requests']);
     }
 }

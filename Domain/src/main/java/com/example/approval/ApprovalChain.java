@@ -20,6 +20,7 @@ public class ApprovalChain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "approvalChain", cascade = CascadeType.ALL)

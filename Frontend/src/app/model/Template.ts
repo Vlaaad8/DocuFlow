@@ -5,6 +5,10 @@ export interface Template{
     name: string;
     category: string;
     description: string;
-    status: string;
     fields: Field[];
+}
+
+export interface ApprovalFlowTemplate {
+    id : number;
+    name: string;
 }

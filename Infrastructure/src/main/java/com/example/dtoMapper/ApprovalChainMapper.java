@@ -1,7 +1,8 @@
 package com.example.dtoMapper;
 
 import com.example.approval.ApprovalChain;
-import com.example.dto.ApprovalChainDTO;
+import com.example.dto.Approval.ApprovalChainDTO;
+import com.example.dto.Approval.ApprovalChainOptionDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,4 +14,5 @@ public interface ApprovalChainMapper {
 
     ApprovalChain toApprovalChain(ApprovalChainDTO approvalChainDTO);
 
+    ApprovalChainOptionDTO toApprovalChainOption(ApprovalChain approvalChain);
 }

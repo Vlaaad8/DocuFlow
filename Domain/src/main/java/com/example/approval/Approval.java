@@ -27,16 +27,11 @@ public class Approval {
     private ApprovalStatus status;
 
     @ManyToOne
-    private User requester;
-
-    @ManyToOne
     private User approver;
-
-    @ManyToOne
-    private Template template;
 
     private Timestamp decisionDate;
 
+    @Column(nullable = false)
     private int stepNumber;
 
     @ManyToOne

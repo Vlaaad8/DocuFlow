@@ -15,6 +15,7 @@ import { LabelDisplayComponent } from "../commons/label-display/label-display.co
 import { MatIconModule } from "@angular/material/icon";
 import { CreatorService } from '../services/creator.service';
 import { Field } from '../model/Field';
+import { LoadingComponent } from "../commons/loading/loading.component";
 
 
 const defaultContent = '<p>Create your template…</p>';
@@ -22,7 +23,7 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, MatProgressSpinner, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, MatProgressSpinner, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent]
 })
 export class CreatorComponent implements OnInit {
   @ViewChild(EditorComponent) editorComp?: EditorComponent;

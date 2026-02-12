@@ -35,9 +35,10 @@
             </div>
           </div>
 
-          <div class="upload-body" >
-            <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()" *ngIf="selectedFile==null"
-              (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
+          <div class="upload-body">
+            <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
+              *ngIf="selectedFile==null" (drop)="onDrop($event)" (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)">
               <div class="drop-zone">
                 <mat-icon class="upload-icon">backup</mat-icon>
                 <h2>Drop your document here</h2>
@@ -46,14 +47,14 @@
               <input #fileInput type="file" accept=".pdf,.doc,.docx,.txt" (change)="handleFileSelected($event)"
                 style="visibility: hidden;">
             </div>
-             <div >
-        <div class="loading-zone" *ngIf="selectedFile!=null">
-          <mat-spinner diameter="80" strokeWidth="8" class="custom-spinner"></mat-spinner>
-          <h4>Validating template...</h4>
-          <p>Please wait while we process your request</p>
-        </div>
-      </div>
-            
+            <div>
+              <div class="loading-zone" *ngIf="selectedFile!=null">
+                <mat-spinner diameter="80" strokeWidth="8" class="custom-spinner"></mat-spinner>
+                <h4>Validating template...</h4>
+                <p>Please wait while we process your request</p>
+              </div>
+            </div>
+
             <div class="info">
               Template Requirements:
               <ul>
@@ -89,6 +90,12 @@
                   <option *ngFor="let category of templateCategories" [value]="category">{{category}}</option>
                 </select>
               </div>
+              <div class="input-design">
+                <label>Approval Flow</label>
+                <select formControlName="approvalFlow">
+                  <option *ngFor="let flow of approvalFlows" [value]="flow.id">{{flow.name}}</option>
+                </select>
+              </div>
               <div class="buttonSection">
                 <button type="submit">Add Template</button>
                 <button type="button" (click)="handleLeave()">Cancel</button>
@@ -106,13 +113,7 @@
       </div>
     </ng-template>
     <ng-template #loadingScreen>
-      <div class="loading-wrapper">
-        <div class="loading-container">
-          <mat-spinner diameter="100" strokeWidth="8" class="custom-spinner"></mat-spinner>
-          <h4>Loading all templates...</h4>
-          <p>Please wait while we process your request</p>
-        </div>
-      </div>
+      <app-loading title="Loading templates..." message="Please wait while we process your request"></app-loading>
     </ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

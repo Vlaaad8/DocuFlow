@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Template } from '../model/Template';
+import { ApprovalFlowTemplate, Template } from '../model/Template';
 
 export interface HtmlRequest {
   content: string;
@@ -28,12 +28,13 @@ export class TemplateService {
   public deleteTemplate(templateId: number): Observable<void> {
     return this.http.delete<void>(`${URL}`, { params: { id: templateId } });
   }
-  public uploadTemplate(file: File, name: string, category: string, description: string): Observable<Template> {
+  public uploadTemplate(file: File, name: string, category: string, description: string, approvalFlowId: number): Observable<Template> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('name', name);
     formData.append('category', category);
     formData.append('description', description);
+    formData.append('approvalFlow', approvalFlowId.toString());
     return this.http.post<Template>(`${URL}`, formData);
   }
   public getTemplateCategories(): Observable<string[]> {
@@ -53,4 +54,7 @@ public editTemplateHTML(htmlContent: string, fileName: string): Observable<void>
 
 }
 
+public getApprovalFlows(): Observable<ApprovalFlowTemplate[]> {
+  return this.http.get<ApprovalFlowTemplate[]>(`${URL}/approvalFlows`); 
+}
 }

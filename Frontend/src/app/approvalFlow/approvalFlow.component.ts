@@ -31,19 +31,6 @@ export class ApprovalFlowComponent implements OnInit {
   public roles!: string[];
 
   ngOnInit() {
-    // forkJoin({
-    //   roles: this.service.getRoles(),
-    //   chains: this.service.getFlows()
-    // }).subscribe({
-    //   next: (response) => {
-    //     this.roles = response.roles;
-    //     this.chains = response.chains;
-    //     console.log(this.chains);
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // });
    
     this.service.getRoles().subscribe({
       next: (response) => {
@@ -80,10 +67,7 @@ export class ApprovalFlowComponent implements OnInit {
     this.inputFormSteps.clear();
     for (const step of list) {
       this.inputFormSteps.push(this.formBuilder.group({
-        id: [0],
         approverRole: [step.approverRole],
-        stepNumber: [step.stepNumber],
-        approvalChain: [0]
       }));
     }
   }
@@ -99,6 +83,7 @@ export class ApprovalFlowComponent implements OnInit {
       approverRole: [null],
     }));
   }
+
   handleStepNumberChange(stepNumber: number): void {
     this.inputFormSteps.removeAt(stepNumber - 1);
     for (let i = stepNumber - 1; i < this.inputFormSteps.length; i++) {
@@ -109,7 +94,7 @@ export class ApprovalFlowComponent implements OnInit {
   }
 
   saveFlow(): void {
-    //console.log(this.formGroup.value);
+    // console.log(this.formGroup.value);
     this.service.saveFlow(this.formGroup.value).subscribe({
       next: () => {
         console.log('Flow saved successfully');

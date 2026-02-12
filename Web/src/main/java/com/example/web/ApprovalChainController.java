@@ -1,8 +1,7 @@
 package com.example.web;
 
 import com.example.ApprovalChainService;
-import com.example.approval.ApprovalChain;
-import com.example.dto.ApprovalChainDTO;
+import com.example.dto.Approval.ApprovalChainDTO;
 import com.example.dto.ChainRequest;
 import com.example.login.Role;
 import lombok.AllArgsConstructor;

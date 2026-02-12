@@ -27,6 +27,9 @@
     (click)="handleApprovalFlows()">
     <mat-icon class="icon-design">add_link</mat-icon>Approval Flows
   </div>
+  <div [ngClass]="selectedRequestsTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleRequests()">
+    <mat-icon class="icon-design">done_all</mat-icon>Requests Manager
+  </div>
 
   <div class="user-section">
     <div class="user-card" (click)="handleProfile()">

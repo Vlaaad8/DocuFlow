@@ -13,7 +13,7 @@
       </div>
       <p>Autofill and sign your document with ease using our generation tools.</p>
       <div class="main-content">
-        
+
         <div class="first-part">
           <div class="info-panel">
             <h3>Your Data Profile</h3>
@@ -31,26 +31,46 @@
       </div>
     </div>
 
-    <div class="confirm-zone" *ngIf="isModalOpen">
+    <ng-template class="confirm-zone" #templateDialog>
       <div class="card">
         <div class="card-header">
           <h3>Template Details</h3>
-          <mat-icon (click)="isModalOpen = false">close</mat-icon>
+          <mat-icon (click)="handleLeave()" class="close-button">close</mat-icon>
         </div>
-        <ng-container *ngIf="modalStage === 'presentation'; then presentation else loading"></ng-container>
+        <ng-container *ngIf="modalStage === 'presentation'; then presentationDialog else loading"></ng-container>
 
-        <ng-template #presentation>
+        <ng-template #presentationDialog>
           <div class="card-body">
             <h3>Document preview</h3>
             <div class="detail-card">
-              <p>Document will be generated with you following personal data</p>
+              <p>Document will be generated with you following personal data:</p>
               <div>
                 <p class="field-item" *ngFor="let field of templateFields"><span class="field-label">{{field.name}}:
                   </span> <span>{{field.value}}</span></p>
               </div>
             </div>
+            <h3>Approval preview</h3>
+            <div class="detail-card">
+              <div class="step-container">
+                <div class="steps-visualization" *ngFor="let step of templateApprovers">
+                  <div class="step-item">
+                    <div class="step-badge" [title]="step.approverName" [class]="step.approverRole">
+                      {{ getRoleAbbreviation(step.approverName) }}
+                    </div>
+                    <div class="step-label">
+                      <span class="step-name">{{ step.approverName }}</span>
+                      <span class="step-role">{{ step.approverRole }}</span>
+                    </div>
+                    <div *ngIf="true" class="step-arrow">→</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+
+            </div>
             <div class="buttonSection">
-              <button type="submit" (click)="generateDocument()">Generate Document</button>
+              <button type="submit" (click)="generateDocument()">Request Approval</button>
               <button type="button" (click)="handleLeave()">Cancel</button>
             </div>
           </div>
@@ -66,6 +86,6 @@
           </div>
         </ng-template>
       </div>
-    </div>
+    </ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

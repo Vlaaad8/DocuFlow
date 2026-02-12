@@ -1,13 +1,13 @@
 import {
-  ScrollDispatcher,
-  ScrollingModule,
-  ViewportRuler
-} from "./chunk-UOETHLXP.js";
-import {
   DomPortalOutlet,
   PortalModule,
   TemplatePortal
 } from "./chunk-WTKZ6WER.js";
+import {
+  ScrollDispatcher,
+  ScrollingModule,
+  ViewportRuler
+} from "./chunk-Y5P6RFF6.js";
 import {
   coerceCssPixelValue
 } from "./chunk-46HAYV32.js";
@@ -24,14 +24,14 @@ import {
   _getEventTarget,
   coerceArray,
   hasModifierKey
-} from "./chunk-KF2Y7FGZ.js";
-import {
-  Platform
-} from "./chunk-FPNVPXKF.js";
+} from "./chunk-2ET2YIZY.js";
 import {
   BidiModule,
   Directionality
 } from "./chunk-I77MDKE2.js";
+import {
+  Platform
+} from "./chunk-FPNVPXKF.js";
 import {
   Location
 } from "./chunk-BGUU5Y2V.js";
@@ -2890,4 +2890,4 @@ export {
   createOverlayRef,
   OverlayModule
 };
-//# sourceMappingURL=chunk-52DSVYTK.js.map
+//# sourceMappingURL=chunk-MGX2C5OQ.js.map

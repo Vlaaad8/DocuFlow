@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GenerateTemplate } from '../model/GenerateTemplate';
+import { GenerateTemplate, TemplateApprovers } from '../model/GenerateTemplate';
 import { FieldTemplate } from '../model/FieldTemplate';
 
 
@@ -26,5 +26,9 @@ export class GenerateService {
     formData.append('templateID', templateID.toString());
     formData.append('userID', userID.toString());
     return this.http.post<void>(URL, formData);
+  }
+
+  public getTemplateApprovers(templateId: number, userId: number): Observable<TemplateApprovers[]> {
+    return this.http.get<TemplateApprovers[]>(`${URL}/approver/${templateId}/${userId}`);
   }
 }
