@@ -166,5 +166,9 @@
 }
 .content{
     padding: 16px 32px;
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
 }
+
 

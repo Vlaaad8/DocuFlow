@@ -40,9 +40,11 @@ export class DashboardComponent implements OnInit {
     this.service.getDashboardData(this.user.id).subscribe({
       next: (data) => {
         this.dashboardData = data;
+        this.status = 'present';
       },
       error: (err) => {
         console.error('Error fetching dashboard data:', err);
+               this.status = 'present';
       }
     });
   }

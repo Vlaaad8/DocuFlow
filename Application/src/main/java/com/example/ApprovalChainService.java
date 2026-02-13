@@ -26,6 +26,7 @@ public class ApprovalChainService {
         return Role.values();
     }
 
+    //TODO exception and transactional
     public void createApprovalChain(ChainRequest request) {
 
         ApprovalChain approvalChain = new ApprovalChain();

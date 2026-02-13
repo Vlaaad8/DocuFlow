@@ -2,6 +2,7 @@
     background: #ffffff;
     border-radius: 10px;
     border: 2px solid #ebedf0;
+    
 }
 
 .container:hover {
@@ -41,12 +42,13 @@
 }
 
 .category {
-    padding: 6px 12px;
+    padding: 6px;
     background: #dbeafe;
     color: #1e40af;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
+    width: fit-content;
 }
 
 .container-content {
@@ -79,65 +81,72 @@
     font-size: 12px;
     font-weight: 700;
     flex-shrink: 0;
-    
+
 }
 
 .step-item.required .step-badge {
     background: #fee2e2;
     color: #991b1b;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fecaca;
-    
+
 }
+
 .CEO {
     background-color: #f2a5a0;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;
-    color: white;
+    color: #1f2937;
 }
 
-.Manager{
-    background-color: #9fe0b7; 
+.Manager {
+    background-color: #9fe0b7;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe0b7;
     color: #1f2937;
 }
-.Employee{
-    background-color: #d1d5db; 
+
+.Employee {
+    background-color: #d1d5db;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d1d5db;
     color: #1f2937;
 }
-.HumanResource{
-    background-color: #d7b5e6; 
+
+.HumanResource {
+    background-color: #d7b5e6;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d7b5e6;
     color: #1f2937;
 }
-.IT{
-    background-color: #a7cbee; 
+
+.IT {
+    background-color: #a7cbee;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #a7cbee;
     color: #1f2937;
 }
-.Finance{
-    background-color: #86efac; 
+
+.Finance {
+    background-color: #86efac;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #86efac;
     color: #1f2937;
 }
-.Law{
-    background-color: #fcd34d; 
+
+.Law {
+    background-color: #fcd34d;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fcd34d;
     color: #1f2937;
 }
 
-.Sales{
-    background-color: #fde3b5; 
+.Sales {
+    background-color: #fde3b5;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fde3b5;
     color: #1f2937;
 }
-.Support{
-    background-color: #9fe4ef;  
+
+.Support {
+    background-color: #9fe4ef;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe4ef;
     color: #1f2937;
 }
 
-.Marketing{
-    background-color: #fdba74; 
+.Marketing {
+    background-color: #fdba74;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fdba74;
     color: #1f2937;
 }
@@ -145,9 +154,7 @@
 
 .step-label {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 80px;
+    gap: 8px;
 }
 
 .step-role {
@@ -167,8 +174,25 @@
     color: #d1d5db;
     font-size: 16px;
 }
-.step-container{
+
+.step-container {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.info-section h4 {
+    margin: 0;
+    padding: 4px;
+}
+
+.info-section p {
+    margin: 0px;
+}
+
+.container-content p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+    margin-bottom: 10px;
 }

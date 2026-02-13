@@ -37,7 +37,9 @@ public class ApprovalRequest {
     int currentStep;
 
     @OneToMany(mappedBy = "approvalRequest", cascade = CascadeType.ALL)
-    List<Approval> steps;
+    @OrderBy("stepNumber ASC")
+    private List<Approval> steps;
+
 
 
 

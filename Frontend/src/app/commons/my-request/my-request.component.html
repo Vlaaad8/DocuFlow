@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="header">
+    <div class="first-part">
+      <mat-icon>description</mat-icon>
+      <div class="info">
+        <h3>{{request.templateTitle}}</h3>
+        <p>{{request.templateType}}</p>
+      </div>
+    </div>
+    <div class="status">
+      {{request.status}}
+    </div>
+  </div>
+  <div class="content">
+    <ng-container *ngFor="let approval of request.approvals">
+
+      <ng-container [ngSwitch]="approval.status">
+
+        <!-- PENDING -->
+        <div class="approval" *ngSwitchCase="'IN_PROGRESS'">
+          <div class="display pending">
+            <mat-icon>hourglass_empty</mat-icon>
+            <div class="info">
+              <h3>{{ approval.approverName }}</h3>
+              <p>{{ approval.approverRole }}</p>
+            </div>
+          </div>
+          <div class="date">
+            <h3>Pending</h3>
+            <p>---</p>
+          </div>
+        </div>
+
+        <!-- APPROVED -->
+        <div class="approval" *ngSwitchCase="'ACCEPTED'">
+          <div class="display">
+            <mat-icon>check</mat-icon>
+            <div class="info">
+              <h3>{{ approval.approverName }}</h3>
+              <p>{{ approval.approverRole }}</p>
+            </div>
+          </div>
+          <div class="date">
+            <h3>Signed</h3>
+            <p>{{ formatDate(approval.decisionDate) }}</p>
+          </div>
+        </div>
+
+        <!-- CANCELED -->
+        <div class="approval" *ngSwitchCase="'CANCELED'">
+          <div class="display rejected">
+            <mat-icon>close</mat-icon>
+            <div class="info">
+              <h3>{{ approval.approverName }}</h3>
+              <p>{{ approval.approverRole }}</p>
+            </div>
+          </div>
+          <div class="date">
+            <h3>Canceled</h3>
+            <p>{{ formatDate(approval.decisionDate) }}</p>
+          </div>
+        </div>
+
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+</div>

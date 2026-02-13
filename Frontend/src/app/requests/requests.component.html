@@ -15,18 +15,25 @@
     </div>
     <div class="container">
       <mat-tab-group class="tab-section">
-        <mat-tab label="Pending Requests">
+        <mat-tab label="Pending Requests" *ngIf="user.role!='Employee'">
+          <p>Here you can view and manage your pending document requests.</p>
           <div class="tab-content">
-            <p>Here you can view and manage your pending document requests.</p>
-            <app-document-approval></app-document-approval>
+            <app-document-approval *ngFor="let approval of approvals" [approval]="approval"
+              (approvalAction)="handleDecision($event)"></app-document-approval>
+          </div>
+          <div *ngIf="approvals.length == 0" class="no-requests">
+            <p>No pending requests available.</p>
           </div>
         </mat-tab>
         <mat-tab label="My Requests">
           <div class="tab-section">
             <p>Here you can view your approved document requests.</p>
+            <div class=requests-list>
+              <app-my-request *ngFor="let request of requests" [request]="request"></app-my-request>
+            </div>
           </div>
         </mat-tab>
-       
+
       </mat-tab-group>
     </div>
   </mat-sidenav-content>

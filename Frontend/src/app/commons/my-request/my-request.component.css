@@ -1,0 +1,149 @@
+.container {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 2px solid #ebedf0;
+    margin-bottom: 16px;
+}
+
+.container:hover {
+    cursor: pointer;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb;
+    width: inherit;
+    padding: 12px 16px;
+    border-radius: 10px;
+}
+
+.first-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+}
+
+.first-part mat-icon {
+    cursor: pointer;
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.status.pending {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status.signed {
+    background-color: #d1fae5;
+    color: #81bac2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status.rejected {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+.content {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.approval {
+    display: flex;
+    border: 2px solid #ebedf0;
+    border-radius: 20px;
+    padding: 12px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9fafb;
+
+}
+.approval:hover{
+    transition: all 0.25s ease;
+    transform: translateY(-2px);
+}
+
+.display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.display .mat-icon {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 8px;
+    background: #d1fae5;
+    color: #81bac2;
+}
+
+.info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.info p {
+    margin: 4px 0 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.date h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.date p {
+    margin: 4px 0 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.display.pending mat-icon {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 8px;
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.display.rejected mat-icon {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 8px;
+    background-color: #fee2e2;
+    color: #b91c1c;
+}

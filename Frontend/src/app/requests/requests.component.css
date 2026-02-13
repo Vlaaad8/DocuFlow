@@ -37,3 +37,6 @@
 .container {
     padding: 16px 32px;
 }
+.requests-list{
+    gap: 12px;
+}

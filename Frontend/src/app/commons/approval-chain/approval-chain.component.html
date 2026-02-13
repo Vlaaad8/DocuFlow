@@ -2,28 +2,31 @@
   <div class="container-header">
     <div class="info-section">
       <h4>{{ approvalChain.name }}</h4>
-      <p class="category">CATEGORY</p>
+      <div class="category">
+        <p>CATEGORY</p>
+      </div>
+    
     </div>
     <div class="button-section">
       <div> <mat-icon>edit</mat-icon></div>
-      <div><mat-icon>delete</mat-icon></div>
+      <div (click)="handleDelete()"><mat-icon>delete</mat-icon></div>
     </div>
   </div>
   <div class="container-content">
-    <p>Details about the approval chain will be displayed here.</p>
+    <p>Below is the approval chain for this document.</p>
     <div class="chain-details">
       <div class="chain-name">
-        <h3>aaaa</h3>
         <div class="step-container">
-          <div class="steps-visualization" *ngFor="let step of approvalChain.steps">
+          <div class="steps-visualization" *ngFor="let step of approvalChain.steps ; let i = index">
             <div class="step-item">
               <div class="step-badge" [title]="step.approverRole"  [class]="step.approverRole">
                 {{ getRoleAbbreviation(step.approverRole) }}
               </div>
               <div class="step-label">
                 <span class="step-role">{{ step.approverRole }}</span>
+                <div *ngIf="i < approvalChain.steps.length - 1" class="step-arrow">→</div>
               </div>
-              <div *ngIf="true" class="step-arrow">→</div>
+
             </div>
           </div>
         </div>

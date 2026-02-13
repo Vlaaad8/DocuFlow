@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ApprovalChain } from '../../model/Approval';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ApprovalChainComponent implements OnInit {
 
-
+  @Output() remove = new EventEmitter<number>();
   @Input({required: true}) approvalChain!: ApprovalChain
 
   constructor() { }
@@ -26,6 +26,9 @@ export class ApprovalChainComponent implements OnInit {
     } else {
       return words.map(word => word.charAt(0).toUpperCase()).join('');
     }
+  }
+  handleDelete() : void{
+    this.remove.emit(this.approvalChain.id);
   }
 
 }

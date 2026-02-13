@@ -24,6 +24,6 @@ public class ApprovalChain {
     private String name;
 
     @OneToMany(mappedBy = "approvalChain", cascade = CascadeType.ALL)
-    //@OrderBy("stepOrder ASC")
+    @OrderBy("stepNumber ASC")
     private List<ApprovalStep> steps;
 }
