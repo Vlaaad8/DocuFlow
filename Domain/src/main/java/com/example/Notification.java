@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "notifications")
 public class Notification {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

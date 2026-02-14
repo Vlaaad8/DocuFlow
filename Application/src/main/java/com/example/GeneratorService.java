@@ -17,6 +17,7 @@ import com.example.template.Template;
 import com.example.template.UserFieldValue;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +44,7 @@ public class GeneratorService {
     private final TemplateMapper templateMapper;
 
 
+    @Transactional
     public void generateFile(int templateID, int userID) {
 
         Template template = this.templateRepository.getReferenceById(templateID);

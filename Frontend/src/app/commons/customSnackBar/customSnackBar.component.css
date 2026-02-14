@@ -6,6 +6,7 @@
     display: flex;
     align-items: center;
     margin: 0px;
+    justify-content: space-between;
 }
 .error-type  > span {
     display: flex;
@@ -16,7 +17,13 @@ span mat-icon {
     cursor: pointer;
     margin-left: 5px;
 }
-span mat-icon:hover {
-    background-color: #d1d5db;
+div mat-icon:hover {
+    background-color: #4ade80;
+    border-radius: 8px;
+    
+}
+strong mat-icon:hover {
+    background-color: #d63d3d;
+    border-radius: 8px;
     
 }

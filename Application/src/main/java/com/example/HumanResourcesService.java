@@ -8,6 +8,7 @@ import com.example.login.Role;
 import com.example.login.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class HumanResourcesService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public void saveRelation(int bossID, int subordinateID) {
         User boss = userRepository.findById(bossID).orElseThrow(() -> new RelationException("Boss not found"));
         User subordinate = userRepository.findById(subordinateID).orElseThrow(() -> new RelationException("Subordinate not found"));

@@ -13,6 +13,7 @@ import { ApprovalChain, ApprovalChainStep } from '../model/Approval';
 import { ApprovalChainComponent } from "../commons/approval-chain/approval-chain.component";
 import { App } from '../app';
 import { forkJoin } from 'rxjs';
+import { SnackBarService } from '../services/snackBar.service';
 
 @Component({
   selector: 'app-approvalFlow',
@@ -27,9 +28,9 @@ export class ApprovalFlowComponent implements OnInit {
   formGroup!: FormGroup;
   chains! : ApprovalChain[];
 
-  constructor(private dialog: MatDialog, private service: ApprovalFlowService, private formBuilder: FormBuilder) { }
+  constructor(private dialog: MatDialog, private service: ApprovalFlowService, private formBuilder: FormBuilder,private snackBar: SnackBarService) { }
   public roles!: string[];
-
+  errorMessage: string | null = null;
   ngOnInit() {
    
     this.service.getRoles().subscribe({
@@ -38,16 +39,15 @@ export class ApprovalFlowComponent implements OnInit {
         console.log(this.roles);
       },
       error: (error) => {
-        console.log(error);
+        this.errorMessage = error.error || 'An error occurred while fetching roles.';
       }
     });
     this.service.getFlows().subscribe({
       next: (response) => {
         this.chains = response;
-        console.log(this.chains);
       },
       error: (error) => {
-        console.log(error);
+        this.errorMessage = error.error || 'An error occurred while fetching flows.';
       }
     });
 
@@ -94,14 +94,13 @@ export class ApprovalFlowComponent implements OnInit {
   }
 
   saveFlow(): void {
-    // console.log(this.formGroup.value);
     this.service.saveFlow(this.formGroup.value).subscribe({
       next: () => {
-        console.log('Flow saved successfully');
+        this.snackBar.showMessage('Flow saved successfully!', 'success');
         this.closeCreateModal();
       },
       error: (error) => {
-        console.error('Error saving flow:', error);
+        this.errorMessage = error.error || 'An error occurred while saving the flow. Please try again.';
       }
     });
   }

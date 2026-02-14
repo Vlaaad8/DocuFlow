@@ -10,6 +10,7 @@ import { MatIcon } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Relation } from '../model/Relation';
+import { SnackBarService } from '../services/snackBar.service';
 
 interface Node {
   id: number;
@@ -37,11 +38,13 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   public addEdgeMode: boolean = false;
   public removeEdgeMode: boolean = false;
 
+   errorMessage: string | null = null;
+
   @ViewChild('network') networkContainer!: ElementRef;
 
   private loggedUser! :User;
 
-  constructor(private service: HrService) { }
+  constructor(private service: HrService,private snackBar: SnackBarService) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
@@ -135,18 +138,19 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       manipulation: {
         enabled: true,
         addEdge: (data: Edge, callback: any) => {
-          console.log(data)
           if (data.from === data.to) {
             callback(null);
-
           }
           else {
             data.arrows = 'to';
             this.service.addRelation(data.to, data.from).subscribe({
               next: () => {
                 callback(data)
+                this,this.snackBar.showMessage("Relation added successfully!", "success");
               },
               error: (error) => {
+                console.log(error);
+                this.errorMessage = error.error || 'An error occurred while adding the relation. Please try again.';
                 callback(null);
               }
             });

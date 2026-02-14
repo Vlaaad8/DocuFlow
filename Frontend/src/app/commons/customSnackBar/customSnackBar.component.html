@@ -6,8 +6,10 @@
     <mat-icon>error</mat-icon>
     {{data.message}}
   </span>
-  <span matSnackBarAction>
+  <span class="close-button" matSnackBarAction >
+    <strong>
      <mat-icon (click)="onClose()">close_small</mat-icon>
+    </strong>
   </span>
   </div>
 </ng-template>
@@ -18,8 +20,10 @@
     <mat-icon>done_outline</mat-icon>
     {{data.message}}
   </span>
-  <span >
+  <span class="close-button" matSnackBarAction >
+    <div>
      <mat-icon (click)="onClose()">close_small</mat-icon>
+     </div>
   </span>
   </div>
 </ng-template>

@@ -16,6 +16,13 @@
       </div>
       <p>Manage the organization's employees and related resources here.</p>
     </div>
+     <div class="error-section" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        <div class="action-zone">
+          <p>{{errorMessage}}</p>
+          <mat-icon (click)="errorMessage = null">close</mat-icon>
+        </div>
+      </div>
     <div class="content">
       <div class="network-container">
         <div #network></div>
