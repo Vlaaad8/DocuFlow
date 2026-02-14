@@ -39,134 +39,159 @@ span {
 
 
 .card {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: all 0.25s ease;
-  cursor: pointer;
-  width: 100%;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    width: 100%;
 }
 
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 
 .card-icon {
-  background: #eff6ff;
-  color: #1e40af;
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 24px;
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 24px;
 }
 
 
 .card-info p {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 700;
-  color: #000000;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
 }
 
 .card-info h3 {
-  margin: 4px 0 0;
-  font-size: 15px;
-  font-weight: 500;
-  color: #6b7280;
+    margin: 4px 0 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
 }
-.stats-container{
+
+.stats-container {
     display: flex;
     gap: 30px;
 
 }
-.container{
-        padding: 24px 32px;
-        margin: 16px 0px;
+
+.container {
+    padding: 24px 32px;
+    margin: 16px 0px;
 }
-.generated {
+
+.received {
     background: #eafff5;
     color: #065f46;
 }
+
 .pending {
     background: #fef6d5;
     color: #92400e;
 }
-.received {
-    background: #fef2f2;
-    color: #991b1b;
+
+.generated {
+    background: #f5f3ff;
+    /* Un mov foarte deschis, odihnitor */
+    color: #5b21b6;
+    /* Un violet intens pentru contrast și lizibilitate */
 }
-.chart-section{
+
+.chart-section {
     background: #ffffff;
     padding: 24px;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     height: fit-content;
 }
-.chart-container{
+
+.chart-container {
     display: flex;
     gap: 24px;
     margin-top: 24px;
     align-items: center;
     justify-content: space-between;
 }
-.title h3{
+
+.title h3 {
     font-size: 20px;
     font-weight: 600;
     margin: 0;
 }
-.title p{
+
+.title p {
     color: #6b7280;
     font-size: 14px;
     font-weight: 400;
     margin-top: 7px;
 }
+
 .chart-wrapper {
-  flex: 1;
-  max-height: 350px;   
-  width: 100%;
-  margin-top: 16px;
+    flex: 1;
+    max-height: 350px;
+    width: 100%;
+    margin-top: 16px;
 }
-.title{
-    margin-bottom:10px;
+
+.title {
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
 }
 
 .legend-list {
-  list-style: none; 
-  padding: 0;
-  margin: 15px 0;
-  display: flex;
-  justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 
 .legend-list li::before {
-  content: "";
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 4px;
-  margin-left: 12px;
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 4px;
+    margin-left: 12px;
 
 }
 
-.role-accept::before      { background-color: rgba(75, 192, 192, 0.2); border: 2px solid  rgba(75, 192, 192, 1); } 
-.role-pending::before  { background-color: rgba(255, 206, 86, 0.2); border: 2px solid  rgba(255, 206, 86, 1); } 
-.role-reject::before       { background-color: rgba(255, 99, 132, 0.2); border: 2px solid  rgba(255, 99, 132, 1); } 
+.role-accept::before {
+    background-color: rgba(75, 192, 192, 0.2);
+    border: 2px solid rgba(75, 192, 192, 1);
+}
+
+.role-pending::before {
+    background-color: rgba(255, 206, 86, 0.2);
+    border: 2px solid rgba(255, 206, 86, 1);
+}
+
+.role-reject::before {
+    background-color: rgba(255, 99, 132, 0.2);
+    border: 2px solid rgba(255, 99, 132, 1);
+}
 
 .buttonSection {
     display: flex;
     gap: 25px;
     align-items: center;
 }
+
 .notificationButton {
     background-color: #f0f4f8;
     padding: 8px;
@@ -174,6 +199,102 @@ span {
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
-.notificationButton mat-icon{
+
+.notificationButton mat-icon {
     color: #374151;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: #ffffff;
+}
+
+.menuBar {
+    min-width: 300px !important;
+}
+
+.info h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.info p {
+    margin: 4px 0 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.close-button:hover {
+    color: #991b1b;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background-color: #fee2e2;
+    border-radius: 8px;
+}
+
+::ng-deep .menuBar {
+    min-width: 350px !important;
+}
+
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+
+}
+
+::ng-deep .mat-mdc-menu-panel {
+    border-radius: 16px !important;
+
+}
+
+.notification-icon {
+    color: #f97316;
+    background: #fff7ed;
+    padding: 8px;
+    border-radius: 20px;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.notification:hover {
+    background: #f9fafb;
+    transition: all 0.25s ease;
+    transform: translateY(-2px);
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.text-section p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.timestamp {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+::ng-deep .mat-badge-content {
+    color: white !important;
 }

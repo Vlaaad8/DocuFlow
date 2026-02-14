@@ -8,6 +8,7 @@ import com.example.dto.Approval.ApprovalDTO;
 import com.example.dto.Approval.ApprovalRequestDTO;
 import com.example.dtoMapper.ApprovalMapper;
 import com.example.dtoMapper.ApprovalRequestMapper;
+import com.example.email.EmailPort;
 import com.example.exceptions.ApprovalException;
 import com.example.jpa.ApprovalRepository;
 import com.example.jpa.ApprovalRequestRepository;
@@ -31,6 +32,7 @@ public class RequestService {
     private final RelationRepository relationRepository;
     private final ApprovalRequestRepository approvalRequestRepository;
     private final ApprovalRequestMapper approvalRequestMapper;
+    private final EmailPort emailPort;
 
     public List<ApprovalDTO> getToApproveRequestsForUser(int userId) {
         return approvalRepository.findByApprover_IdAndStatus(userId, ApprovalStatus.IN_PROGRESS).stream()
@@ -72,6 +74,8 @@ public class RequestService {
 
         if (approvalRequest.getCurrentStep() == approvalRequest.getApprovalChain().getSteps().size()) {
             approvalRequest.setStatus(ApprovalRequestStatus.ACCEPTED);
+            //TODO nu se genereaza documentul ok cred? am primit pe mail ceva aiurea ca si continut
+            this.emailPort.sendEmail(approvalRequest.getTemplate().getPath(), approvalRequest.getTemplate().getUser().getEmail(), approvalRequest.getTemplate().getUser().getFirstName(), approvalRequest.getTemplate().getUser().getLastName());
         } else {
             Role nextApproverRole = approvalRequest.getApprovalChain().getSteps().get(approvalRequest.getCurrentStep()).getApproverRole();
             int previousApprover = approvalRequest.getSteps().get(approvalRequest.getCurrentStep() - 2).getApprover().getId();

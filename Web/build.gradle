@@ -35,6 +35,7 @@ dependencies {
     implementation project(":Domain")
     // https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc11
     implementation("com.oracle.database.jdbc:ojdbc11:23.26.0.0.0")
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

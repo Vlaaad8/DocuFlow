@@ -19,7 +19,11 @@
     (click)="handleTemplateCreator()">
     <mat-icon class="icon-design">create</mat-icon>Template Creator
   </div>
-  <div [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
+  <div *ngIf="user.role == 'Employee'" [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
+    (click)="handleHumanResource()">
+    <mat-icon class="icon-design">person_3</mat-icon>Organization Structure
+  </div>
+    <div *ngIf="user.role != 'Employee'" [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleHumanResource()">
     <mat-icon class="icon-design">person_3</mat-icon>Human Resource
   </div>

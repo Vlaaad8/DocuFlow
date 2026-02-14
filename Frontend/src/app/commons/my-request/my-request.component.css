@@ -17,6 +17,9 @@
     width: inherit;
     padding: 12px 16px;
     border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 3px solid #f3f5f6;
 }
 
 .first-part {
@@ -46,14 +49,14 @@
 
 .status.signed {
     background-color: #d1fae5;
-    color: #81bac2;
+    color: #35486a;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
 }
 
-.status.rejected {
+.status.denyed {
     background-color: #fee2e2;
     color: #b91c1c;
     padding: 4px 8px;
@@ -97,7 +100,7 @@
     border-radius: 20px;
     padding: 8px;
     background: #d1fae5;
-    color: #81bac2;
+    color: #35486a;
 }
 
 .info h3 {
@@ -140,10 +143,39 @@
     color: #92400e;
 }
 
-.display.rejected mat-icon {
+.display.denyed mat-icon {
     cursor: pointer;
     border-radius: 20px;
     padding: 8px;
     background-color: #fee2e2;
     color: #b91c1c;
+}
+.pending{
+
+    border-radius: 4px; 
+    color:#35486a;
+    background-color: #d1fae5;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+.rejected{
+ 
+    border-radius: 4px; 
+    color:#b91c1c;
+    background-color: #fee2e2;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+.accepted{
+ 
+    border-radius: 4px; 
+    color:#065f46;
+    background-color: #d1fae5;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 500;
 }

@@ -13,7 +13,7 @@
           <p>Here's a quick overview of your dashboard.</p>
         </div>
         <div class="buttonSection">
-          <div matBadge="15" class="notificationButton" matBadgeColor="warn"><mat-icon >notifications_active</mat-icon></div>
+          <div matBadge="15" class="notificationButton"  [matMenuTriggerFor]="notificationMenu"><mat-icon >notifications_active</mat-icon></div>
         <app-exit-button></app-exit-button>
         </div>
       </div>
@@ -23,7 +23,7 @@
     <div class="container">
       <div class="stats-container">
         <div class="card">
-          <mat-icon class="card-icon">adf_scanner</mat-icon>
+          <mat-icon class="card-icon total">adf_scanner</mat-icon>
           <div class="card-info">
             <p>{{dashboardData.totalTemplates}}</p>
             <h3>Total Templates</h3>
@@ -95,3 +95,42 @@
     </ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+
+<mat-menu #notificationMenu="matMenu" yPosition="below" class="menuBar">
+ <div class="notifications-header">
+  <div class="info">
+  <h3>Notifications</h3>
+  <p>15 new notifications.</p>
+  </div>
+  <mat-icon class="close-button">close</mat-icon>
+ </div>
+  <div class="notification">
+    <div class="notification-content">
+      <mat-icon class="notification-icon">assignment_add</mat-icon>
+      <div class="text-section">
+        <p><strong>John Doe</strong> requested a new document.</p>
+        <span class="timestamp">2 hours ago</span>
+      </div>
+    </div>
+    
+  </div>  <div class="notification">
+    <div class="notification-content">
+      <mat-icon class="notification-icon">assignment_add</mat-icon>
+      <div class="text-section">
+        <p><strong>John Doe</strong> requested a new document.</p>
+        <span class="timestamp">2 hours ago</span>
+      </div>
+    </div>
+    
+  </div>  <div class="notification">
+    <div class="notification-content">
+      <mat-icon class="notification-icon">assignment_add</mat-icon>
+      <div class="text-section">
+        <p><strong>John Doe</strong> requested a new document.</p>
+        <span class="timestamp">2 hours ago</span>
+      </div>
+    </div>
+    
+  </div>
+</mat-menu>

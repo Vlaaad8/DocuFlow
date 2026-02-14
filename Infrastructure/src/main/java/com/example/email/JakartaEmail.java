@@ -14,6 +14,7 @@ import java.util.Properties;
 
 @Component
 public class JakartaEmail implements EmailPort {
+    //TODO - move credentials to application.properties
     private final Properties prop = new Properties();
     private String username = "api";
     private String password = "a03d177495c203b303d33e860605fc95";
@@ -44,7 +45,7 @@ public class JakartaEmail implements EmailPort {
             message.setSubject("Document Generation");
 
             String msg = "<p class=\"isSelectedEnd\">Dear " + firstName + " " + lastName + ",</p>\n" +
-                    "<p class=\"isSelectedEnd\">The requested document has been securely generated and is attached to this email. The content of the attached file may contain confidential and/or personal information and is intended solely for the designated recipient.</p>\n" +
+                    "<p class=\"isSelectedEnd\">The requested document got all approvals and has been securely generated and is attached to this email. The content of the attached file may contain confidential and/or personal information and is intended solely for the designated recipient.</p>\n" +
                     "<p class=\"isSelectedEnd\">Unauthorized access, use, disclosure, distribution, or copying of this document or its contents is strictly prohibited. If you have received this email in error, please delete it immediately.</p>\n" +
                     "<p class=\"isSelectedEnd\">Thank you for your cooperation.</p>\n" +
                     "<p>Sincerely,<br><strong>DocuFlow &ndash; Automated Document Delivery</strong><br><a>documents@docuflow.social</a></p>\n" +

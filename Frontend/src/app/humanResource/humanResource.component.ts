@@ -39,9 +39,12 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
 
   @ViewChild('network') networkContainer!: ElementRef;
 
+  private loggedUser! :User;
+
   constructor(private service: HrService) { }
 
   ngOnInit() {
+    this.loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
   }
   ngAfterViewInit(): void {
 
@@ -63,14 +66,14 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       title: `${user.firstName} ${user.lastName}`,
       color: {
         background: this.determineColor(user.role),
-        border: '#ffffff',
-        borderWidth: 2,
+        border: this.determineBorderColor(user.id),
         highlight: {
           background: this.determineHighlightColor(user.role),
           border: '#bdc3c7'
         },
         
       },
+      borderWidth: this.determineBorderWidth(user.id),
       level: this.determineLevel(user.role),
 
       font: {
@@ -244,6 +247,20 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   toggleRemoveEdge(): void {
     this.removeEdgeMode = !this.removeEdgeMode;
     this.addEdgeMode = false;
+  }
+
+
+  determineBorderColor(userID:number): string {
+    if (userID == this.loggedUser.id) {
+      return '#facc15';; // Blue border for logged-in user
+    }
+    return '#95a5a6'; // Default border color
+  }
+  determineBorderWidth(userID:number): number {
+    if (userID == this.loggedUser.id) {
+      return 5; 
+    }
+   return 2;
   }
 
 

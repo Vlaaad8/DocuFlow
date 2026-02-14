@@ -1,31 +1,26 @@
 import {
   MAT_RIPPLE_GLOBAL_OPTIONS,
-  MatRipple,
   RippleRenderer,
   defaultRippleAnimationConfig
-} from "./chunk-DJ3N3JSL.js";
+} from "./chunk-MLM5MVJV.js";
 import {
   _animationsDisabled
-} from "./chunk-6J6XIY4F.js";
+} from "./chunk-R3ZJIHIS.js";
 import {
-  MatCommonModule,
   _getEventTarget
-} from "./chunk-2PO74AAJ.js";
+} from "./chunk-HQFL5CAQ.js";
 import {
   Platform
-} from "./chunk-3P47QPBN.js";
+} from "./chunk-FPNVPXKF.js";
 import {
   DOCUMENT,
   Injectable,
   Injector,
-  NgModule,
   NgZone,
   RendererFactory2,
   inject,
   setClassMetadata,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule
+  ɵɵdefineInjectable
 } from "./chunk-BF7FI6KT.js";
 
 // node_modules/@angular/material/fesm2022/ripple-loader.mjs
@@ -165,32 +160,7 @@ var MatRippleLoader = class _MatRippleLoader {
   }], () => [], null);
 })();
 
-// node_modules/@angular/material/fesm2022/ripple-module.mjs
-var MatRippleModule = class _MatRippleModule {
-  static ɵfac = function MatRippleModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _MatRippleModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _MatRippleModule,
-    imports: [MatCommonModule, MatRipple],
-    exports: [MatRipple, MatCommonModule]
-  });
-  static ɵinj = ɵɵdefineInjector({
-    imports: [MatCommonModule, MatCommonModule]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(MatRippleModule, [{
-    type: NgModule,
-    args: [{
-      imports: [MatCommonModule, MatRipple],
-      exports: [MatRipple, MatCommonModule]
-    }]
-  }], null, null);
-})();
-
 export {
-  MatRippleLoader,
-  MatRippleModule
+  MatRippleLoader
 };
-//# sourceMappingURL=chunk-K3WUX5ZI.js.map
+//# sourceMappingURL=chunk-AE7MQK6A.js.map

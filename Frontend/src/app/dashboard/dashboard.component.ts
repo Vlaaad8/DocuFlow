@@ -11,45 +11,56 @@ import { DashboardData } from '../model/dashboardData';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingComponent } from "../commons/loading/loading.component";
 import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+import { NotificationsService } from '../services/notifications.service';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent, MatBadgeModule, LoadingComponent,CommonModule]
+  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent, MatBadgeModule, LoadingComponent, CommonModule,MatMenuModule]
 })
 export class DashboardComponent implements OnInit {
-  
-  public chart! : Chart;
-  public dailyChart! : Chart;
+
+  public chart!: Chart;
+  public dailyChart!: Chart;
   public user!: User;
   public dashboardData!: DashboardData;
 
   public status: string = 'loading' // 'loading' , 'present' 
 
-  constructor(private service: DashboardService) {
-        sessionStorage.getItem('loggedInUser')
-        this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
-    
-   }
+  constructor(private service: DashboardService,private notificationsService: NotificationsService) {
+    sessionStorage.getItem('loggedInUser')
+    this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+
+  }
 
   ngOnInit() {
-    this.chart = new Chart('activityChart', this.getChartConfig());
-    this.dailyChart = new Chart('dailyChart', this.getChartConfigLine());
     this.service.getDashboardData(this.user.id).subscribe({
       next: (data) => {
         this.dashboardData = data;
         this.status = 'present';
+        setTimeout(() => {
+          this.createCharts();
+        }, 2);
       },
       error: (err) => {
         console.error('Error fetching dashboard data:', err);
-               this.status = 'present';
       }
     });
   }
+  private createCharts() {
+    // Only initialize if they haven't been created yet
+    if (!this.chart) {
+      this.chart = new Chart('activityChart', this.getChartConfig());
+    }
+    if (!this.dailyChart) {
+      this.dailyChart = new Chart('dailyChart', this.getChartConfigLine());
+    }
+  }
 
-  getChartConfig() : any {
+  getChartConfig(): any {
     const data = {
       labels: [
         'Accepted',
@@ -80,7 +91,7 @@ export class DashboardComponent implements OnInit {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend:{
+          legend: {
             position: 'none'
           }
         }
@@ -88,7 +99,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getChartConfigLine() : any {
+  getChartConfigLine(): any {
     const data = {
       labels: [
         'Monday',
@@ -106,13 +117,13 @@ export class DashboardComponent implements OnInit {
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1
       },
-    {
+      {
         label: 'Daily Approvals',
         data: [10, 15, 2, 4, 1, 2, 5],
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1
-    }]
+      }]
     };
 
     return {
@@ -122,7 +133,7 @@ export class DashboardComponent implements OnInit {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend:{
+          legend: {
             position: 'none'
           }
         }

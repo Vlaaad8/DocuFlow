@@ -10,15 +10,15 @@ import { Approval } from '../../model/Approval';
 })
 export class DocumentApprovalComponent implements OnInit {
 
-  @Input({required: true}) approval!: Approval
-  @Output() approvalAction = new EventEmitter<{approvalId: number, action: string}>();
+  @Input({ required: true }) approval!: Approval
+  @Output() approvalAction = new EventEmitter<{ approvalId: number, action: string }>();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-    formatStatus(status: string): string {
+  formatStatus(status: string): string {
     switch (status) {
       case "IN_PROGRESS":
         return 'In Progress';
@@ -41,6 +41,12 @@ export class DocumentApprovalComponent implements OnInit {
 
   preview(): void {
     console.log('Previewing document for approval ID:', this.approval.id);
+  }
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+
+
   }
 
 }

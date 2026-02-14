@@ -7,8 +7,8 @@
         <p>{{request.templateType}}</p>
       </div>
     </div>
-    <div class="status">
-      {{request.status}}
+    <div [ngClass]="request.status.toLowerCase()">
+      {{formatStatus(request.status)}}
     </div>
   </div>
   <div class="content">
@@ -47,8 +47,8 @@
         </div>
 
         <!-- CANCELED -->
-        <div class="approval" *ngSwitchCase="'CANCELED'">
-          <div class="display rejected">
+        <div class="approval" *ngSwitchCase="'REJECTED'">
+          <div class="display denyed">
             <mat-icon>close</mat-icon>
             <div class="info">
               <h3>{{ approval.approverName }}</h3>

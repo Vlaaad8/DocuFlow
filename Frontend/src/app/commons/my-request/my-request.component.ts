@@ -24,4 +24,16 @@ export class MyRequestComponent implements OnInit {
 
 
   }
+  formatStatus(status: string): string {
+    switch (status) {
+      case "IN_PROGRESS":
+        return 'In Progress';
+      case "ACCEPTED":
+        return 'Accepted';
+      case "REJECTED":
+        return 'Rejected';
+      default:
+        return 'Pending';
+    }
+  }
 }

@@ -2,7 +2,7 @@ import {
   Platform,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-3P47QPBN.js";
+} from "./chunk-FPNVPXKF.js";
 import {
   BidiModule
 } from "./chunk-I77MDKE2.js";
@@ -65,40 +65,14 @@ import {
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
 
-// node_modules/@angular/cdk/fesm2022/id-generator.mjs
-var counters = {};
-var _IdGenerator = class __IdGenerator {
-  _appId = inject(APP_ID);
-  /**
-   * Generates a unique ID with a specific prefix.
-   * @param prefix Prefix to add to the ID.
-   */
-  getId(prefix) {
-    if (this._appId !== "ng") {
-      prefix += this._appId;
-    }
-    if (!counters.hasOwnProperty(prefix)) {
-      counters[prefix] = 0;
-    }
-    return `${prefix}${counters[prefix]++}`;
-  }
-  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || __IdGenerator)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: __IdGenerator,
-    factory: __IdGenerator.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], null, null);
-})();
+// node_modules/@angular/cdk/fesm2022/fake-event-detection.mjs
+function isFakeMousedownFromScreenReader(event) {
+  return event.buttons === 0 || event.detail === 0;
+}
+function isFakeTouchstartFromScreenReader(event) {
+  const touch = event.touches && event.touches[0] || event.changedTouches && event.changedTouches[0];
+  return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) && (touch.radiusY == null || touch.radiusY === 1);
+}
 
 // node_modules/@angular/cdk/fesm2022/keycodes2.mjs
 var BACKSPACE = 8;
@@ -124,15 +98,6 @@ var A = 65;
 var Z = 90;
 var META = 91;
 var MAC_META = 224;
-
-// node_modules/@angular/cdk/fesm2022/fake-event-detection.mjs
-function isFakeMousedownFromScreenReader(event) {
-  return event.buttons === 0 || event.detail === 0;
-}
-function isFakeTouchstartFromScreenReader(event) {
-  const touch = event.touches && event.touches[0] || event.changedTouches && event.changedTouches[0];
-  return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) && (touch.radiusY == null || touch.radiusY === 1);
-}
 
 // node_modules/@angular/cdk/fesm2022/shadow-dom.mjs
 var shadowDomIsSupported;
@@ -2010,6 +1975,41 @@ var A11yModule = class _A11yModule {
   }], () => [], null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/id-generator.mjs
+var counters = {};
+var _IdGenerator = class __IdGenerator {
+  _appId = inject(APP_ID);
+  /**
+   * Generates a unique ID with a specific prefix.
+   * @param prefix Prefix to add to the ID.
+   */
+  getId(prefix) {
+    if (this._appId !== "ng") {
+      prefix += this._appId;
+    }
+    if (!counters.hasOwnProperty(prefix)) {
+      counters[prefix] = 0;
+    }
+    return `${prefix}${counters[prefix]++}`;
+  }
+  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || __IdGenerator)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: __IdGenerator,
+    factory: __IdGenerator.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], null, null);
+})();
+
 // node_modules/@angular/cdk/fesm2022/keycodes.mjs
 function hasModifierKey(event, ...modifiers) {
   if (modifiers.length) {
@@ -3153,7 +3153,6 @@ var MatCommonModule = class _MatCommonModule {
 })();
 
 export {
-  _IdGenerator,
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
   BACKSPACE,
@@ -3161,9 +3160,12 @@ export {
   ENTER,
   ESCAPE,
   SPACE,
+  LEFT_ARROW,
   UP_ARROW,
+  RIGHT_ARROW,
   DOWN_ARROW,
   DELETE,
+  _getShadowRoot,
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
   normalizePassiveListenerOptions,
@@ -3179,9 +3181,10 @@ export {
   FocusTrapFactory,
   LiveAnnouncer,
   A11yModule,
+  _IdGenerator,
   hasModifierKey,
   FocusKeyManager,
   AriaDescriber,
   MatCommonModule
 };
-//# sourceMappingURL=chunk-2PO74AAJ.js.map
+//# sourceMappingURL=chunk-HQFL5CAQ.js.map
