@@ -9,6 +9,7 @@ import { Approval, ApprovalRequest } from '../model/Approval';
 import { User } from '../model/User';
 import { CommonModule } from '@angular/common';
 import { MyRequestComponent } from "../commons/my-request/my-request.component";
+import { SnackBarService } from '../services/snackBar.service';
 
 @Component({
   selector: 'app-requests',
@@ -24,7 +25,7 @@ export class RequestsComponent implements OnInit {
 
   public user!: User;
 
-  constructor(private service: RequestService) {
+  constructor(private service: RequestService,private snackBar: SnackBarService) {
   }
 
   ngOnInit() {
@@ -42,9 +43,11 @@ export class RequestsComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching approvals:', error);
+        this.snackBar.showMessage("Error fetching approvals", "error");
       }
     );
   }
+
   loadMyRequests() {
 
     this.service.getMyRequests(this.user.id).subscribe(
@@ -54,8 +57,13 @@ export class RequestsComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching my requests:', error);
+        this.snackBar.showMessage("Error fetching my requests", "error");
       }
     );
+  }
+
+  reloadData() {
+    this.requests = this.requests.filter(r => r.status === "IN_PROGRESS");
   }
 
   handleDecision(event: { approvalId: number, action: string }) {
@@ -70,11 +78,11 @@ export class RequestsComponent implements OnInit {
     }
     this.service.handleResponseAction(event.approvalId, this.user.id, decision).subscribe({
       next: () => {
-        console.log('Action handled successfully');
-        this.loadApprovals(); // Refresh the list of approvals after handling the action
+        this.reloadData();
+        this.snackBar.showMessage("Action handled successfully!", "success");
       },
       error: (error) => {
-        console.error('Error handling action:', error);
+        this.snackBar.showMessage("Error handling action", "error");
       }
     });
 

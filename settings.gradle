@@ -3,4 +3,5 @@ include 'Domain'
 include 'Application'
 include 'Infrastructure'
 include 'Web'
+include 'Signature'
 

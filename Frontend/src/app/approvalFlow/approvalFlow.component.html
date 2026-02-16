@@ -42,10 +42,10 @@
       <div class="form-zone">
         <form [formGroup]="formGroup" (ngSubmit)="saveFlow()">
           <div class="input-design">
-            <label>Name</label>
+            <label>Name<span style="color: red;">*</span></label>
             <input type="text" formControlName="name" placeholder="A name for a new flow" />
           </div>
-          <h5>Approval Steps</h5>
+          <h5>Approval Steps<span style="color: red;">*</span></h5>
           <div formArrayName="steps">
           <app-approvalstep *ngFor="let ctrl of inputFormSteps.controls; let i = index" [stepNumber]="i + 1" [roleOptions]="roles"
             (stepNumberChange)="handleStepNumberChange(i+1)" [group]="ctrl" class="step"></app-approvalstep>

@@ -51,7 +51,7 @@ public class GeneratorService {
         Map<String, String> values = new HashMap<>();
 
         for (Field field : template.getFields()) {
-            UserFieldValue userFieldValue = this.userFieldValueRepository.findByUser_IdAndField_id(userID, field.getId()).orElse(null);
+            UserFieldValue userFieldValue = this.userFieldValueRepository.findByUser_IdAndField_id(userID, field.getId()).orElseThrow(() -> new RuntimeException("Value for field " + field.getFieldName() + " not found for user " + userID));
             if (userFieldValue != null) {
                 values.put(userFieldValue.getField().getRepresentation(), userFieldValue.getValue());
             }
@@ -65,14 +65,14 @@ public class GeneratorService {
         Path destination = rootFolder.resolve(generateName);
 
         try {
+            //TODO fix error from here
             this.mappingPort.fillTemplate(Path.of(template.getStoragePath()), destination, values);
             User user = this.userRepository.getReferenceById(userID);
             FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
             filledTemplateRepository.save(filledTemplate);
 
 
-            //this.emailPort.sendEmail(destination.toString(),user.getEmail(),user.getFirstName(),user.getLastName());
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_7.p12", "parola", destination.toString(), destination.toString());
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+userID+".p12", "parola", destination.toString(), destination.toString());
 
             ApprovalRequest approvalRequest = new ApprovalRequest();
             approvalRequest.setTemplate(filledTemplate);

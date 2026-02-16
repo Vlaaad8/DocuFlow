@@ -15,6 +15,7 @@ import com.example.jpa.ApprovalRequestRepository;
 import com.example.jpa.RelationRepository;
 import com.example.login.Role;
 import com.example.login.User;
+import com.example.security.SignaturePort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ public class RequestService {
     private final ApprovalRequestRepository approvalRequestRepository;
     private final ApprovalRequestMapper approvalRequestMapper;
     private final EmailPort emailPort;
+    private final SignaturePort signaturePort;
 
     public List<ApprovalDTO> getToApproveRequestsForUser(int userId) {
         return approvalRepository.findByApprover_IdAndStatus(userId, ApprovalStatus.IN_PROGRESS).stream()
@@ -64,6 +66,7 @@ public class RequestService {
             approvalRequestRepository.save(approvalRequest);
         }
         else {
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(), approval.getApprovalRequest().getTemplate().getPath());
             continueAnswerRequest(approval.getApprovalRequest());
         }
 

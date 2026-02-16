@@ -108,7 +108,13 @@ public class CertificateCreator implements CertificatePort {
         String issuerName =getAttribute(issuer,"CN");
         String issuerCity = getAttribute(issuer,"L");
         String cn = getAttribute(subject, "CN");
-        String email = getAttribute(subject, "E");
+        String email = getAttribute(subject, "EMAILADDRESS");
+        if (email == null) {
+            email = getAttribute(subject, "E");
+        }
+        if (email == null) {
+            email = getAttribute(subject, "1.2.840.113549.1.9.1");
+        }
 
         String ou = getAttribute(subject, "OU");
 

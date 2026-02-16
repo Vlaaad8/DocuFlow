@@ -2,8 +2,6 @@ package com.example.generator;
 
 import com.example.converter.Convertors;
 import com.example.ocr.MappingPort;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.itextpdf.text.pdf.XfaXpathConstructor.XdpPackage.Pdf;
 
+//TODO uneori nu mapeaza bine, to verify
 @Component
 public class ApachePOI implements MappingPort {
 
@@ -68,18 +66,25 @@ public class ApachePOI implements MappingPort {
     }
 
     private static void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> values) {
-        for (XWPFRun run : paragraph.getRuns()) {
-            String text = run.getText(0);
-            if (text == null) continue;
+        String paragraphText = paragraph.getText();
 
-            String replaced = text;
-            for (Map.Entry<String, String> e : values.entrySet()) {
-                replaced = replaced.replace(e.getKey(), Objects.toString(e.getValue(), ""));
-            }
 
-            if (!replaced.equals(text)) {
-                run.setText(replaced, 0);
+        boolean updated = false;
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            if (paragraphText.contains(entry.getKey())) {
+                paragraphText = paragraphText.replace(entry.getKey(), Objects.toString(entry.getValue(), ""));
+                updated = true;
             }
+        }
+
+        if (updated) {
+
+            List<XWPFRun> runs = paragraph.getRuns();
+            for (int i = runs.size() - 1; i >= 0; i--) {
+                paragraph.removeRun(i);
+            }
+            XWPFRun newRun = paragraph.createRun();
+            newRun.setText(paragraphText);
         }
     }
 

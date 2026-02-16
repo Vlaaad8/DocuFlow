@@ -9,3 +9,7 @@ export interface UserCertificate {
     validTo: string,
     daysLeft: number
 }
+export interface SignatureInfo{
+    signerName: string,
+    signingDate: string;
+}

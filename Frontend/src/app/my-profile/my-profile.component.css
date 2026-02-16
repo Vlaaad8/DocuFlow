@@ -148,3 +148,59 @@
     margin-bottom: 12px;
 }
 
+.drop-container {
+        padding: 16px 32px;
+        border: 2.5px dashed #d1d5dbdc;
+        background-color: #ffffff;
+        border-radius: 10px;
+        max-width: 1200px;
+        min-height: 250px;
+        margin: 16px 32px;
+        width: 100%;
+
+    }
+
+    .drag-mode,
+    .drop-container:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        transform: translateY(-2px);
+        transition: all 0.25s ease;
+
+    }
+
+    .chip-area {
+        margin: 5px 32px;
+    }
+
+
+    .drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .drop-zone p {
+        color: #6b7280;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .drop-zone h2 {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .upload-icon {
+        color: #3b82f6;
+        font-size: 60px;
+        width: fit-content;
+        height: fit-content;
+        box-shadow: 0 0 15px #5591f0;
+        background-color: #ddeafc;
+        border-radius: 50%;
+        padding: 12px;
+
+    }
