@@ -9,86 +9,62 @@ repositories {
     mavenCentral()
 }
 
+// Menținem excluderile pentru a nu polua classpath-ul cu versiuni vechi de Xerces/Xalan
+// care pot intra în conflict cu parserul nativ din Java 21
+def docx4jExclusions = {
+    exclude group: "xml-apis", module: "xml-apis"
+    exclude group: "xerces", module: "xercesImpl"
+    exclude group: "xalan", module: "serializer"
+    exclude group: "xalan", module: "xalan"
+}
+
 dependencies {
     implementation project(':Domain')
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    // https://mvnrepository.com/artifact/com.azure/azure-ai-formrecognizer
-    implementation("com.azure:azure-ai-formrecognizer:4.1.13")
-    // https://mvnrepository.com/artifact/com.azure/azure-ai-documentintelligence
-    implementation("com.azure:azure-ai-documentintelligence:1.0.6")
+
+    // Spring Boot & JPA
     implementation 'org.springframework.boot:spring-boot-starter:3.2.5'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:3.5.8"
+    implementation "org.springframework.boot:spring-boot-starter-mail:3.2.12"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.2.5'
 
-    implementation("org.apache.tika:tika-core:2.9.2")
-    implementation("org.apache.tika:tika-parsers-standard-package:2.9.2")
-// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.8")
-    // https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad
+    // Azure AI
+    implementation("com.azure:azure-ai-formrecognizer:4.1.13")
+    implementation("com.azure:azure-ai-documentintelligence:1.0.6")
+
+    // Apache Tika
+    implementation('org.apache.tika:tika-core:2.9.2')
+    implementation('org.apache.tika:tika-parsers-standard-package:2.9.2')
+
+    // Apache POI & iText
     implementation("org.apache.poi:poi-scratchpad:5.5.1")
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation("com.itextpdf:itextpdf:5.5.13.4")
-    // https://mvnrepository.com/artifact/org.docx4j/docx4j-core
-    implementation("org.docx4j:docx4j-core:11.5.8") {
-        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
-        exclude group: "org.apache.pdfbox", module: "pdfbox"
-        exclude group: "org.apache.pdfbox", module: "fontbox"
-    }
-    implementation("org.docx4j:docx4j-export-fo:11.5.8") {
-        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
-        exclude group: "org.apache.pdfbox", module: "pdfbox"
-        exclude group: "org.apache.pdfbox", module: "fontbox"
-    }
-    implementation("org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.8") {
-        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
-        exclude group: "org.apache.pdfbox", module: "pdfbox"
-        exclude group: "org.apache.pdfbox", module: "fontbox"
-    }
-    implementation("org.docx4j:docx4j-ImportXHTML-core:11.5.6") {
-        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
-        exclude group: "org.apache.pdfbox", module: "pdfbox"
-        exclude group: "org.apache.pdfbox", module: "fontbox"
-        exclude group: "io.github.openhtmltopdf", module: "openhtmltopdf-pdfbox"
-        exclude group: "com.openhtmltopdf", module: "openhtmltopdf-pdfbox"
-    }
+
+    // Docx4j - DOAR PENTRU CONVERSIE (fără conflicte XML)
+    implementation("org.docx4j:docx4j-core:11.5.8", docx4jExclusions)
+    implementation("org.docx4j:docx4j-export-fo:11.5.8", docx4jExclusions)
+    implementation("org.docx4j:docx4j-ImportXHTML-core:11.5.6", docx4jExclusions)
+
+    // JAXB - Necesar pentru a evita ClassNotFoundException: NamespacePrefixMapper
+    implementation 'org.docx4j:docx4j-JAXB-ReferenceImpl:11.4.11'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.2'
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
+
+    // HTML to PDF (OpenHTMLToPDF) & Jsoup
     implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10")
     implementation("com.openhtmltopdf:openhtmltopdf-core:1.0.10")
-
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
-    implementation("org.docx4j:docx4j-ImportXHTML-core:11.5.6") {
-        exclude group: "org.apache.pdfbox", module: "pdfbox-io"
-        exclude group: "org.apache.pdfbox", module: "xmpbox"
-    }
-
     implementation "org.jsoup:jsoup:1.17.2"
-// https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api
-    implementation("jakarta.mail:jakarta.mail-api:2.1.5")
-    // https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
-    implementation("jakarta.activation:jakarta.activation-api:2.1.4")
-    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.12")
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
-    implementation("org.bouncycastle:bcprov-jdk18on:1.83")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
-    implementation 'eu.europa.ec.joinup.sd-dss:dss-pades-pdfbox:6.1'
-    implementation 'eu.europa.ec.joinup.sd-dss:dss-token:6.1'
-    implementation 'eu.europa.ec.joinup.sd-dss:dss-service:6.1'
-// https://mvnrepository.com/artifact/eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons
-    implementation("eu.europa.ec.joinup.sd-dss:dss-utils-apache-commons:6.1")
-    // Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+
+    // Mapstruct
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
-    implementation 'eu.europa.ec.joinup.sd-dss:dss-validation:6.1'
-    implementation 'eu.europa.ec.joinup.sd-dss:dss-alert:6.1'
 
+    // Mail APIs
+    implementation("jakarta.mail:jakarta.mail-api:2.1.5")
+    implementation("jakarta.activation:jakarta.activation-api:2.1.4")
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
-}
-configurations.configureEach {
-    resolutionStrategy {
-        force "org.apache.pdfbox:pdfbox:2.0.30"
-        force "org.apache.pdfbox:fontbox:2.0.30"
-        force "org.apache.pdfbox:xmpbox:2.0.30"
-    }
 }

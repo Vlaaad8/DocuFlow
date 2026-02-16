@@ -12,4 +12,5 @@ export interface UserCertificate {
 export interface SignatureInfo{
     signerName: string,
     signingDate: string;
+    isValid: boolean;
 }

@@ -99,28 +99,35 @@
 
       <mat-tab label="Check Document Signature">
         <div class=tab-content>
-          <ng-container *ngIf="true; then uploadSection"> </ng-container>
-          <ng-template #uploadSection>
 
-            <div class="error-section" *ngIf="errorMessage">
-              <mat-icon>error</mat-icon>
-              <div class="action-zone">
-                <p>{{errorMessage}}</p>
-                <mat-icon (click)="errorMessage = null">close</mat-icon>
+          <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
+            (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
+            <div class="drop-zone">
+              <mat-icon class="upload-icon">backup</mat-icon>
+              <div></div>
+              <h2>Drop your document here</h2>
+              <p>or click to select a file</p>
+              <p *ngIf="selectedFile !== null">{{ selectedFile.name }}</p>
+            </div>
+            <input #fileInput type="file" accept=".pdf" style="visibility: hidden;"
+              (change)="handleFileSelected($event)">
+          </div>
+
+          <div class="signature-container">
+            <div class="user-card" *ngFor="let signature of signatures">
+              <div class="info">
+              <img [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + signature.signerName"
+                [alt]="signature.signerName" class="user-avatar" />
+              <div class="user-specs">
+                <h3>{{signature.signerName}}</h3>
+                <p>{{formatDate(signature.signingDate)}}</p>
+              </div>
+              </div>
+              <div class="status">
+                {{formatStatus(signature.isValid)}}
               </div>
             </div>
-            <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
-              (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
-              <div class="drop-zone">
-                <mat-icon class="upload-icon">backup</mat-icon>
-                <div></div>
-                <h2>Drop your document here</h2>
-                <p>or click to select a file</p>
-                <p *ngIf="selectedFile !== null">{{ selectedFile.name }}</p>
-              </div>
-              <input #fileInput type="file" accept=".pdf" style="visibility: hidden;" (change)="handleFileSelected($event)">
-            </div>
-          </ng-template>
+          </div>
         </div>
       </mat-tab>
     </mat-tab-group>

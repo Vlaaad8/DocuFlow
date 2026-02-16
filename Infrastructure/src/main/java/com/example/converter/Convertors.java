@@ -20,7 +20,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Convertors {
-
+    static {
+        System.setProperty("docx4j.jaxb.Context", "org.docx4j.jaxb.Context");
+    }
     public static void convertWordToPDF(XWPFDocument document, Path outputPDF) throws Exception {
 
         byte[] docxBytes;

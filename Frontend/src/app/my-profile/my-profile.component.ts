@@ -6,7 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ProfileService } from '../services/profile.service';
-import { UserCertificate } from '../model/user-certificate';
+import { SignatureInfo, UserCertificate } from '../model/user-certificate';
 import { User } from '../model/User';
 import { CommonModule } from '@angular/common';
 
@@ -24,6 +24,8 @@ export class MyProfileComponent implements OnInit {
   isDragOver: boolean = false;
   selectedFile: File | null = null;
   errorMessage: string | null = null;
+
+  signatures!: SignatureInfo[];
   constructor(private service: ProfileService) { }
 
   ngOnInit() {
@@ -79,6 +81,7 @@ export class MyProfileComponent implements OnInit {
     if (this.selectedFile) {
       this.service.extractData(this.selectedFile).subscribe({
         next: (signatures) => {
+          this.signatures = signatures;
           console.log('Signatures extracted:', signatures);
         },
         error: (error) => {
@@ -87,5 +90,12 @@ export class MyProfileComponent implements OnInit {
         }
       });
     }
+  }
+  formatDate(dateString: string): string {
+    return dateString.split('T')[0];
+  }
+  formatStatus(isValid: boolean): string {
+    return isValid ? 'Valid' : 'Invalid';
+
   }
 }
