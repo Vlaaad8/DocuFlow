@@ -28,6 +28,7 @@ export class GenerateComponent implements OnInit {
   templateApprovers: TemplateApprovers[] = [];
   selectedTemplateId: number | null = null;
   modalStage: string = 'presentation'; // presentation | loading 
+  dataProfile: { category: string, value: number }[] = [];
 
 
   constructor(private service: GenerateService, private snackBar: SnackBarService, private dialog: MatDialog) { }
@@ -36,6 +37,21 @@ export class GenerateComponent implements OnInit {
 
   ngOnInit() {
     this.loadTemplates();
+    this.loadProfileData();
+  }
+
+  loadProfileData(): void {
+    const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+    const userID = user.id;
+    this.service.getDataProfile(userID).subscribe({
+      next: (data) => {
+        this.dataProfile = data.filter(item => item.category!="UNKNOWN").sort((a, b) => b.value - a.value);
+        console.log("Data profile loaded:", this.dataProfile);
+      },
+      error: (error) => {
+        console.error("Error loading data profile:", error);
+      }
+    });
   }
 
   loadTemplates(): void {

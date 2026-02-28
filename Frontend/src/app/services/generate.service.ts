@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { GenerateTemplate, TemplateApprovers } from '../model/GenerateTemplate';
 import { FieldTemplate } from '../model/FieldTemplate';
 
@@ -31,4 +31,17 @@ export class GenerateService {
   public getTemplateApprovers(templateId: number, userId: number): Observable<TemplateApprovers[]> {
     return this.http.get<TemplateApprovers[]>(`${URL}/approver/${templateId}/${userId}`);
   }
+
+public getDataProfile(userId: number): Observable<{ category: string, value: number }[]> {
+  return this.http
+    .get<Record<string, boolean>>(`${URL}/profile/${userId}`)
+    .pipe(
+      map(response =>
+        Object.entries(response).map(([key, value]) => ({
+          category: key,
+          value: value ? 1 : 0
+        }))
+      )
+    );
+}
 }

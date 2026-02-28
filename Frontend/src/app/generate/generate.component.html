@@ -17,10 +17,11 @@
         <div class="first-part">
           <div class="info-panel">
             <h3>Your Data Profile</h3>
-            <ul>
-              <li>A</li>
-              <li>B</li>
-              <li>C</li>
+            <ul class="data-list">
+              <li *ngFor="let item of dataProfile">
+                <mat-icon [class]="item.value === 1 ? 'valid' : 'missing'">{{ item.value === 1 ? 'check' : 'question_mark' }}</mat-icon>
+                {{ formatSourceOfData(item.category) }}
+              </li>
             </ul>
           </div>
         </div>

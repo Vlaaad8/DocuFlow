@@ -2,19 +2,15 @@ package com.example;
 
 import com.example.approval.*;
 import com.example.dto.Generate.GeneratorTemplateApproverDTO;
-import com.example.dto.UserFieldValueDTO;
 import com.example.dto.Generate.GeneratorTemplateDTO;
+import com.example.dto.UserFieldValueDTO;
 import com.example.dtoMapper.TemplateMapper;
-import com.example.email.EmailPort;
 import com.example.jpa.*;
 import com.example.login.Relation;
 import com.example.login.User;
 import com.example.ocr.MappingPort;
 import com.example.security.SignaturePort;
-import com.example.template.Field;
-import com.example.template.FilledTemplate;
-import com.example.template.Template;
-import com.example.template.UserFieldValue;
+import com.example.template.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +67,7 @@ public class GeneratorService {
             filledTemplateRepository.save(filledTemplate);
 
 
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+userID+".p12", "parola", destination.toString(), destination.toString());
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), destination.toString());
 
             ApprovalRequest approvalRequest = new ApprovalRequest();
             approvalRequest.setTemplate(filledTemplate);
@@ -117,12 +113,12 @@ public class GeneratorService {
         return true;
     }
 
-    public List<UserFieldValueDTO> getTemplateValues(int  templateId, int userID) {
+    public List<UserFieldValueDTO> getTemplateValues(int templateId, int userID) {
         Template template = this.templateRepository.getReferenceById(templateId);
         List<UserFieldValue> userFilledFields = this.userFieldValueRepository.findForUserAndTemplate(userID, template.getId());
         List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
         for (UserFieldValue userFieldValue : userFilledFields) {
-            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue(),userFieldValue.getSourceOfData());
+            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue(), userFieldValue.getSourceOfData());
             fieldValueDTOs.add(fieldValueDTO);
         }
         return fieldValueDTOs;
@@ -135,16 +131,31 @@ public class GeneratorService {
         List<GeneratorTemplateApproverDTO> approverDTOS = new ArrayList<>();
         List<ApprovalStep> approvalSteps = template.getApprovalChain().getSteps();
 
-        approverDTOS.add(new GeneratorTemplateApproverDTO(user.getFirstName()+" "+user.getLastName(), user.getRole().toString()));
+        approverDTOS.add(new GeneratorTemplateApproverDTO(user.getFirstName() + " " + user.getLastName(), user.getRole().toString()));
 
-        for(int i = 1 ;i < approvalSteps.size(); i++){
+        for (int i = 1; i < approvalSteps.size(); i++) {
             Relation relation = this.relationRepository.findBySubordinate_IdAndBoss_Role(user.getId(), approvalSteps.get(i).getApproverRole());
-            if(relation != null){
-                approverDTOS.add(new GeneratorTemplateApproverDTO(relation.getBoss().getFirstName()+" "+relation.getBoss().getLastName(), relation.getBoss().getRole().toString()));
+            if (relation != null) {
+                approverDTOS.add(new GeneratorTemplateApproverDTO(relation.getBoss().getFirstName() + " " + relation.getBoss().getLastName(), relation.getBoss().getRole().toString()));
                 user = relation.getBoss();
             }
             //TODO throw error if relation is null, meaning that the user doesn't have a boss with the required role to approve the document
         }
         return approverDTOS;
+    }
+
+    public Map<SourceOfData, Boolean> getDataProfile(int userID) {
+        Map<SourceOfData, Boolean> dataProfile = new HashMap<>();
+        SourceOfData[] sources = this.userFieldValueRepository.findSourceCounts((long) userID);
+        for (SourceOfData source : sources) {
+            dataProfile.put(source, true);
+        }
+        SourceOfData[] allSources = SourceOfData.values();
+        for (SourceOfData source : allSources) {
+            if (!dataProfile.containsKey(source)) {
+                dataProfile.put(source, false);
+            }
+        }
+        return dataProfile;
     }
 }

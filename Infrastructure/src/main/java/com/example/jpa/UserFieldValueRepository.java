@@ -1,6 +1,8 @@
 package com.example.jpa;
 
+import com.example.dto.DataProfileResponse;
 import com.example.template.Field;
+import com.example.template.SourceOfData;
 import com.example.template.UserFieldValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +31,8 @@ public interface UserFieldValueRepository extends JpaRepository<UserFieldValue, 
       )
 """)
     List<UserFieldValue> findForUserAndTemplate(@Param("userId") int userId, @Param("templateId") int templateId);
+
+    @Query("select  distinct ufv.sourceOfData from UserFieldValue ufv where ufv.user.id = :userId")
+    SourceOfData[] findSourceCounts(@Param("userId") Long userId);
 
 }
