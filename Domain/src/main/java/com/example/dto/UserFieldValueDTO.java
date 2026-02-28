@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.template.SourceOfData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,4 +11,5 @@ import lombok.Setter;
 public class UserFieldValueDTO {
     String name;
     String value;
+    SourceOfData sourceOfData;
 }

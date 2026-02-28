@@ -99,10 +99,19 @@
     }
 
 
-    /* Trebuie modificat */
+
     .field-item span {
         font-size: 14px;
         color: #374151;
+    }
+    .field-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+    .field-item:first-child{
+        padding-top: 0;
     }
 
     .field-label {
@@ -110,6 +119,14 @@
         font-weight: bold;
         color: #000;
         margin-top: 12px;
+    }
+    .source{
+        background: #e0e7ff;
+        padding: 4px 6px;
+        border-radius: 6px;
+        color: #1e40af;
+        font-size: 12px;
+        font-weight: 500;
     }
 
     .buttonSection {

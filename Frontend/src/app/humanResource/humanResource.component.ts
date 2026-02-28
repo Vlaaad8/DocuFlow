@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Relation } from '../model/Relation';
 import { SnackBarService } from '../services/snackBar.service';
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 interface Node {
   id: number;
@@ -25,7 +27,7 @@ interface Edge {
   selector: 'app-humanResource',
   templateUrl: './humanResource.component.html',
   styleUrls: ['./humanResource.component.css'],
-  imports: [MatSidenavContainer, SidenavUserComponent, MatSidenavModule, ExitButtonComponent, MatIcon, CommonModule]
+  imports: [MatSidenavContainer, SidenavUserComponent, MatSidenavModule, ExitButtonComponent, MatIcon, CommonModule, MatDialogModule,ReactiveFormsModule]
 })
 export class HumanResourceComponent implements OnInit, AfterViewInit {
 
@@ -41,14 +43,25 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
    errorMessage: string | null = null;
 
   @ViewChild('network') networkContainer!: ElementRef;
+  @ViewChild('createUserDialog') createUserDialog: any;
 
   private loggedUser! :User;
+  public registerForm!: FormGroup;
 
-  constructor(private service: HrService,private snackBar: SnackBarService) { }
+  constructor(private service: HrService,private snackBar: SnackBarService,private dialog: MatDialog,private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
-  }
+    this.registerForm = this.formBuilder.group({
+      firstname: new FormControl('', [Validators.required]),
+      lastname: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      role: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      username: new FormControl('', [Validators.required, Validators.minLength(4)])
+    });
+   }
+  
   ngAfterViewInit(): void {
 
     forkJoin([
@@ -265,6 +278,15 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       return 5; 
     }
    return 2;
+  }
+
+   openCreateModal(): void {
+    this.dialog.open(this.createUserDialog);
+  }
+  closeCreateModal(): void {
+    this.dialog.closeAll();
+  }
+  registerUser(): void {
   }
 
 

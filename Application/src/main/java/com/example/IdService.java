@@ -3,6 +3,7 @@ package com.example;
 import com.example.ocr.DocumentPort;
 import com.example.ocr.ExtractedField;
 import com.example.ocr.IdPort;
+import com.example.template.SourceOfData;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.AnyKeyJavaClass;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 public class IdService {
@@ -18,7 +21,7 @@ public class IdService {
     private final IdPort idPort;
 
     public List<ExtractedField> getFields(InputStream inputStream , int fileSize) throws IOException {
-        return idPort.analyzeId(inputStream, fileSize);
+        return idPort.analyzeId(inputStream,fileSize);
     }
 
 //Start Validare CNP https://ro.wikipedia.org/wiki/Cod_numeric_personal_(România)
@@ -29,4 +32,5 @@ public class IdService {
         }
         return true;
     }
+
 }

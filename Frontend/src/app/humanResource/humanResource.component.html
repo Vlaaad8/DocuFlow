@@ -10,19 +10,19 @@
       <div class="first-row">
         <h2>Human Resource</h2>
         <div class="buttonSection">
-          <button class="upload-button"><mat-icon>add</mat-icon>Register User</button>
+          <button class="upload-button" (click)="openCreateModal()"><mat-icon>add</mat-icon>Register User</button>
           <app-exit-button></app-exit-button>
         </div>
       </div>
       <p>Manage the organization's employees and related resources here.</p>
     </div>
-     <div class="error-section" *ngIf="errorMessage">
-        <mat-icon>error</mat-icon>
-        <div class="action-zone">
-          <p>{{errorMessage}}</p>
-          <mat-icon (click)="errorMessage = null">close</mat-icon>
-        </div>
+    <div class="error-section" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <div class="action-zone">
+        <p>{{errorMessage}}</p>
+        <mat-icon (click)="errorMessage = null">close</mat-icon>
       </div>
+    </div>
     <div class="content">
       <div class="network-container">
         <div #network></div>
@@ -71,3 +71,66 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #createUserDialog>
+  <div class="upload-card">
+
+    <div class="card-header">
+      <h3>Register a new user to DocuFlow</h3>
+      <mat-icon (click)="closeCreateModal()" class="close-button">close</mat-icon>
+    </div>
+    <div class="error-section" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <div class="action-zone">
+        <p>{{errorMessage}}</p>
+        <mat-icon (click)="errorMessage = null">close</mat-icon>
+      </div>
+    </div>
+    <mat-dialog-content>
+      <div class="form-zone">
+        <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+          <div class="input-design">
+            <label>First Name<span style="color: red;">*</span></label>
+            <input type="text" formControlName="firstname" placeholder="First name of the user" />
+          </div>
+          <div class="input-design">
+            <label>Last Name<span style="color: red;">*</span></label>
+            <input type="text" formControlName="lastName" placeholder="Last name of the user" />
+          </div>
+          <div class="input-design">
+            <label>Email<span style="color: red;">*</span></label>
+            <input type="email" formControlName="email" placeholder="Email address of the user" />
+          </div>
+          <div class="input-design">
+            <label>Username<span style="color: red;">*</span></label>
+            <input type="text" formControlName="username" placeholder="Username of the user" />
+          </div>
+          <div class="input-design">
+            <label>Password<span style="color: red;">*</span></label>
+            <input type="password" formControlName="password" placeholder="Password of the user" />
+          </div>
+          <div class="input-design">
+            <label>Role<span style="color: red;">*</span></label>
+            <select formControlName="role">
+              <option value="" disabled selected>Select a role</option>
+              <option value="employee">Employee</option>
+              <option value="manager">Manager</option>
+              <option value="hr">HR</option>
+              <option value="finance">Finance</option>
+              <option value="it">IT</option>
+              <option value="sales">Sales</option>
+              <option value="marketing">Marketing</option>
+              <option value="support">Support</option>
+              <option value="law">Law</option>
+              <option value="ceo">CEO</option>
+            </select>
+          </div>
+          <div class="buttonSection">
+            <button type="submit">Register User</button>
+            <button type="button" (click)="closeCreateModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </mat-dialog-content>
+  </div>
+</ng-template>

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ExtractedField } from '../model/ExtractedField';
 
 
-const URL = 'http://localhost:8080/ocr/';
+const URL = 'http://localhost:8080/ocr';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +16,14 @@ export class UploadService {
 
   }
 
-  public extractData(file: File, documentType: string): Observable<ExtractedField[]> {
+  public extractData(file: File): Observable<ExtractedField[]> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<ExtractedField[]>(`${URL}${documentType}`, formData);
+    return this.http.post<ExtractedField[]>(`${URL}`, formData);
   }
 
   public saveExtractedData(data: ExtractedField[]): void {
-    this.http.post<void>(`${URL}extracted-fields`, data).subscribe({
+    this.http.post<void>(`${URL}/extracted-fields`, data).subscribe({
       next: () => {
         console.log('Extracted data saved successfully.');
       },

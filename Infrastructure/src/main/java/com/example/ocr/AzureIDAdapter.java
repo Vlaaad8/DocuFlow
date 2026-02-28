@@ -6,6 +6,7 @@ import com.azure.ai.documentintelligence.models.*;
 import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.util.BinaryData;
 import com.azure.core.util.polling.SyncPoller;
+import com.example.template.SourceOfData;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -46,8 +47,7 @@ public class AzureIDAdapter implements IdPort {
                 return allExtractedFields;
 
             }
-            for (AnalyzedDocument doc : result.getDocuments()) {
-
+            for (AnalyzedDocument doc : result.getDocuments()) {;
                 Map<String, DocumentField> fields = doc.getFields();
                 //TODO DocumentNumber is not processed ok
                 fields.forEach((key, field) -> {
@@ -68,7 +68,7 @@ public class AzureIDAdapter implements IdPort {
                     //TODO MachineReadableZone - very important , can double check data and provides me with relevant information
                     if (value != null) {
                         Float confidence = (float) (field.getConfidence() * 100);
-                        allExtractedFields.add(new ExtractedField(key, value, confidence));
+                        allExtractedFields.add(new ExtractedField(key, value, confidence,doc.getDocumentType()));
                     }
                 });
             }
@@ -76,6 +76,22 @@ public class AzureIDAdapter implements IdPort {
             return allExtractedFields;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    private SourceOfData mapSourceOfData(String source) {
+        switch (source) {
+            case ("idDocument.nationalId"):
+                return SourceOfData.NATIONAL_IDENTITY_CARD;
+            case ("idDocument.passport"):
+                return SourceOfData.PASSPORT;
+            case ("idDocument.driverLicense"):
+                return SourceOfData.DRIVER_LICENSE;
+            case ("idDocument.residencePermit"):
+                return SourceOfData.RESIDENCE_PERMIT;
+            case ("idDocument.socialSecurityCard"):
+                return SourceOfData.SOCIAL_SECURITY_CARD;
+            default:
+                return SourceOfData.UNKNOWN;
         }
     }
 }

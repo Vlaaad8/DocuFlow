@@ -276,3 +276,91 @@
 .action-zone mat-icon {
     cursor: pointer;
 }
+.card-header {
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.input-design input[type="text"]:hover,
+.input-design input[type="text"]:focus,
+.input-design input[type="password"]:hover,
+.input-design input[type="password"]:focus,
+.input-design input[type="email"]:hover,
+.input-design input[type="email"]:focus,
+.input-design select:hover,
+.input-design select:focus,
+.input-design textarea:hover,
+.input-design textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.input-design input[type="text"],
+.input-design input[type="password"],
+.input-design input[type="email"],
+.input-design select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 7px;
+    border: 2px solid #d1d5dbdc;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.input-design label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.input-design {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+}
+
+.upload-card .buttonSection {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 8px;
+}
+
+.upload-card .buttonSection button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #374151;
+    border: none;
+}
+
+.upload-card .buttonSection button[type="submit"] {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.upload-card {
+    background: white;
+    padding: 24px;
+    width: 500px;
+    height: fit-content;
+}
+.close-button:hover {
+    color: #991b1b;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background-color: #fee2e2;
+    border-radius: 8px;
+}

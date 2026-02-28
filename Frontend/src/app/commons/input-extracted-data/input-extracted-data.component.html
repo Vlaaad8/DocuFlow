@@ -1,6 +1,7 @@
 <div class="preview-input" [formGroup]="group">
   <div class="label-section">
     <label for="documentPreview">{{label}}</label>
+    <div class="source-of-data">Source of data: <span>{{formatSourceOfData(sourceOfData)}}</span></div>
   </div>
   <div class="results">
     <input type="text" placeholder="No value extracted yet" formControlName="value"

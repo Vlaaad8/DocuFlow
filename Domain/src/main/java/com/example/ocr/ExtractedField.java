@@ -12,4 +12,5 @@ public class ExtractedField {
     String label;
     String value;
     Float confidence;
+    String sourceOfData;
 }

@@ -73,7 +73,7 @@ export class GenerateComponent implements OnInit {
     });
 
   }
-  
+
 
   handleGenerateEvent($event: Template): void {
     this.selectedTemplateId = $event.id;
@@ -110,6 +110,25 @@ export class GenerateComponent implements OnInit {
       return role.substring(0, 1).toUpperCase();
     } else {
       return words.map(word => word.charAt(0).toUpperCase()).join('');
+    }
+  }
+  formatSourceOfData(source: string): string {
+    switch (source) {
+      case ("NATIONAL_IDENTITY_CARD"):
+        return "ID Card";
+      case ("PASSPORT"):
+        return "Passport";
+      case ("DRIVER_LICENSE"):
+        return "Driving License";
+      case ("RESIDENCE_PERMIT"):
+        return "Residence Permit";
+      case ("SOCIAL_SECURITY_CARD"):
+        return "US Social Security Card";
+      case ("MANUAL_ENTRY"):
+        return "Manual Entry";
+
+      default:
+        return "Unknown";
     }
   }
 }

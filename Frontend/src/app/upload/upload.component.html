@@ -25,12 +25,6 @@
     </ng-container>
 
     <ng-template #uploadSection>
-      <mat-chip-listbox aria-label="Upload options" class="chip-area">
-        <mat-chip-option class="chip-item" value="identity-card" (selectionChange)="onChipSelect($event)">Identity
-          card</mat-chip-option>
-        <mat-chip-option class="chip-item" value="document"
-          (selectionChange)="onChipSelect($event)">Document</mat-chip-option>
-      </mat-chip-listbox>
       <div class="error-section" *ngIf="errorMessage">
         <mat-icon>error</mat-icon>
         <div class="action-zone">
@@ -71,7 +65,7 @@
             <div class="document-present">
               <mat-icon class="description-icon">description</mat-icon>
               <h4>{{ selectedFile?.name }}</h4>
-              <p>{{selectedFile?.size}}</p>
+              <p>{{selectedFile?.size | convertMemory}}</p>
               <button class="preview-option" (click)="openFile()">👁️ Preview</button>
             </div>
           </div>

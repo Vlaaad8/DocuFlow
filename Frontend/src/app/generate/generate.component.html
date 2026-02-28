@@ -45,8 +45,13 @@
             <div class="detail-card">
               <p>Document will be generated with you following personal data:</p>
               <div>
-                <p class="field-item" *ngFor="let field of templateFields"><span class="field-label">{{field.name}}:
-                  </span> <span>{{field.value}}</span></p>
+                <div class="field-item" *ngFor="let field of templateFields">
+                  <div>
+                    <span class="field-label">{{field.name}}:</span>
+                    <span>{{field.value}}</span>
+                  </div>
+                  <div class="source"> {{formatSourceOfData(field.sourceOfData)}}</div>
+                </div>
               </div>
             </div>
             <h3>Approval preview</h3>

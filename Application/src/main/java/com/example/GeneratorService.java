@@ -39,7 +39,6 @@ public class GeneratorService {
 
     private final Path rootFolder = Paths.get("storage/generated");
     private final MappingPort mappingPort;
-    private final EmailPort emailPort;
     private final SignaturePort signaturePort;
     private final TemplateMapper templateMapper;
 
@@ -123,7 +122,7 @@ public class GeneratorService {
         List<UserFieldValue> userFilledFields = this.userFieldValueRepository.findForUserAndTemplate(userID, template.getId());
         List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
         for (UserFieldValue userFieldValue : userFilledFields) {
-            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue());
+            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue(),userFieldValue.getSourceOfData());
             fieldValueDTOs.add(fieldValueDTO);
         }
         return fieldValueDTOs;
