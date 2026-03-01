@@ -23,10 +23,11 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, MatProgressSpinner, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent]
 })
 export class CreatorComponent implements OnInit {
   @ViewChild(EditorComponent) editorComp?: EditorComponent;
+
   public tinymceApiKey = 'ahh7gcufunnecgtf6i7axfxi4w4l5i9x02pq73y13qi80z0e';
 
   private path: string | null = null;
@@ -43,6 +44,8 @@ export class CreatorComponent implements OnInit {
     height: 600,
     menubar: true,
     plugins: 'lists link table code preview',
+    content_style: "body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; }",
+    font_family_formats: "Times New Roman=times new roman,times,serif; Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace",
     toolbar: 'undo redo | bold italic | bullist numlist | link | table | preview',
     inline_styles: true,
     extended_valid_elements: '*[class|style|id]',
@@ -56,7 +59,7 @@ export class CreatorComponent implements OnInit {
           e.preventDefault();
           console.log('Dropped content:');
         });
-        
+        editor.execCommand('fontName', false, 'Times New Roman');
         console.log('Editor is ready');
         if (this.content != defaultContent)
           editor.setContent(this.content);
@@ -84,7 +87,7 @@ export class CreatorComponent implements OnInit {
     this.serviceCreator.getFields().subscribe({
       next: (fields) => {
         fields.sort((a, b) => a.required === b.required ? 0 : a.required ? -1 : 1);
-        
+
         this.fields = fields;
         console.log('Fields fetched:', this.fields);
       },

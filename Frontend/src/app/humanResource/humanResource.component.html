@@ -77,13 +77,13 @@
 
     <div class="card-header">
       <h3>Register a new user to DocuFlow</h3>
-      <mat-icon (click)="closeCreateModal()" class="close-button">close</mat-icon>
+      <mat-icon (click)="closeCreateModal()" class="close-button" (click)="registerErrorMessage = null">close</mat-icon>
     </div>
-    <div class="error-section" *ngIf="errorMessage">
+    <div class="error-section" *ngIf="registerErrorMessage">
       <mat-icon>error</mat-icon>
       <div class="action-zone">
-        <p>{{errorMessage}}</p>
-        <mat-icon (click)="errorMessage = null">close</mat-icon>
+        <p>{{registerErrorMessage}}</p>
+        <mat-icon (click)="registerErrorMessage = null">close</mat-icon>
       </div>
     </div>
     <mat-dialog-content>
@@ -113,16 +113,16 @@
             <label>Role<span style="color: red;">*</span></label>
             <select formControlName="role">
               <option value="" disabled selected>Select a role</option>
-              <option value="employee">Employee</option>
-              <option value="manager">Manager</option>
-              <option value="hr">HR</option>
-              <option value="finance">Finance</option>
-              <option value="it">IT</option>
-              <option value="sales">Sales</option>
-              <option value="marketing">Marketing</option>
-              <option value="support">Support</option>
-              <option value="law">Law</option>
-              <option value="ceo">CEO</option>
+              <option value="Employee">Employee</option>
+              <option value="Manager">Manager</option>
+              <option value="HR">HR</option>
+              <option value="Finance">Finance</option>
+              <option value="IT">IT</option>
+              <option value="Sales">Sales</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Support">Support</option>
+              <option value="Law">Law</option>
+              <option value="CEO">CEO</option>
             </select>
           </div>
           <div class="buttonSection">

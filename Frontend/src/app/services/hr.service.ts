@@ -24,4 +24,9 @@ export class HrService {
   public addRelation(bossID: number, subordinateID: number): Observable<void> {
     return this.http.post<void>(`${URL}/relation?bossID=${bossID}&subordinateID=${subordinateID}`, {});
   }
+
+  public addUser(firstName: string, lastName: string, email: string, role: string, password: string, username: string): Observable<void> {
+    const user = { firstName, lastName, email, role, password, username };
+    return this.http.post<void>(`${URL}/user`, user);
+  }
 }

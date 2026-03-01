@@ -8,6 +8,7 @@ import org.docx4j.Docx4jProperties;
 import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
 import org.docx4j.convert.out.HTMLSettings;
 import org.docx4j.fonts.BestMatchingMapper;
+import org.docx4j.fonts.PhysicalFont;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jsoup.Jsoup;
@@ -22,6 +23,7 @@ import java.util.List;
 public class Convertors {
     static {
         System.setProperty("docx4j.jaxb.Context", "org.docx4j.jaxb.Context");
+        org.docx4j.Docx4jProperties.setProperty("docx4j.fonts.RunFontSelector.DefaultFont", "Times New Roman");
     }
     public static void convertWordToPDF(XWPFDocument document, Path outputPDF) throws Exception {
 
@@ -36,7 +38,8 @@ public class Convertors {
         try(InputStream is = new ByteArrayInputStream(docxBytes)){
             wordMLPackage = WordprocessingMLPackage.load(is);
         }
-        wordMLPackage.setFontMapper(new BestMatchingMapper());
+
+        wordMLPackage.setFontMapper(FontManager.getInstance());
         try(OutputStream os = new FileOutputStream(outputPDF.toFile())){
             Docx4J.toPDF(wordMLPackage, os);
         }
@@ -57,6 +60,7 @@ public class Convertors {
             throw new RuntimeException(e);
         }
     }
+
     public static void convertHTMLToWord(String html,Path outputDOCX) throws Exception{
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
         XHTMLImporterImpl importer = new XHTMLImporterImpl(wordMLPackage);

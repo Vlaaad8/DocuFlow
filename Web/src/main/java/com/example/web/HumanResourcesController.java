@@ -1,6 +1,7 @@
 package com.example.web;
 
 import com.example.HumanResourcesService;
+import com.example.UserService;
 import com.example.login.Relation;
 import com.example.login.User;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 public class HumanResourcesController {
 
     private final HumanResourcesService humanResourcesService;
+    private final UserService userService;
 
 
     @GetMapping("hr/users")
@@ -28,5 +30,10 @@ public class HumanResourcesController {
     @PostMapping("hr/relation")
     public void saveRelation(@RequestParam("bossID") int bossID, @RequestParam("subordinateID") int subordinateID) {
         humanResourcesService.saveRelation(bossID, subordinateID);
+    }
+
+    @PostMapping("hr/user")
+    public void registerUser(@RequestBody User user) {
+        userService.register(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getUsername(), user.getRole().toString());
     }
 }

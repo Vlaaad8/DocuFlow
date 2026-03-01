@@ -41,6 +41,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   public removeEdgeMode: boolean = false;
 
    errorMessage: string | null = null;
+   registerErrorMessage: string | null = null;
 
   @ViewChild('network') networkContainer!: ElementRef;
   @ViewChild('createUserDialog') createUserDialog: any;
@@ -54,7 +55,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     this.loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     this.registerForm = this.formBuilder.group({
       firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       role: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -287,6 +288,23 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     this.dialog.closeAll();
   }
   registerUser(): void {
+    if (this.registerForm.valid) {
+      const formData = this.registerForm.value;
+     
+      console.log('Registering user with data:', formData);
+      this.closeCreateModal();
+      this.service.addUser(formData.firstname, formData.lastName, formData.email, formData.role, formData.password, formData.username).subscribe({
+        next: () => {
+          this.snackBar.showMessage("User registered successfully!", "success");
+          this.ngAfterViewInit();
+        },
+        error: (error) => {
+          console.error('Error registering user:', error);
+          this.registerErrorMessage = error.error || 'An error occurred while registering the user. Please try again.';
+        }
+      });
+     this.snackBar.showMessage("Error registering user!", "error");
+    }
   }
 
 

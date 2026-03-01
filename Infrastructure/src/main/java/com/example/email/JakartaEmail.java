@@ -2,6 +2,7 @@ package com.example.email;
 
 
 import com.example.exceptions.EmailException;
+import com.example.login.User;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
@@ -65,6 +66,41 @@ public class JakartaEmail implements EmailPort {
             multipart.addBodyPart(attachmentBodyPart);
             message.setContent(multipart);
 
+            Transport.send(message);
+        } catch (Exception e) {
+            throw new EmailException(e.getMessage());
+        }
+    }
+    public void sendRegisterEmail(User user){
+        Session session = Session.getInstance(prop, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("welcome@docuflow.social"));
+            message.setRecipients(
+                    Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@stud.ubbcluj.ro"));
+            message.setSubject("Welcome to DocuFlow!");
+
+            String msg = "<p>Dear " + user.getFirstName() + " " + user.getLastName() + ",</p>\n" +
+                    "<p><strong>Welcome to DocuFlow!</strong> Your account has been successfully created. You can now access our platform using the credentials below:</p>\n" +
+                    "\n" +
+                    "<div style=\"background-color: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px solid #ddd; margin: 20px 0;\">\n" +
+                    "    <p style=\"margin: 0;\"><strong>Username:</strong> " + user.getUsername() + "</p>\n" +
+                    "    <p style=\"margin: 5px 0 0 0;\"><strong>Password:</strong> " + user.getPassword() + "</p>\n" +
+                    "</div>\n" +
+
+                    "<p>For your security, we recommend that you <strong>change your password</strong> immediately after your first login from the account settings menu.</p>\n" +
+                    "<p>You can log in here: <a href=\"https://docuflow.social/login\">docuflow.social/login</a></p>\n" +
+
+                    "<p>Sincerely,<br><strong>The DocuFlow Team</strong><br><a href=\"mailto:support@docuflow.social\">support@docuflow.social</a></p>\n" +
+                    "<p><strong><span style=\"color: #e03e2d;\"><em>This is an automated message. Please do not reply.</em></span></strong></p>";
+
+            message.setContent(msg, "text/html; charset=utf-8");
             Transport.send(message);
         } catch (Exception e) {
             throw new EmailException(e.getMessage());

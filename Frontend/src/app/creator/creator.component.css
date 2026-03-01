@@ -82,6 +82,11 @@ mat-sidenav{
     border: none;
     width: 100%;
 }
+.template-button:hover {
+    background-color: #e0e7ff;
+    transform: translateY(-2px);
+    transition: all 0.25s ease;
+}
 
 .template-button {
     background-color: #e0e7ff;
