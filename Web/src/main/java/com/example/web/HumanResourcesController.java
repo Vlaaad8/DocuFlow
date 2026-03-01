@@ -32,6 +32,7 @@ public class HumanResourcesController {
         humanResourcesService.saveRelation(bossID, subordinateID);
     }
 
+    //TODO hash password in dataBase
     @PostMapping("hr/user")
     public void registerUser(@RequestBody User user) {
         userService.register(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getUsername(), user.getRole().toString());

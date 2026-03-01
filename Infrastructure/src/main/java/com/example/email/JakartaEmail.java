@@ -81,7 +81,7 @@ public class JakartaEmail implements EmailPort {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("welcome@docuflow.social"));
+            message.setFrom(new InternetAddress("no-reply@docuflow.social"));
             message.setRecipients(
                     Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@stud.ubbcluj.ro"));
             message.setSubject("Welcome to DocuFlow!");
@@ -95,8 +95,6 @@ public class JakartaEmail implements EmailPort {
                     "</div>\n" +
 
                     "<p>For your security, we recommend that you <strong>change your password</strong> immediately after your first login from the account settings menu.</p>\n" +
-                    "<p>You can log in here: <a href=\"https://docuflow.social/login\">docuflow.social/login</a></p>\n" +
-
                     "<p>Sincerely,<br><strong>The DocuFlow Team</strong><br><a href=\"mailto:support@docuflow.social\">support@docuflow.social</a></p>\n" +
                     "<p><strong><span style=\"color: #e03e2d;\"><em>This is an automated message. Please do not reply.</em></span></strong></p>";
 

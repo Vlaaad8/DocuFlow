@@ -7,12 +7,13 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 import { DashboardService } from '../services/dashboard.service';
 import { User } from '../model/User';
 import Chart, { Legend } from 'chart.js/auto';
-import { DashboardData } from '../model/dashboardData';
+import { DashboardData, Notification } from '../model/dashboardData';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingComponent } from "../commons/loading/loading.component";
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
-import { NotificationsService } from '../services/notifications.service';
+import { WebSocketService } from '../services/notifications.service';
+
 
 
 @Component({
@@ -27,10 +28,11 @@ export class DashboardComponent implements OnInit {
   public dailyChart!: Chart;
   public user!: User;
   public dashboardData!: DashboardData;
+  public notiifications: Notification[] = [];
 
   public status: string = 'loading' // 'loading' , 'present' 
 
-  constructor(private service: DashboardService,private notificationsService: NotificationsService) {
+  constructor(private service: DashboardService,private notificationsService: WebSocketService) {
     sessionStorage.getItem('loggedInUser')
     this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
 
@@ -47,6 +49,16 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching dashboard data:', err);
+      }
+    });
+    this.notificationsService.connect(this.user.id.toString());
+    this.notificationsService.getNotifications().subscribe({
+      next: (notification) => {
+        console.log('Received notification:', notification);
+        this.notiifications.push(notification);
+      },
+      error: (err) => {
+        console.error('Error receiving notifications:', err);
       }
     });
   }

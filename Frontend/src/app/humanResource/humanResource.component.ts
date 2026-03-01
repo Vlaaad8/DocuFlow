@@ -291,7 +291,6 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
      
-      console.log('Registering user with data:', formData);
       this.closeCreateModal();
       this.service.addUser(formData.firstname, formData.lastName, formData.email, formData.role, formData.password, formData.username).subscribe({
         next: () => {
@@ -303,7 +302,6 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
           this.registerErrorMessage = error.error || 'An error occurred while registering the user. Please try again.';
         }
       });
-     this.snackBar.showMessage("Error registering user!", "error");
     }
   }
 

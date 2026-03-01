@@ -24,9 +24,20 @@ public class Notification {
     @ManyToOne
     private User recipient;
 
+    @Column(nullable = false)
     String title;
 
+    @Column(nullable = false)
     String message;
 
+    @Column(nullable = false)
     Timestamp timestamp;
+
+    @Column(nullable = false)
+    boolean read;
+
+
+
+
+
 }

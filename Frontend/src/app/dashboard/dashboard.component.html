@@ -13,82 +13,83 @@
           <p>Here's a quick overview of your dashboard.</p>
         </div>
         <div class="buttonSection">
-          <div matBadge="15" class="notificationButton"  [matMenuTriggerFor]="notificationMenu"><mat-icon >notifications_active</mat-icon></div>
-        <app-exit-button></app-exit-button>
+          <div matBadge="{{notiifications.length}}" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
+            <mat-icon>notifications_active</mat-icon></div>
+          <app-exit-button></app-exit-button>
         </div>
       </div>
     </div>
     <ng-container *ngIf="status == 'loading' ; then loading ; else presenting"></ng-container>
     <ng-template #presenting>
-    <div class="container">
-      <div class="stats-container">
-        <div class="card">
-          <mat-icon class="card-icon total">adf_scanner</mat-icon>
-          <div class="card-info">
-            <p>{{dashboardData.totalTemplates}}</p>
-            <h3>Total Templates</h3>
+      <div class="container">
+        <div class="stats-container">
+          <div class="card">
+            <mat-icon class="card-icon total">adf_scanner</mat-icon>
+            <div class="card-info">
+              <p>{{dashboardData.totalTemplates}}</p>
+              <h3>Total Templates</h3>
+            </div>
+          </div>
+          <div class="card">
+            <mat-icon class="card-icon generated">assignment_add</mat-icon>
+            <div class="card-info">
+              <p>{{dashboardData.totalGeneratedDocuments}}</p>
+              <h3>Generated Documents</h3>
+            </div>
+          </div>
+          <div class="card">
+            <mat-icon class="card-icon pending">pending_actions</mat-icon>
+            <div class="card-info">
+              <p>{{dashboardData.pendingApprovals}}</p>
+              <h3>Pending Approvals</h3>
+            </div>
+          </div>
+          <div class="card">
+            <mat-icon class="card-icon received">approval_delegation</mat-icon>
+            <div class="card-info">
+              <p>{{dashboardData.receivedApprovals}}</p>
+              <h3>Received Approvals</h3>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <mat-icon class="card-icon generated">assignment_add</mat-icon>
-          <div class="card-info">
-            <p>{{dashboardData.totalGeneratedDocuments}}</p>
-            <h3>Generated Documents</h3>
+        <div class="chart-container">
+          <div class="chart-section">
+            <div class="title">
+              <div>
+                <h3>Document Generation Results</h3>
+                <p>See document proportion over time.</p>
+              </div>
+              <div>
+                <ul class="legend-list">
+                  <li class="role-accept">Accepted</li>
+                  <li class="role-pending">Pending</li>
+                  <li class="role-reject">Rejected</li>
+                </ul>
+              </div>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="activityChart"></canvas>
+            </div>
           </div>
-        </div>
-        <div class="card">
-          <mat-icon class="card-icon pending">pending_actions</mat-icon>
-          <div class="card-info">
-            <p>{{dashboardData.pendingApprovals}}</p>
-            <h3>Pending Approvals</h3>
-          </div>
-        </div>
-        <div class="card">
-          <mat-icon class="card-icon received">approval_delegation</mat-icon>
-          <div class="card-info">
-            <p>{{dashboardData.receivedApprovals}}</p>
-            <h3>Received Approvals</h3>
+          <div class="chart-section">
+            <div class="title">
+              <div>
+                <h3>Document Generation Trends</h3>
+                <p>See document proportion over time.</p>
+              </div>
+              <div>
+                <ul class="legend-list">
+                  <li class="role-accept">Requested</li>
+                  <li class="role-reject">Accepted</li>
+                </ul>
+              </div>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="dailyChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
-      <div class="chart-container">
-        <div class="chart-section">
-          <div class="title">
-            <div>
-              <h3>Document Generation Results</h3>
-              <p>See document proportion over time.</p>
-            </div>
-            <div>
-              <ul class="legend-list">
-                <li class="role-accept">Accepted</li>
-                <li class="role-pending">Pending</li>
-                <li class="role-reject">Rejected</li>
-              </ul>
-            </div>
-          </div>
-          <div class="chart-wrapper">
-            <canvas id="activityChart"></canvas>
-          </div>
-        </div>
-        <div class="chart-section">
-          <div class="title">
-            <div>
-              <h3>Document Generation Trends</h3>
-              <p>See document proportion over time.</p>
-            </div>
-            <div>
-              <ul class="legend-list">
-                <li class="role-accept">Requested</li>
-                <li class="role-reject">Accepted</li>
-              </ul>
-            </div>
-          </div>
-          <div class="chart-wrapper">
-            <canvas id="dailyChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
     </ng-template>
     <ng-template #loading>
       <app-loading title="Loading dashboard..." message="Please wait while we fetch your data"></app-loading>
@@ -98,39 +99,22 @@
 
 
 <mat-menu #notificationMenu="matMenu" yPosition="below" class="menuBar">
- <div class="notifications-header">
-  <div class="info">
-  <h3>Notifications</h3>
-  <p>15 new notifications.</p>
+  <div class="notifications-header">
+    <div class="info">
+      <h3>Notifications</h3>
+      <p>{{notiifications.length}} new notifications.</p>
+    </div>
+    <mat-icon class="close-button">close</mat-icon>
   </div>
-  <mat-icon class="close-button">close</mat-icon>
- </div>
-  <div class="notification">
+  <div class="notification" *ngFor="let notification of notiifications">
     <div class="notification-content">
       <mat-icon class="notification-icon">assignment_add</mat-icon>
       <div class="text-section">
-        <p><strong>John Doe</strong> requested a new document.</p>
-        <span class="timestamp">2 hours ago</span>
+        <p><strong>{{notification.title}}</strong> {{notification.message}}</p>
+        <span class="timestamp">{{notification}}</span>
       </div>
     </div>
-    
-  </div>  <div class="notification">
-    <div class="notification-content">
-      <mat-icon class="notification-icon">assignment_add</mat-icon>
-      <div class="text-section">
-        <p><strong>John Doe</strong> requested a new document.</p>
-        <span class="timestamp">2 hours ago</span>
-      </div>
-    </div>
-    
-  </div>  <div class="notification">
-    <div class="notification-content">
-      <mat-icon class="notification-icon">assignment_add</mat-icon>
-      <div class="text-section">
-        <p><strong>John Doe</strong> requested a new document.</p>
-        <span class="timestamp">2 hours ago</span>
-      </div>
-    </div>
-    
+
+
   </div>
 </mat-menu>

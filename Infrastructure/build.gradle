@@ -9,8 +9,7 @@ repositories {
     mavenCentral()
 }
 
-// Menținem excluderile pentru a nu polua classpath-ul cu versiuni vechi de Xerces/Xalan
-// care pot intra în conflict cu parserul nativ din Java 21
+
 def docx4jExclusions = {
     exclude group: "xml-apis", module: "xml-apis"
     exclude group: "xerces", module: "xercesImpl"
@@ -63,6 +62,8 @@ dependencies {
     implementation("jakarta.activation:jakarta.activation-api:2.1.4")
 
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:3.2.0'
 }
 
 test {
