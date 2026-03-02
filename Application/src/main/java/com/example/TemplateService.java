@@ -30,7 +30,7 @@ public class TemplateService {
     private final ApprovalChainRepository approvalChainRepository;
     private final ApprovalChainMapper approvalChainMapper;
     private final TemplateMapper templateMapper;
-
+    private final HTMLCleanerPort htmlCleanerPort;
     private final Path rootFolder = Paths.get("storage");
 
 
@@ -67,6 +67,12 @@ public class TemplateService {
         try {
             byte[] content = inputStream.readAllBytes();
             String extractedText = textPort.extract(new ByteArrayInputStream(content));
+
+            if (extractedText != null) {
+                extractedText = extractedText.replace('\u00A0', ' '); // Non-breaking space
+                extractedText = extractedText.replaceAll("\\h", " "); // Orice alt tip de spațiu orizontal
+            }
+
             if (!hasValidFormat(extractedText)) {
                 throw new TemplateValidationException("File has not the valid format");
             }
@@ -185,14 +191,23 @@ public class TemplateService {
     }
 
     public void updateTemplate(String htmlContent,String fileName){
+        validateHTMLTemplate(htmlContent);
 
         Path destination = Path.of(fileName);
         try{
         Convertors.convertHTMLToWord(htmlContent,destination);
         }
-        catch(Exception e){
-            e.printStackTrace();
+        catch (Exception e){
+
+            throw new RuntimeException(e);
         }
+    }
+
+    public void validateHTMLTemplate(String htmlContent){
+        String sanitizedContent = this.htmlCleanerPort.clean(htmlContent);
+        sanitizedContent = sanitizedContent.replace("\u00A0", " ");
+        InputStream stream = new ByteArrayInputStream(sanitizedContent.getBytes());
+        validateTemplate(stream);
     }
 
     public List<ApprovalChainOptionDTO> getApprovalChains(){

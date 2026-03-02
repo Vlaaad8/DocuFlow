@@ -13,14 +13,14 @@ import { LoadingComponent } from "../commons/loading/loading.component";
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { WebSocketService } from '../services/notifications.service';
-
+import { ConvertDatePipe } from '../pipes/convertDate.pipe';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent, MatBadgeModule, LoadingComponent, CommonModule,MatMenuModule]
+  imports: [MatSidenavModule, MatIconModule, SidenavUserComponent, ExitButtonComponent, MatBadgeModule, LoadingComponent, CommonModule, MatMenuModule, ConvertDatePipe]
 })
 export class DashboardComponent implements OnInit {
 
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   public dailyChart!: Chart;
   public user!: User;
   public dashboardData!: DashboardData;
-  public notiifications: Notification[] = [];
+  public notiifications:any[] = [];
 
   public status: string = 'loading' // 'loading' , 'present' 
 

@@ -13,8 +13,10 @@
           <p>Here's a quick overview of your dashboard.</p>
         </div>
         <div class="buttonSection">
-          <div matBadge="{{notiifications.length}}" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
+          <div *ngIf="notiifications.length != 0" matBadge="{{notiifications.length}}" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
             <mat-icon>notifications_active</mat-icon></div>
+            <div *ngIf="notiifications.length == 0" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
+            <mat-icon>notifications</mat-icon></div>
           <app-exit-button></app-exit-button>
         </div>
       </div>
@@ -110,8 +112,8 @@
     <div class="notification-content">
       <mat-icon class="notification-icon">assignment_add</mat-icon>
       <div class="text-section">
-        <p><strong>{{notification.title}}</strong> {{notification.message}}</p>
-        <span class="timestamp">{{notification}}</span>
+        <p><strong>{{notification.message?.title}}</strong> <br>{{notification.message?.message}}</p>
+        <span class="timestamp">{{notification.timestamp | convertDate}}</span>
       </div>
     </div>
 

@@ -31,13 +31,10 @@ public class Notification {
     String message;
 
     @Column(nullable = false)
-    Timestamp timestamp;
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     @Column(nullable = false)
-    boolean read;
-
-
-
+    boolean read = false;
 
 
 }

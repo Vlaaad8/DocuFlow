@@ -1,6 +1,7 @@
 package com.example.converter;
 
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.docx4j.Docx4J;
@@ -55,7 +56,8 @@ public class Convertors {
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Docx4J.toHTML(settings, out, Docx4J.FLAG_EXPORT_PREFER_XSL);
-            return out.toString(StandardCharsets.UTF_8);
+            String html =  out.toString(StandardCharsets.UTF_8);
+            return StringEscapeUtils.unescapeHtml4(html);
         } catch (IOException | Docx4JException e) {
             throw new RuntimeException(e);
         }

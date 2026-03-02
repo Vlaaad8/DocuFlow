@@ -57,12 +57,18 @@ public class TemplateController {
 
     @PutMapping(value = "template")
     public void updateTemplate(@RequestBody UpdateRequest updateRequest) {
+        System.out.println(updateRequest.html());
         this.templateService.updateTemplate(updateRequest.html(), updateRequest.fileName());
     }
 
     @GetMapping(value="template/approvalFlows")
     public List<ApprovalChainOptionDTO> getApprovalFlows(){
         return this.templateService.getApprovalChains();
+    }
+
+    @PostMapping(value="template/validate/html")
+    public void validateTemplateHTML(@RequestParam("html") String html){
+        this.templateService.validateHTMLTemplate(html);
     }
 
 }

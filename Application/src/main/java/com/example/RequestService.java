@@ -12,6 +12,7 @@ import com.example.email.EmailPort;
 import com.example.exceptions.ApprovalException;
 import com.example.jpa.ApprovalRepository;
 import com.example.jpa.ApprovalRequestRepository;
+import com.example.jpa.NotificationRepository;
 import com.example.jpa.RelationRepository;
 import com.example.login.Role;
 import com.example.login.User;
@@ -35,8 +36,7 @@ public class RequestService {
     private final ApprovalRequestMapper approvalRequestMapper;
     private final EmailPort emailPort;
     private final SignaturePort signaturePort;
-    private final NotificationPort notificationPort;
-
+    private final NotificationRepository notificationRepository;
 
     public List<ApprovalDTO> getToApproveRequestsForUser(int userId) {
         return approvalRepository.findByApprover_IdAndStatus(userId, ApprovalStatus.IN_PROGRESS).stream()
@@ -66,10 +66,21 @@ public class RequestService {
             ApprovalRequest approvalRequest = approval.getApprovalRequest();
             approvalRequest.setStatus(ApprovalRequestStatus.REJECTED);
             approvalRequestRepository.save(approvalRequest);
+
+            Notification notification = new Notification();
+            notification.setRecipient(approvalRequest.getTemplate().getUser());
+            notification.setMessage("Your approval request for template " + approvalRequest.getTemplate().getTemplate().getName() + " has been rejected.");
+            notification.setTitle("Approval Request Rejected");
+            notificationRepository.save(notification);
         }
         else {
             this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(), approval.getApprovalRequest().getTemplate().getPath());
             continueAnswerRequest(approval.getApprovalRequest());
+            Notification notification = new Notification();
+            notification.setRecipient(approval.getApprovalRequest().getTemplate().getUser());
+            notification.setMessage(approval.getApprover().getFirstName()+ " " + approval.getApprover().getLastName() +  " approved a request for template " + approval.getApprovalRequest().getTemplate().getTemplate().getName() + ".");
+            notification.setTitle("New Approval");
+            notificationRepository.save(notification);
         }
 
     }
@@ -81,6 +92,12 @@ public class RequestService {
             approvalRequest.setStatus(ApprovalRequestStatus.ACCEPTED);
 
             this.emailPort.sendEmail(approvalRequest.getTemplate().getPath(), approvalRequest.getTemplate().getUser().getEmail(), approvalRequest.getTemplate().getUser().getFirstName(), approvalRequest.getTemplate().getUser().getLastName());
+            Notification notification = new Notification();
+            notification.setRecipient(approvalRequest.getTemplate().getUser());
+            notification.setMessage("Your approval request for template " + approvalRequest.getTemplate().getTemplate().getName() + " has been accepted.");
+            notification.setTitle("Approval Request Accepted");
+            notificationRepository.save(notification);
+
         } else {
             Role nextApproverRole = approvalRequest.getApprovalChain().getSteps().get(approvalRequest.getCurrentStep()).getApproverRole();
             int previousApprover = approvalRequest.getSteps().get(approvalRequest.getCurrentStep() - 2).getApprover().getId();

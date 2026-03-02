@@ -16,4 +16,8 @@ export class CreatorService {
   public getFields(): Observable<Field[]> {
     return this.http.get<Field[]>(URL + '/field');
   }
+
+  public validateHTMLTemplate(html: string): Observable<void> {
+    return this.http.post<void>(URL + '/validate/html', {html:  html });
+  }
 }

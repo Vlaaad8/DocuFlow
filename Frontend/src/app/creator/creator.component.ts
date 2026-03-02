@@ -3,7 +3,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
 import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
 import { EditorComponent } from '@tinymce/tinymce-angular';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TemplateService } from '../services/template.service';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -16,6 +16,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { CreatorService } from '../services/creator.service';
 import { Field } from '../model/Field';
 import { LoadingComponent } from "../commons/loading/loading.component";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ApprovalFlowTemplate } from '../model/Template';
 
 
 const defaultContent = '<p>Create your template…</p>';
@@ -23,10 +25,12 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule]
 })
 export class CreatorComponent implements OnInit {
+
   @ViewChild(EditorComponent) editorComp?: EditorComponent;
+  @ViewChild('templateDetails') templateDetails!: any;
 
   public tinymceApiKey = 'ahh7gcufunnecgtf6i7axfxi4w4l5i9x02pq73y13qi80z0e';
 
@@ -39,6 +43,11 @@ export class CreatorComponent implements OnInit {
   public fields: Field[] = [];
 
   public draggedContent: string = '';
+
+  templateCategories!: string[];
+  approvalFlows!: ApprovalFlowTemplate[];
+  formGroup!: FormGroup
+  errorMessage: string | null = null;
 
   tinyInit = {
     height: 600,
@@ -69,7 +78,7 @@ export class CreatorComponent implements OnInit {
   }
 
 
-  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService) { }
+  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -100,15 +109,25 @@ export class CreatorComponent implements OnInit {
   }
 
   handleEdit(): void {
-    this.service.editTemplateHTML(this.content, this.path!).subscribe({
-      next: () => {
-        console.log('Template HTML updated successfully.');
-      },
-      error: (error) => {
-        console.error('Error updating template HTML:', error);
-      }
-    });
+    if (this.id == null) {
+      this.handleSave();
+    }
+    else {
+      this.service.editTemplateHTML(this.content, this.path!).subscribe({
+        next: () => {
+          this.snackBar.showMessage('Template updated successfully!', 'success');
+          this.errorMessage = null;
+          this.content = defaultContent;
+          this.id = null;
+          this.path = null;
+        },
+        error: (error) => {
+          this.errorMessage = error.error;
+        }
+      });
+    }
   }
+
 
   showEditor(): boolean {
     if (this.id == null) {
@@ -119,12 +138,27 @@ export class CreatorComponent implements OnInit {
     }
   }
   handleClear(): void {
-    this.snackBar.showMessage('Clearing the editor will remove all unsaved changes. Are you sure?', 'success');
-    const html = this.editorComp?.editor?.getContent({ format: 'html' });
-    console.log(html);
+    this.content = defaultContent;
   }
 
   handleDrag(representation: string): void {
     this.draggedContent = representation
+  }
+
+  handleSave(): void {
+    this.service.validateHTMLTemplate(this.content).subscribe({
+      next: () => {
+        this.errorMessage = null;
+        this.dialog.open(this.templateDetails);
+      },
+      error: (error) => {
+        this.errorMessage = error.error;
+      }
+    });
+  }
+  
+
+  closeDialog(): void {
+    this.dialog.closeAll();
   }
 }

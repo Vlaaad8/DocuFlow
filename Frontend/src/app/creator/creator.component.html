@@ -15,7 +15,13 @@
     </div>
 
     <app-loading *ngIf="!showEditor()" title="Loading editor..." message="Please wait while we finish loading"></app-loading>
-
+    <div class="error-section" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <div class="action-zone">
+        <p>{{errorMessage}}</p>
+        <mat-icon (click)="errorMessage = null">close</mat-icon>
+      </div>
+    </div> 
     <div class="editor" [style.visibility]="showEditor() ? 'visible' : 'hidden'">
       <editor [apiKey]="tinymceApiKey" [init]="tinyInit" [(ngModel)]="content" id="editor" />
       <div class="edit-section">
@@ -46,3 +52,40 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+      <ng-template #templateDetails>
+        <div class="upload-card">
+          <div class="card-header">
+            <h3>Template Details</h3>
+            <mat-icon (click)="closeDialog()" class="close-button">close</mat-icon>
+          </div>
+          <div class="form-zone">
+            <form [formGroup]="formGroup" (ngSubmit)="handleSave()">
+              <div class="input-design">
+                <label>Template Name</label>
+                <input type="text" formControlName="name" />
+              </div>
+              <div class="input-design">
+                <label>Description</label>
+                <textarea formControlName="description"></textarea>
+              </div>
+              <div class="input-design">
+                <label>Category</label>
+                <select formControlName="category">
+                  <option *ngFor="let category of templateCategories" [value]="category">{{category}}</option>
+                </select>
+              </div>
+              <div class="input-design">
+                <label>Approval Flow</label>
+                <select formControlName="approvalFlow">
+                  <option *ngFor="let flow of approvalFlows" [value]="flow.id">{{flow.name}}</option>
+                </select>
+              </div>
+              <div class="buttonSection">
+                <button type="submit">Add Template</button>
+                <button type="button" (click)="closeDialog()">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </ng-template>

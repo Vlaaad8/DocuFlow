@@ -43,18 +43,23 @@ export class TemplateService {
   //TODO to redo
 
 
-public getTemplateHTMLById(templateId: number): Observable<HtmlRequest> {
-  return this.http.get<HtmlRequest>(`${URL}/html`, {
-    params: { id: templateId }
-  });
-}
+  public getTemplateHTMLById(templateId: number): Observable<HtmlRequest> {
+    return this.http.get<HtmlRequest>(`${URL}/html`, {
+      params: { id: templateId }
+    });
+  }
 
-public editTemplateHTML(htmlContent: string, fileName: string): Observable<void> {
-  return this.http.put<void>(`${URL}`, { html: htmlContent, fileName: fileName });
+  public editTemplateHTML(htmlContent: string, fileName: string): Observable<void> {
+    return this.http.put<void>(`${URL}`, { html: htmlContent, fileName: fileName });
 
-}
+  }
 
-public getApprovalFlows(): Observable<ApprovalFlowTemplate[]> {
-  return this.http.get<ApprovalFlowTemplate[]>(`${URL}/approvalFlows`); 
-}
+  public getApprovalFlows(): Observable<ApprovalFlowTemplate[]> {
+    return this.http.get<ApprovalFlowTemplate[]>(`${URL}/approvalFlows`);
+  }
+  public validateHTMLTemplate(html: string): Observable<void> {
+    const formData = new FormData();
+    formData.append('html', html);
+    return this.http.post<void>(URL + '/validate/html', formData);
+  }
 }
