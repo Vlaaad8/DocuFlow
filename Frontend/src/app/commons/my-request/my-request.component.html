@@ -1,69 +1,50 @@
-<div class="container">
-  <div class="header">
-    <div class="first-part">
-      <mat-icon>description</mat-icon>
-      <div class="info">
-        <h3>{{request.templateTitle}}</h3>
-        <p>{{request.templateType}}</p>
+<div class="card" [ngClass]="'card--' + request.status.toLowerCase()">
+
+  <!-- ── Header ── -->
+  <div class="card-header">
+    <div class="card-left">
+      <div class="card-icon" [ngClass]="'icon--' + request.status.toLowerCase()">
+        <mat-icon>{{ getStatusIcon(request.status) }}</mat-icon>
+      </div>
+      <div class="card-title">
+        <h3>{{ request.templateTitle }}</h3>
+        <span class="type-chip">{{ request.templateType }}</span>
       </div>
     </div>
-    <div [ngClass]="request.status.toLowerCase()">
-      {{formatStatus(request.status)}}
-    </div>
+    <span class="status-badge" [ngClass]="'badge--' + request.status.toLowerCase()">
+      {{ formatStatus(request.status) }}
+    </span>
   </div>
-  <div class="content">
-    <ng-container *ngFor="let approval of request.approvals">
 
-      <ng-container [ngSwitch]="approval.status">
-
-        <!-- PENDING -->
-        <div class="approval" *ngSwitchCase="'IN_PROGRESS'">
-          <div class="display pending">
-            <mat-icon>hourglass_empty</mat-icon>
-            <div class="info">
-              <h3>{{ approval.approverName }}</h3>
-              <p>{{ approval.approverRole }}</p>
-            </div>
-          </div>
-          <div class="date">
-            <h3>Pending</h3>
-            <p>---</p>
-          </div>
-        </div>
-
-        <!-- APPROVED -->
-        <div class="approval" *ngSwitchCase="'ACCEPTED'">
-          <div class="display">
-            <mat-icon>check</mat-icon>
-            <div class="info">
-              <h3>{{ approval.approverName }}</h3>
-              <p>{{ approval.approverRole }}</p>
-            </div>
-          </div>
-          <div class="date">
-            <h3>Signed</h3>
-            <p>{{ formatDate(approval.decisionDate) }}</p>
-          </div>
-        </div>
-
-        <!-- CANCELED -->
-        <div class="approval" *ngSwitchCase="'REJECTED'">
-          <div class="display denyed">
-            <mat-icon>close</mat-icon>
-            <div class="info">
-              <h3>{{ approval.approverName }}</h3>
-              <p>{{ approval.approverRole }}</p>
-            </div>
-          </div>
-          <div class="date">
-            <h3>Canceled</h3>
-            <p>{{ formatDate(approval.decisionDate) }}</p>
-          </div>
-        </div>
-
-      </ng-container>
-
-    </ng-container>
+  <!-- ── Horizontal stepper ── -->
+  <div class="stepper">
+    <div class="step">
+    <div class="step-node" [ngClass]="'node--me'">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="step-label">
+      <p class="step-name">You</p>
+    </div>
+    <div class="step-line"
+         [ngClass]="'line--me'"></div>
+  </div>
+    <div class="step" *ngFor="let approval of request.approvals; let last = last">
+      <div class="step-node" [ngClass]="'node--' + approval.status.toLowerCase()">
+        <mat-icon *ngIf="approval.status === 'ACCEPTED'">check</mat-icon>
+        <mat-icon *ngIf="approval.status === 'REJECTED'">close</mat-icon>
+        <mat-icon *ngIf="approval.status === 'IN_PROGRESS'">more_horiz</mat-icon>
+      </div>
+      <div class="step-label">
+        <p class="step-name">{{ approval.approverName }}</p>
+        <p class="step-role">{{ approval.approverRole }}</p>
+        <p class="step-date" *ngIf="approval.status !== 'IN_PROGRESS'">
+          {{ formatDate(approval.decisionDate) }}
+        </p>
+        <p class="step-date" *ngIf="approval.status === 'IN_PROGRESS'">Awaiting</p>
+      </div>
+      <div class="step-line" *ngIf="!last"
+        [ngClass]="'line--' + approval.status.toLowerCase()"></div>
+    </div>
   </div>
 
 </div>

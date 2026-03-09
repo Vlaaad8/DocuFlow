@@ -19,12 +19,9 @@ public class ApacheText implements TemplateTextPort {
             String text = tika.parseToString(stream);
             if (text == null) return "";
 
-            // Pasul A: Înlocuim orice spațiu orizontal (inclusiv &nbsp; / \u00A0) cu spațiu normal
-            // \h prinde toate tipurile de spații orizontale Unicode
+
             text = text.replaceAll("\\h", " ");
 
-            // Pasul B: Reducem spațiile multiple la unul singur
-            // Aceasta protejează regula ta strictă de \\s în cazul în care Tika a pus 2 spații
             text = text.replaceAll(" +", " ");
 
             return text.trim();

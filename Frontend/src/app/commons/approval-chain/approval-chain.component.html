@@ -1,34 +1,38 @@
-<div class="container">
-  <div class="container-header">
-    <div class="info-section">
-      <h4>{{ approvalChain.name }}</h4>
-      <div class="category">
-        <p>CATEGORY</p>
+<div class="card">
+  <div class="accent-bar"></div>
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="card-left">
+      <div class="card-icon">
+        <mat-icon>account_tree</mat-icon>
       </div>
-    
+      <div class="card-title">
+        <h3>{{ approvalChain.name }}</h3>
+        <span class="category-chip">Category</span>
+      </div>
     </div>
-    <div class="button-section">
-      <div> <mat-icon>edit</mat-icon></div>
-      <div (click)="handleDelete()"><mat-icon>delete</mat-icon></div>
+    <div class="card-actions-header">
+      <button class="btn-icon" title="Edit">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button class="btn-icon btn-icon--danger" (click)="handleDelete()" title="Delete">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
-  <div class="container-content">
-    <p>Below is the approval chain for this document.</p>
-    <div class="chain-details">
-      <div class="chain-name">
-        <div class="step-container">
-          <div class="steps-visualization" *ngFor="let step of approvalChain.steps ; let i = index">
-            <div class="step-item">
-              <div class="step-badge" [title]="step.approverRole"  [class]="step.approverRole">
-                {{ getRoleAbbreviation(step.approverRole) }}
-              </div>
-              <div class="step-label">
-                <span class="step-role">{{ step.approverRole }}</span>
-                <div *ngIf="i < approvalChain.steps.length - 1" class="step-arrow">→</div>
-              </div>
 
-            </div>
-          </div>
+  <!-- Steps -->
+  <div class="card-body">
+    <p class="section-label">Approval Flow</p>
+    <div class="steps-row">
+      <div class="step-item" *ngFor="let step of approvalChain.steps; let i = index">
+        <div class="step-badge" [title]="step.approverRole" [class]="step.approverRole">
+          {{ getRoleAbbreviation(step.approverRole) }}
+        </div>
+        <span class="step-role">{{ step.approverRole }}</span>
+        <div class="step-connector" *ngIf="i < approvalChain.steps.length - 1">
+          <mat-icon>arrow_forward</mat-icon>
         </div>
       </div>
     </div>

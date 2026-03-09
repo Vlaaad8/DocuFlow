@@ -2,6 +2,7 @@ package com.example.converter;
 
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.poi.xwpf.usermodel.BreakType;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.docx4j.Docx4J;
@@ -34,6 +35,8 @@ public class Convertors {
             docxBytes = baos.toByteArray();
         }
 
+        XWPFParagraph p = document.createParagraph();
+        p.createRun().addBreak(BreakType.PAGE);
 
         WordprocessingMLPackage wordMLPackage;
         try(InputStream is = new ByteArrayInputStream(docxBytes)){

@@ -11,13 +11,14 @@ import { ExitButtonComponent } from "../commons/exit-button/exit-button.componen
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SnackBarService } from '../services/snackBar.service';
 import { ConvertMemoryPipe } from "../pipes/convertMemory.pipe";
+import {LoadingComponent} from '../commons/loading/loading.component';
 
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, InputExtractedDataComponent, MatProgressSpinnerModule, ExitButtonComponent, ReactiveFormsModule, ConvertMemoryPipe]
+  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, InputExtractedDataComponent, MatProgressSpinnerModule, ExitButtonComponent, ReactiveFormsModule, ConvertMemoryPipe, LoadingComponent]
 })
 export class UploadComponent implements OnInit {
   isDragOver: boolean = false;
@@ -100,7 +101,7 @@ export class UploadComponent implements OnInit {
         }
       });
     }
-  
+
   }
   public openFile(): void {
     if (this.selectedFile) {

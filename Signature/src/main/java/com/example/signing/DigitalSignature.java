@@ -5,8 +5,13 @@ import com.example.dto.SignatureInfo;
 import com.example.security.SignaturePort;
 import eu.europa.esig.dss.alert.SilentOnStatusAlert;
 import eu.europa.esig.dss.enumerations.SignatureLevel;
+import eu.europa.esig.dss.enumerations.SignerTextPosition;
+import eu.europa.esig.dss.enumerations.TextWrapping;
 import eu.europa.esig.dss.model.*;
 import eu.europa.esig.dss.pades.PAdESSignatureParameters;
+import eu.europa.esig.dss.pades.SignatureFieldParameters;
+import eu.europa.esig.dss.pades.SignatureImageParameters;
+import eu.europa.esig.dss.pades.SignatureImageTextParameters;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.simplereport.SimpleReport;
 import eu.europa.esig.dss.spi.DSSUtils;
@@ -19,27 +24,37 @@ import eu.europa.esig.dss.validation.reports.Reports;
 import eu.europa.esig.dss.xml.common.SchemaFactoryBuilder;
 import eu.europa.esig.dss.xml.common.XmlDefinerUtils;
 import lombok.AllArgsConstructor;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 @AllArgsConstructor
 public class DigitalSignature implements SignaturePort {
     private final CertificationAuthority certificationAuthority;
     static {
-        // Configure SchemaFactoryBuilder to silently ignore security attribute errors
+
         SchemaFactoryBuilder schemaFactoryBuilder = SchemaFactoryBuilder.getSecureSchemaBuilder();
         schemaFactoryBuilder.setSecurityExceptionAlert(new SilentOnStatusAlert());
         XmlDefinerUtils.getInstance().setSchemaFactoryBuilder(schemaFactoryBuilder);
     }
 
-    public void signDocument(String userCertificatePath, String certificatePassword, String pdfPath, String outputFile) {
+    public void signDocument(String userCertificatePath, String certificatePassword, String pdfPath, String outputFile,int singerNumber) {
         try (Pkcs12SignatureToken token = new Pkcs12SignatureToken(new FileInputStream(userCertificatePath), new KeyStore.PasswordProtection(certificatePassword.toCharArray()))) {
 
             List<DSSPrivateKeyEntry> keys = token.getKeys();
@@ -49,6 +64,28 @@ public class DigitalSignature implements SignaturePort {
             parameters.setSignatureLevel(SignatureLevel.PAdES_BASELINE_B);
             parameters.setSigningCertificate(privateKey.getCertificate());
             parameters.setCertificateChain(privateKey.getCertificateChain());
+
+
+            SignatureImageParameters imageParameters = new SignatureImageParameters();
+            SignatureFieldParameters fieldParameters = new SignatureFieldParameters();
+            fieldParameters.setFieldId("Signature" + singerNumber); // campul pre-creat
+            imageParameters.setFieldParameters(fieldParameters);
+
+
+
+            SignatureImageTextParameters textParameters = new SignatureImageTextParameters();
+            textParameters.setText(
+                    "Signed by: " + getCommonName(privateKey) + "\n" +
+                            "Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+            );
+            textParameters.setTextWrapping(TextWrapping.FILL_BOX_AND_LINEBREAK);
+            textParameters.setSignerTextPosition(SignerTextPosition.LEFT);
+            imageParameters.setTextParameters(textParameters);
+
+            parameters.setImageParameters(imageParameters);
+
+
+
             // Add trusted CA certificate
             CommonTrustedCertificateSource trustedCertSource = new CommonTrustedCertificateSource();
             X509Certificate caCert = certificationAuthority.loadCertificate();
@@ -94,9 +131,6 @@ public class DigitalSignature implements SignaturePort {
             for (String sigId : report.getSignatureIdList()) {
                 String name = report.getSignedBy(sigId);
                 java.util.Date date = report.getSigningTime(sigId);
-                eu.europa.esig.dss.enumerations.Indication indication = report.getIndication(sigId);
-                eu.europa.esig.dss.enumerations.SubIndication subIndication = report.getSubIndication(sigId);
-
 
                 boolean isValid = !eu.europa.esig.dss.enumerations.Indication.FAILED.equals(report.getIndication(sigId));
 
@@ -110,4 +144,76 @@ public class DigitalSignature implements SignaturePort {
             throw new RuntimeException("Eroare la verificarea semnăturii PDF-ului", e);
         }
     }
+
+    public void prepareForSigning(String pdfPath, int numberOfSigners) {
+        String tempPath = pdfPath + ".tmp";
+
+        try (PDDocument pdDoc = PDDocument.load(new File(pdfPath))) {
+
+            CommonCertificateVerifier verifier = new CommonCertificateVerifier();
+            verifier.setCheckRevocationForUntrustedChains(false);
+            PAdESService service = new PAdESService(verifier);
+
+            PDPage lastPage = pdDoc.getPage(pdDoc.getNumberOfPages() - 1);
+            float pageWidth  = lastPage.getMediaBox().getWidth();
+            float pageHeight = lastPage.getMediaBox().getHeight();
+
+            float sigWidth      = 200;
+            float sigHeight     = 60;
+            float marginSide    = 20;
+            float marginBetween = 15;
+            float marginTop     = 20;
+
+            int targetPage = pdDoc.getNumberOfPages();
+            int sigsPerRow = (int) ((pageWidth - 2 * marginSide) / (sigWidth + marginBetween));
+
+            DSSDocument result = new FileDocument(pdfPath); // ← inițializare
+
+            for (int i = 0; i < numberOfSigners; i++) {
+                int col = i % sigsPerRow;
+                int row = i / sigsPerRow;
+
+                float x = marginSide + col * (sigWidth + marginBetween);
+                float y = pageHeight - marginTop - sigHeight - row * (sigHeight + marginBetween);
+
+                SignatureFieldParameters field = new SignatureFieldParameters();
+                field.setFieldId("Signature" + (i + 1));
+                field.setOriginX(x);
+                field.setOriginY(y);
+                field.setWidth(sigWidth);
+                field.setHeight(sigHeight);
+                field.setPage(targetPage);
+
+                result = service.addNewSignatureField(result, field);
+            }
+
+            result.save(tempPath); // ← temp, nu pdfPath direct
+
+        } catch (Exception e) {
+            throw new RuntimeException("Eroare la pregatirea documentului", e);
+        }
+
+        // Înlocuiești după ce PDDocument e închis
+        try {
+            Files.move(
+                    Path.of(tempPath),
+                    Path.of(pdfPath),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("Eroare la salvarea documentului", e);
+        }
+    }
+
+
+
+        private String getCommonName(DSSPrivateKeyEntry privateKey) {
+            String dn = privateKey.getCertificate().getSubject().getPrincipal().toString();
+            for (String part : dn.split(",")) {
+                if (part.trim().startsWith("CN=")) {
+                    return part.trim().substring(3);
+                }
+            }
+            return dn;
+        }
 }

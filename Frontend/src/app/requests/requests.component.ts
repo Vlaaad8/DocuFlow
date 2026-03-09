@@ -39,10 +39,8 @@ export class RequestsComponent implements OnInit {
     this.service.getReqestsTOApprove(this.user.id).subscribe(
       (data: Approval[]) => {
         this.approvals = data;
-        console.log("Approvals loaded:", this.approvals);
       },
       (error) => {
-        console.error('Error fetching approvals:', error);
         this.snackBar.showMessage("Error fetching approvals", "error");
       }
     );
@@ -53,17 +51,15 @@ export class RequestsComponent implements OnInit {
     this.service.getMyRequests(this.user.id).subscribe(
       (data: ApprovalRequest[]) => {
         this.requests = data;
-        console.log("My Requests loaded:", this.requests);
       },
       (error) => {
-        console.error('Error fetching my requests:', error);
         this.snackBar.showMessage("Error fetching my requests", "error");
       }
     );
   }
 
   reloadData() {
-    this.requests = this.requests.filter(r => r.status === "IN_PROGRESS");
+    this.approvals = this.approvals.filter(r => r.status === "IN_PROGRESS");
   }
 
   handleDecision(event: { approvalId: number, action: string }) {
@@ -78,6 +74,7 @@ export class RequestsComponent implements OnInit {
     }
     this.service.handleResponseAction(event.approvalId, this.user.id, decision).subscribe({
       next: () => {
+        this.modifyApprovalStatus(event.approvalId, decision);
         this.reloadData();
         this.snackBar.showMessage("Action handled successfully!", "success");
       },
@@ -86,6 +83,13 @@ export class RequestsComponent implements OnInit {
       }
     });
 
-    
+
+  }
+
+  private modifyApprovalStatus(requestId: number, newStatus: string): void {
+    const requestIndex = this.approvals.findIndex(r => r.id === requestId);
+    if (requestIndex !== -1) {
+      this.approvals[requestIndex].status = newStatus;
+    }
   }
 }

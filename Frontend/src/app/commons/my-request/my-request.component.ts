@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipEdit } from "@angular/material/chips";
 import { CommonModule } from '@angular/common';
 import { ApprovalRequest } from '../../model/Approval';
 
@@ -18,12 +17,12 @@ export class MyRequestComponent implements OnInit {
 
   ngOnInit() {
   }
+
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString();
-
-
   }
+
   formatStatus(status: string): string {
     switch (status) {
       case "IN_PROGRESS":
@@ -34,6 +33,17 @@ export class MyRequestComponent implements OnInit {
         return 'Rejected';
       default:
         return 'Pending';
+    }
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case "ACCEPTED":
+        return 'task_alt';
+      case "REJECTED":
+        return 'highlight_off';
+      default:
+        return 'pending_actions';
     }
   }
 }

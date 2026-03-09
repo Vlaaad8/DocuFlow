@@ -1,16 +1,25 @@
 .exitButton {
-    background: #fee2e2;
-    color: #991b1b;
-    border: none;
-    padding: 8px 8px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1.5px solid #fecaca;
+    border-radius: 12px;
     cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.exitButton mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
 }
 
 .exitButton:hover {
-    background: #fecaca;
+    background: #fee2e2;
+    color: #991b1b;
     transform: translateY(-2px);
-    transition: all 0.25s ease;
 }

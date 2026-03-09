@@ -1,198 +1,243 @@
-.container {
-    background: #ffffff;
-    border-radius: 10px;
-    border: 2px solid #ebedf0;
-    
+/* ═══════════════════════════════════════
+   CARD
+   ═══════════════════════════════════════ */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.25s ease;
 }
 
-.container:hover {
-    cursor: pointer;
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
 }
 
-.container-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9fafb;
-    width: inherit;
-    padding: 12px 16px;
-    border-radius: 10px;
+
+/* ═══════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════ */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
 }
 
-.button-section {
-    display: flex;
-    gap: 10px;
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.button-section div {
-    background-color: #fff;
-    border-radius: 6px;
-    border: 1px solid #e5e7eb;
-    padding: 4px 6px;
-    color: #6b7280;
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #f5f3ff;
+  color: #6d28d9;
 }
 
-.button-section div:hover {
-    background-color: #f3f4f6;
-    color: black;
-    cursor: pointer;
-    transform: translateY(-2px);
-    transition: all 0.25s ease;
-
+.card-icon mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
-.category {
-    padding: 6px;
-    background: #dbeafe;
-    color: #1e40af;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 700;
-    width: fit-content;
+.card-title h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
 }
 
-.container-content {
-    padding: 12px 16px;
+.category-chip {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.steps-visualization {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+/* ═══════════════════════════════════════
+   HEADER ACTION BUTTONS
+   ═══════════════════════════════════════ */
+.card-actions-header {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-icon mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.btn-icon:hover {
+  background: #f3f4f6;
+  color: #111827;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-icon--danger:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+/* ═══════════════════════════════════════
+   BODY / STEPS
+   ═══════════════════════════════════════ */
+.card-body {
+  padding: 0 24px 24px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px;
+}
+
+.steps-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .step-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .step-badge {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #dbeafe;
-    color: #1e40af;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    flex-shrink: 0;
-
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
-.step-item.required .step-badge {
-    background: #fee2e2;
-    color: #991b1b;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fecaca;
-
-}
-
-.CEO {
-    background-color: #f2a5a0;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;
-    color: #1f2937;
-}
-
-.Manager {
-    background-color: #9fe0b7;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe0b7;
-    color: #1f2937;
-}
-
-.Employee {
-    background-color: #d1d5db;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d1d5db;
-    color: #1f2937;
-}
-
-.HumanResource {
-    background-color: #d7b5e6;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d7b5e6;
-    color: #1f2937;
-}
-
-.IT {
-    background-color: #a7cbee;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #a7cbee;
-    color: #1f2937;
-}
-
-.Finance {
-    background-color: #86efac;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #86efac;
-    color: #1f2937;
-}
-
-.Law {
-    background-color: #fcd34d;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fcd34d;
-    color: #1f2937;
-}
-
-.Sales {
-    background-color: #fde3b5;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fde3b5;
-    color: #1f2937;
-}
-
-.Support {
-    background-color: #9fe4ef;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe4ef;
-    color: #1f2937;
-}
-
-.Marketing {
-    background-color: #fdba74;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fdba74;
-    color: #1f2937;
-}
-
-
-.step-label {
-    display: flex;
-    gap: 8px;
+.step-badge:hover {
+  transform: scale(1.1);
 }
 
 .step-role {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1f2937;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
 }
 
-.step-badge-text {
-    font-size: 10px;
-    color: #dc2626;
-    font-weight: 700;
-    text-transform: uppercase;
+.step-connector {
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  margin: 0 2px;
 }
 
-.step-arrow {
-    color: #d1d5db;
-    font-size: 16px;
+.step-connector mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
-.step-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* ═══════════════════════════════════════
+   ROLE COLORS (kept from original)
+   ═══════════════════════════════════════ */
+.CEO {
+  background-color: #f2a5a0;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;
+  color: #1f2937;
 }
 
-.info-section h4 {
-    margin: 0;
-    padding: 4px;
+.Manager {
+  background-color: #9fe0b7;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe0b7;
+  color: #1f2937;
 }
 
-.info-section p {
-    margin: 0px;
+.Employee {
+  background-color: #d1d5db;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d1d5db;
+  color: #1f2937;
 }
 
-.container-content p {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 0;
-    margin-bottom: 10px;
+.HumanResource {
+  background-color: #d7b5e6;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d7b5e6;
+  color: #1f2937;
+}
+
+.IT {
+  background-color: #a7cbee;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #a7cbee;
+  color: #1f2937;
+}
+
+.Finance {
+  background-color: #86efac;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #86efac;
+  color: #1f2937;
+}
+
+.Law {
+  background-color: #fcd34d;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fcd34d;
+  color: #1f2937;
+}
+
+.Sales {
+  background-color: #fde3b5;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fde3b5;
+  color: #1f2937;
+}
+
+.Support {
+  background-color: #9fe4ef;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe4ef;
+  color: #1f2937;
+}
+
+.Marketing {
+  background-color: #fdba74;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fdba74;
+  color: #1f2937;
 }

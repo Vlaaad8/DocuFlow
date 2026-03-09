@@ -66,8 +66,8 @@ public class GeneratorService {
             FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
             filledTemplateRepository.save(filledTemplate);
 
-
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), destination.toString());
+            this.signaturePort.prepareForSigning(destination.toString(), template.getApprovalChain().getSteps().size()+1);
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), destination.toString(),1);
 
             ApprovalRequest approvalRequest = new ApprovalRequest();
             approvalRequest.setTemplate(filledTemplate);
@@ -88,6 +88,8 @@ public class GeneratorService {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

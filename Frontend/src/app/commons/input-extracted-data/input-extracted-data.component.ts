@@ -33,7 +33,7 @@ export class InputExtractedDataComponent implements OnInit {
   }
 
   public getConfidenceClass(): string {
-    if (this.confidenceScore >= 80) {
+    if (this.confidenceScore >= 70) {
       return 'valid';
     }
     else if (this.confidenceScore >= 50) {
@@ -44,7 +44,7 @@ export class InputExtractedDataComponent implements OnInit {
     }
   }
   getInputConfidenceClass(): string {
-    if (this.confidenceScore >= 80) {
+    if (this.confidenceScore >= 70) {
       return 'input-valid';
     }
     else if (this.confidenceScore >= 50) {

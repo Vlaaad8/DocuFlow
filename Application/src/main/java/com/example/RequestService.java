@@ -74,7 +74,11 @@ public class RequestService {
             notificationRepository.save(notification);
         }
         else {
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(), approval.getApprovalRequest().getTemplate().getPath());
+            try {
+                this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(), approval.getApprovalRequest().getTemplate().getPath(),approval.getApprovalRequest().getCurrentStep()+1);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             continueAnswerRequest(approval.getApprovalRequest());
             Notification notification = new Notification();
             notification.setRecipient(approval.getApprovalRequest().getTemplate().getUser());

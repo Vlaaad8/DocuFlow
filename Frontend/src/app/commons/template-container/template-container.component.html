@@ -1,26 +1,46 @@
-<div class="template-container">
-  <div class="template-header">
-    <mat-icon>document_scanner</mat-icon>
-    <div class="first-row">
-      <h3>{{ template.name }}</h3>
-      <p class="confidence valid">VALID</p>
+<div class="card">
+  <!-- Top accent bar -->
+  <div class="accent-bar"></div>
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="card-left">
+      <div class="card-icon">
+        <mat-icon>document_scanner</mat-icon>
+      </div>
+      <div class="card-title">
+        <h3>{{ template.name }}</h3>
+        <span class="fields-chip">
+          <mat-icon class="chip-icon">list_alt</mat-icon>
+          {{ template.fields.length }} fields
+        </span>
+      </div>
     </div>
-    <div></div>
+    <span class="status-badge">VALID</span>
   </div>
-  <div class="second-row">
-    <p>Fields:</p>
-    <p class="fields">{{ template.fields.length }} fields</p>
-  </div>
-  <div class="third-row">
-    <p>Dynamic Fields:</p>
+
+  <!-- Dynamic fields -->
+  <div class="card-fields">
+    <p class="fields-label">Dynamic Fields</p>
     <div class="field-list">
-      <span *ngFor="let field of template.fields" class="field-design">{{ field.fieldName }}</span>
+      <span *ngFor="let field of template.fields" class="field-tag">{{ field.fieldName }}</span>
     </div>
   </div>
-  <div class="button-section">
-       <button class="preview-option" (click)="handleClick('Search')"><mat-icon>search</mat-icon> Preview</button>
-       <button class="preview-option delete" (click)="handleClick('Delete')"><mat-icon>delete</mat-icon> Remove</button>
-       <button class="preview-option" (click)="handleClick('Edit')"><mat-icon>edit</mat-icon> Edit</button>
+
+  <!-- Actions -->
+  <div class="card-actions">
+    <button class="btn btn--view" (click)="handleClick('Search')">
+      <mat-icon>search</mat-icon>
+      Preview
+    </button>
+    <button class="btn btn--edit" (click)="handleClick('Edit')">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+    <button class="btn btn--delete" (click)="handleClick('Delete')">
+      <mat-icon>delete</mat-icon>
+      Remove
+    </button>
   </div>
 
 </div>

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { MatIconModule } from "@angular/material/icon";
 import { Approval } from '../../model/Approval';
 
@@ -6,7 +7,7 @@ import { Approval } from '../../model/Approval';
   selector: 'app-document-approval',
   templateUrl: './document-approval.component.html',
   styleUrls: ['./document-approval.component.css'],
-  imports: [MatIconModule]
+  imports: [MatIconModule, NgClass]
 })
 export class DocumentApprovalComponent implements OnInit {
 
