@@ -10,12 +10,13 @@ import { SignatureInfo, UserCertificate } from '../model/user-certificate';
 import { User } from '../model/User';
 import { CommonModule } from '@angular/common';
 import {LoadingComponent} from '../commons/loading/loading.component';
+import {PdfViewer} from '../commons/pdf-viewer/pdf-viewer';
 
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent, PdfViewer]
 })
 export class MyProfileComponent implements OnInit {
 
@@ -27,7 +28,7 @@ export class MyProfileComponent implements OnInit {
   selectedFile: File | null = null;
   errorMessage: string | null = null;
 
-  /** none = idle/ready, loading = calling API */
+
   stage: 'none' | 'loading' = 'none';
 
   signatures: SignatureInfo[] = [];

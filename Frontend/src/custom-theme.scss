@@ -44,3 +44,12 @@ body {
       active-indicator-height: 9px
     ));
 }
+
+.custom-loading-bar{
+  @include mat.progress-bar-overrides((
+    active-indicator-color:  #92400e,
+    track-color: #fef3c7,
+    track-height: 4px,
+    active-indicator-height: 4px
+  ));
+}

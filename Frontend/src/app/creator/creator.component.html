@@ -21,7 +21,7 @@
         <p>{{errorMessage}}</p>
         <mat-icon (click)="errorMessage = null">close</mat-icon>
       </div>
-    </div> 
+    </div>
     <div class="editor" [style.visibility]="showEditor() ? 'visible' : 'hidden'">
       <editor [apiKey]="tinymceApiKey" [init]="tinyInit" [(ngModel)]="content" id="editor" />
       <div class="edit-section">
@@ -34,9 +34,9 @@
           <p>Take different actions regarding editing</p>
         </div>
         <div class="button-section">
-          <button type="button" class="template-button" (click)="handleEdit()">Save</button>
-          <button type="button" class="template-button" (click)="handleClear()">Preview</button>
-          <button type="button" class="template-button" (click)="handleClear()">Clear</button>
+          <button type="button" class="btn" (click)="handleEdit()">Save</button>
+          <button type="button" class="btn" (click)="handleClear()">Preview</button>
+          <button type="button" class="btn" (click)="handleClear()">Clear</button>
         </div>
         <div class="info-section">
           <div class="icon-title"><mat-icon>design_services</mat-icon>

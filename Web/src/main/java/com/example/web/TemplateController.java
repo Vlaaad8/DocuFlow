@@ -7,7 +7,9 @@ import com.example.dto.HtmlRequest;
 import com.example.dto.TemplateDTO;
 import com.example.dto.UpdateRequest;
 import com.example.template.TemplateCategory;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

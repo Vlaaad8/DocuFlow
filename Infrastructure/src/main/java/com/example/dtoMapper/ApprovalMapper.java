@@ -16,6 +16,7 @@ public interface ApprovalMapper {
 
     @Mapping(target = "requesterName", source = "approvalRequest.template.user", qualifiedByName = "fullName")
     @Mapping(target = "templateName", source = "approvalRequest.template.template.name")
+    @Mapping(target = "documentPath", source = "approvalRequest.template.path")
     ApprovalDTO toApprovalDTO(Approval approval);
 
 

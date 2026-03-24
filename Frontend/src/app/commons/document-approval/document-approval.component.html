@@ -1,7 +1,6 @@
-<div class="card">
+<div class="card" [ngClass]=" loading ? 'action-disabled' : '' ">
   <!-- Top accent bar -->
-  <div class="accent-bar" [ngClass]="'bar--' + approval.status.toLowerCase()"></div>
-
+  <mat-progress-bar *ngIf ="internalLock" class="custom-loading-bar" mode="indeterminate"></mat-progress-bar>
   <!-- Header -->
   <div class="card-header">
     <div class="card-left">
@@ -30,7 +29,7 @@
   </div>
 
   <!-- Actions -->
-  <div class="card-actions">
+  <div class="card-actions" [ngClass]=" loading ? 'action-disabled' : '' ">
     <button class="btn btn--approve" (click)="approve()">
       <mat-icon>check_circle</mat-icon>
       Approve

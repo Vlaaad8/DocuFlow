@@ -6,6 +6,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
+    <app-pdf-viewer *ngIf="documentURL!= ''" [pdfUrl]="documentURL" (closeViewer)="handleViewerClose()"></app-pdf-viewer>
     <div class="description-section">
       <div class="first-row">
         <h2>Requests Manager</h2>
@@ -17,8 +18,8 @@
       <mat-tab-group class="tab-section">
         <mat-tab label="Pending Requests" *ngIf="user.role!='Employee'">
           <div class="tab-content">
-            <app-document-approval *ngFor="let approval of approvals" [approval]="approval"
-              (approvalAction)="handleDecision($event)"></app-document-approval>
+            <app-document-approval [loading]="loading" *ngFor="let approval of approvals" [approval]="approval"
+              (approvalAction)="handleDecision($event)" (previewDocument)="handlePreview($event)"></app-document-approval>
           </div>
           <div *ngIf="approvals.length == 0" class="no-requests">
             <p>No pending requests available.</p>

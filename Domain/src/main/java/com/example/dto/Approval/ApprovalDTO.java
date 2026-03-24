@@ -15,4 +15,5 @@ public class ApprovalDTO {
     private String requesterName;
     private String templateName;
     private String decisionDate;
+    private String documentPath;
 }

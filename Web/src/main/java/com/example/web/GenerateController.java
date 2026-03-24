@@ -6,10 +6,20 @@ import com.example.dto.Generate.GeneratorTemplateApproverDTO;
 import com.example.dto.UserFieldValueDTO;
 import com.example.dto.Generate.GeneratorTemplateDTO;
 import com.example.template.SourceOfData;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.transform.Source;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -42,4 +52,22 @@ public class GenerateController {
     public Map<SourceOfData,Boolean> getDataProfile(@PathVariable("userId") int userID) {
         return this.generatorService.getDataProfile(userID);
     }
+
+    @PostMapping(value = "generate/pdf")
+    public ResponseEntity<byte[]> getPDF(@RequestBody String path) {
+        try {
+            Path filePath = Paths.get(path);
+            byte[] pdfBytes = Files.readAllBytes(filePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"document.pdf\"")
+                    .body(pdfBytes);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
+
+

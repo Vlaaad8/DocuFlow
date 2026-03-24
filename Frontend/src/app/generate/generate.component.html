@@ -58,7 +58,7 @@
             <h3>Approval preview</h3>
             <div class="detail-card">
               <div class="step-container">
-                <div class="steps-visualization" *ngFor="let step of templateApprovers">
+                <div class="steps-visualization" *ngFor="let step of templateApprovers; let last = last">
                   <div class="step-item">
                     <div class="step-badge" [title]="step.approverName" [class]="step.approverRole">
                       {{ getRoleAbbreviation(step.approverName) }}
@@ -67,7 +67,7 @@
                       <span class="step-name">{{ step.approverName }}</span>
                       <span class="step-role">{{ step.approverRole }}</span>
                     </div>
-                    <div *ngIf="true" class="step-arrow">→</div>
+                    <div *ngIf="!last" class="step-arrow">→</div>
                   </div>
                 </div>
               </div>
@@ -77,7 +77,7 @@
             </div>
             <div class="buttonSection">
               <button type="submit" (click)="generateDocument()">Request Approval</button>
-              <button type="button" (click)="handleLeave()">Cancel</button>
+              <button type="button" class="close-button" (click)="handleLeave()">Cancel</button>
             </div>
           </div>
         </ng-template>

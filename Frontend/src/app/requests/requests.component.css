@@ -38,7 +38,9 @@
     padding: 16px 32px;
 }
 .requests-list{
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 .filter-section{
   display: flex;
