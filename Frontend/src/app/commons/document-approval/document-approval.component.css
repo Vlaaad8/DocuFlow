@@ -14,33 +14,18 @@
   transform: translateY(-3px);
 }
 
-/* ═══════════════════════════════════════
-   TOP ACCENT BAR
-   ═══════════════════════════════════════ */
+
 .accent-bar {
   height: 5px;
   width: 100%;
 }
 
-.bar--in_progress {
-  background: linear-gradient(90deg, #fbbf24, #f59e0b);
-}
 
-.bar--approved {
-  background: linear-gradient(90deg, #34d399, #10b981);
-}
-
-.bar--rejected {
-  background: linear-gradient(90deg, #fca5a5, #ef4444);
-}
 
 .bar--pending {
   background: linear-gradient(90deg, #93c5fd, #3b82f6);
 }
 
-/* ═══════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════ */
 .card-header {
   display: flex;
   justify-content: space-between;

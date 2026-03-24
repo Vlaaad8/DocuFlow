@@ -16,7 +16,6 @@
     <div class="container">
       <mat-tab-group class="tab-section">
         <mat-tab label="Pending Requests" *ngIf="user.role!='Employee'">
-          <p>Here you can view and manage your pending document requests.</p>
           <div class="tab-content">
             <app-document-approval *ngFor="let approval of approvals" [approval]="approval"
               (approvalAction)="handleDecision($event)"></app-document-approval>
@@ -27,9 +26,14 @@
         </mat-tab>
         <mat-tab label="My Requests">
           <div class="tab-section">
-            <p>Here you can view your approved document requests.</p>
+            <div class="filter-section">
+              <button [ngClass]="currentFilter == null ? 'selected' : ''" (click)="handleFilter(null)">All</button>
+              <button [ngClass]="currentFilter == 'ACCEPTED' ? 'selected' : ''" (click)="handleFilter('ACCEPTED')">Accepted</button>
+              <button [ngClass]="currentFilter == 'PENDING' ? 'selected' : ''" (click)="handleFilter('PENDING')">Pending</button>
+              <button [ngClass]="currentFilter == 'REJECTED' ? 'selected' : ''" (click)="handleFilter('REJECTED')">Rejected</button>
+            </div>
             <div class=requests-list>
-              <app-my-request *ngFor="let request of requests" [request]="request"></app-my-request>
+              <app-my-request *ngFor="let request of requestsToDisplay" [request]="request"></app-my-request>
             </div>
           </div>
         </mat-tab>

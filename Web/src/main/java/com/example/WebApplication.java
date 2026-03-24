@@ -1,12 +1,13 @@
 package com.example;
 
+import com.example.email.JakartaProperties;
 import com.example.ocr.AzureProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(AzureProperties.class)
+@EnableConfigurationProperties({AzureProperties.class, JakartaProperties.class})
 public class WebApplication {
 
     public static void main(String[] args) {

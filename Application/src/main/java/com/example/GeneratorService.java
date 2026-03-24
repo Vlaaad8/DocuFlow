@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -66,8 +68,8 @@ public class GeneratorService {
             FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
             filledTemplateRepository.save(filledTemplate);
 
-            this.signaturePort.prepareForSigning(destination.toString(), template.getApprovalChain().getSteps().size()+1);
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), destination.toString(),1);
+            this.signaturePort.prepareForSigning(destination.toString(), template.getApprovalChain().getSteps().size());
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(),0);
 
             ApprovalRequest approvalRequest = new ApprovalRequest();
             approvalRequest.setTemplate(filledTemplate);
@@ -83,6 +85,7 @@ public class GeneratorService {
             User approver = this.relationRepository.findBossBySubordinate_IdAndBoss_Role(userID, filledTemplate.getTemplate().getApprovalChain().getSteps().get(1).getApproverRole());
             approval.setApprover(approver);
             approval.setStepNumber(1);
+            approval.setDecisionDate(Timestamp.from(Instant.now()));
             this.approvalRepository.save(approval);
 
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConstraintsParameters Name="TEST_NO_REVOCATION_POLICY" xmlns="http://dss.esig.europa.eu/validation/policy">
+    <Description>Politica de test pentru validarea semnaturii fara CRL</Description>
+    <SignatureConstraints>
+        <BasicSignatureConstraints>
+            <ReferenceDataExistence Level="FAIL"/>
+            <ReferenceDataIntact Level="FAIL"/>
+            <SignatureIntact Level="FAIL"/>
+
+            <ProspectiveCertificateChain Level="FAIL"/>
+        </BasicSignatureConstraints>
+    </SignatureConstraints>
+</ConstraintsParameters>

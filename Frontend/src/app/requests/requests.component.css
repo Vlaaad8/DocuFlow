@@ -40,3 +40,34 @@
 .requests-list{
     gap: 12px;
 }
+.filter-section{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 32px;
+}
+.filter-section button{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.8px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #6b7280;
+  background: #f9fafb;
+}
+
+.filter-section button:hover{
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+.filter-section button.selected{
+  color: #1e40af;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}

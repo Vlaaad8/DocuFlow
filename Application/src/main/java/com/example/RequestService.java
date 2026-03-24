@@ -75,7 +75,7 @@ public class RequestService {
         }
         else {
             try {
-                this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(), approval.getApprovalRequest().getTemplate().getPath(),approval.getApprovalRequest().getCurrentStep()+1);
+                this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(),approval.getApprovalRequest().getCurrentStep());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

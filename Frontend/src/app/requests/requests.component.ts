@@ -22,6 +22,9 @@ export class RequestsComponent implements OnInit {
 
   approvals: Approval[] = [];
   requests: ApprovalRequest[] = [];
+  requestsToDisplay: ApprovalRequest[] = [];
+
+  currentFilter : string | null = null;
 
   public user!: User;
 
@@ -39,6 +42,7 @@ export class RequestsComponent implements OnInit {
     this.service.getReqestsTOApprove(this.user.id).subscribe(
       (data: Approval[]) => {
         this.approvals = data;
+        console.log(data);
       },
       (error) => {
         this.snackBar.showMessage("Error fetching approvals", "error");
@@ -51,6 +55,8 @@ export class RequestsComponent implements OnInit {
     this.service.getMyRequests(this.user.id).subscribe(
       (data: ApprovalRequest[]) => {
         this.requests = data;
+        this.requestsToDisplay = data;
+        this.sortRequests();
       },
       (error) => {
         this.snackBar.showMessage("Error fetching my requests", "error");
@@ -90,6 +96,24 @@ export class RequestsComponent implements OnInit {
     const requestIndex = this.approvals.findIndex(r => r.id === requestId);
     if (requestIndex !== -1) {
       this.approvals[requestIndex].status = newStatus;
+    }
+  }
+  private sortRequests() {
+    const order: Record<string, number> = {
+      PENDING: 0,
+      ACCEPTED: 1,
+      REJECTED: 2
+    };
+
+    this.requestsToDisplay.sort((a, b) => order[a.status] - order[b.status]);
+  }
+
+  public handleFilter(status: string | null): void {
+    this.currentFilter = status;
+    if (status) {
+      this.requestsToDisplay = this.requests.filter(request => request.status === status);
+    } else {
+      this.requestsToDisplay = this.requests;
     }
   }
 }

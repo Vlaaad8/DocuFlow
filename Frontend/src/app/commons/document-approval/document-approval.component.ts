@@ -44,8 +44,9 @@ export class DocumentApprovalComponent implements OnInit {
     console.log('Previewing document for approval ID:', this.approval.id);
   }
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
+    const date : string  = dateString.split('T')[0];
+    const hour : string = dateString.split('T')[1].split('.')[0];
+    return date+ ' ' + hour;
 
 
   }

@@ -16,7 +16,6 @@ import java.security.PrivateKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-//TODO to adjust generating with AES
 @Component
 public class CertificationAuthority {
 

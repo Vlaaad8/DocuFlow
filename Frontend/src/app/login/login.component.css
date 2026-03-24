@@ -58,7 +58,6 @@
     padding-left: 56px;
     padding-right: 40px;
     max-width: 560px;
-    animation: fadeIn 0.8s ease-out;
 }
 
 @keyframes fadeIn {
@@ -164,7 +163,7 @@
 .input-design {
     padding-left: 0px;
     padding-right: 16px;
-    padding-top: 16p;
+    padding-top: 16px;
     padding-bottom: 16px;
 }
 

@@ -26,22 +26,22 @@
                     <p>Powered by DSS European Commission</p>
                   </div>
                   <div class="status-section">
-                    {{certificate?.ou}}
+                    {{ certificate?.ou }}
                   </div>
                 </div>
               </div>
               <div class=card-content>
                 <div class="info-section">
                   <h5>Certificate Holder</h5>
-                  <p>{{certificate?.cn}}</p>
+                  <p>{{ certificate?.cn }}</p>
                 </div>
                 <div class="info-section">
                   <h5>Issued By</h5>
-                  <p>{{certificate?.issuer}}</p>
+                  <p>{{ certificate?.issuer }}</p>
                 </div>
                 <div class="info-section">
                   <h5>Issuer City</h5>
-                  <p>{{certificate?.city}}</p>
+                  <p>{{ certificate?.city }}</p>
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
               <div class="time-section">
                 <div class="header">
                   <p>Certificate Validity Timeline</p>
-                  <p style="color: #3b82f6;">{{certificate?.daysLeft}} days remaining</p>
+                  <p style="color: #3b82f6;">{{ certificate?.daysLeft }} days remaining</p>
                 </div>
                 <mat-progress-bar mode="determinate" [value]="determineProcent()"></mat-progress-bar>
               </div>
@@ -57,20 +57,20 @@
                 <div class="info-section dates-section">
                   <div>
                     <h5>Valid From</h5>
-                    <p>{{certificate?.validFrom}}</p>
+                    <p>{{ certificate?.validFrom }}</p>
                   </div>
                   <div>
                     <h5>Valid To</h5>
-                    <p>{{certificate?.validTo}}</p>
+                    <p>{{ certificate?.validTo }}</p>
                   </div>
                 </div>
                 <div class="info-section">
                   <h5>Email</h5>
-                  <p>{{certificate?.email}}</p>
+                  <p>{{ certificate?.email }}</p>
                 </div>
                 <div class="info-section">
                   <h5>Serial Number</h5>
-                  <p>{{certificate?.serialHex}}</p>
+                  <p>{{ certificate?.serialHex }}</p>
                 </div>
               </div>
             </div>
@@ -82,15 +82,15 @@
           <div class="card">
             <div class="info-section">
               <h4>First Name</h4>
-              <p>{{user?.firstName}}</p>
+              <p>{{ user?.firstName }}</p>
             </div>
             <div class="info-section">
               <h4>Last Name</h4>
-              <p>{{user?.lastName}}</p>
+              <p>{{ user?.lastName }}</p>
             </div>
             <div class="info-section">
               <h4>Email Address</h4>
-              <p>{{user?.email}}</p>
+              <p>{{ user?.email }}</p>
             </div>
 
           </div>
@@ -98,36 +98,130 @@
       </mat-tab>
 
       <mat-tab label="Check Document Signature">
-        <div class=tab-content>
-
-          <div [ngClass]="isDragOver ? 'drop-container drag-mode' : 'drop-container'" (click)="fileInput.click()"
-            (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
-            <div class="drop-zone">
-              <mat-icon class="upload-icon">backup</mat-icon>
-              <div></div>
-              <h2>Drop your document here</h2>
-              <p>or click to select a file</p>
-              <p *ngIf="selectedFile !== null">{{ selectedFile.name }}</p>
-            </div>
-            <input #fileInput type="file" accept=".pdf" style="visibility: hidden;"
-              (change)="handleFileSelected($event)">
-          </div>
-
-          <div class="signature-container">
-            <div class="user-card" *ngFor="let signature of signatures">
-              <div class="info">
-              <img [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + signature.signerName"
-                [alt]="signature.signerName" class="user-avatar" />
-              <div class="user-specs">
-                <h3>{{signature.signerName}}</h3>
-                <p>{{formatDate(signature.signingDate)}}</p>
-              </div>
-              </div>
-              <div class="status">
-                {{formatStatus(signature.isValid)}}
+        <div class="signature-grid">
+          <!-- Left: Upload / Actions -->
+          <section class="signature-panel signature-panel--upload">
+            <div class="panel-header">
+              <div class="panel-title">
+                <mat-icon class="panel-icon">policy</mat-icon>
+                <div>
+                  <h3>Verify digital signatures</h3>
+                  <p>Upload a PDF to check embedded signatures and their validity.</p>
+                </div>
               </div>
             </div>
-          </div>
+
+            <div
+              [ngClass]="isDragOver ? 'dropzone dropzone--active' : 'dropzone'"
+              (click)="fileInput.click()"
+              (drop)="onDrop($event)"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              role="button"
+              tabindex="0"
+            >
+              <mat-icon class="dropzone-icon">backup</mat-icon>
+              <div class="dropzone-text">
+                <h4>Drop your PDF here</h4>
+                <p>or click to browse</p>
+              </div>
+              <input
+                #fileInput
+                type="file"
+                accept=".pdf,application/pdf"
+                style="visibility: hidden; position: absolute;"
+                (change)="handleFileSelected($event)"
+              />
+            </div>
+
+            <div class="file-meta" *ngIf="selectedFile as f">
+              <div class="file-row">
+                <mat-icon class="file-icon">description</mat-icon>
+                <div class="file-text">
+                  <div class="file-name" [title]="f.name">{{ f.name }}</div>
+                  <div class="file-sub">{{ (f.size / 1024 / 1024) | number:'1.2-2' }} MB</div>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <button class="action-btn action-btn--secondary" type="button" (click)="resetSignatureCheck()">
+                  Clear
+                </button>
+                <button class="action-btn" type="button" (click)="retrySignatureCheck()" [disabled]="stage === 'loading'">
+                  Re-check
+                </button>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- Right: Results -->
+          <section class="signature-panel signature-panel--results">
+            <div class="panel-header">
+              <div class="panel-title">
+                <mat-icon class="panel-icon">fact_check</mat-icon>
+                <div>
+                  <h3>Results</h3>
+                  <p *ngIf="!selectedFile">Upload a document to see signers and validation status.</p>
+                  <p *ngIf="selectedFile && stage !== 'loading'">Summary and signer details for the uploaded document.</p>
+                </div>
+              </div>
+
+              <div class="summary" *ngIf="selectedFile && stage !== 'loading' && !errorMessage">
+                <span class="chip chip--neutral">Total: {{ signatures.length }}</span>
+                <span class="chip chip--success">Valid: {{ validCount }}</span>
+                <span class="chip chip--danger">Invalid: {{ invalidCount }}</span>
+              </div>
+            </div>
+
+            <div class="panel-body">
+              <app-loading
+                *ngIf="stage === 'loading'"
+                [title]="'Analyzing your document'"
+                [message]="'Checking for digital signatures...'"
+              ></app-loading>
+
+              <div *ngIf="errorMessage && stage !== 'loading'" class="callout callout--error">
+                <mat-icon>error</mat-icon>
+                <div>
+                  <div class="callout-title">Verification failed</div>
+                  <div class="callout-text">{{ errorMessage }}</div>
+                </div>
+              </div>
+
+              <div *ngIf="selectedFile && !errorMessage && stage !== 'loading' && signatures.length === 0" class="empty-state">
+                <mat-icon>search_off</mat-icon>
+                <h4>No signatures found</h4>
+                <p>This document doesn’t seem to contain any digital signatures.</p>
+              </div>
+
+              <div *ngIf="!selectedFile && stage !== 'loading'" class="empty-state">
+                <mat-icon>upload_file</mat-icon>
+                <h4>Upload a PDF to start</h4>
+                <p>Drag & drop a file on the left panel, or click to browse.</p>
+              </div>
+
+              <div class="results-list" *ngIf="!errorMessage && stage !== 'loading' && signatures.length > 0">
+                <div class="result-card" *ngFor="let signature of signatures">
+                  <div class="result-left">
+                    <img
+                      [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + signature.signerName"
+                      [alt]="signature.signerName"
+                      class="user-avatar"
+                    />
+                    <div class="result-text">
+                      <div class="result-name">{{ signature.signerName }}</div>
+                      <div class="result-sub">Signed on {{ formatDate(signature.signingDate) }}</div>
+                    </div>
+                  </div>
+
+                  <div [class]="statusClass(signature.isValid)">
+                    {{ formatStatus(signature.isValid) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </mat-tab>
     </mat-tab-group>

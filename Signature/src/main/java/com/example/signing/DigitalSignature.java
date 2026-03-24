@@ -4,9 +4,7 @@ import com.example.certificate.CertificationAuthority;
 import com.example.dto.SignatureInfo;
 import com.example.security.SignaturePort;
 import eu.europa.esig.dss.alert.SilentOnStatusAlert;
-import eu.europa.esig.dss.enumerations.SignatureLevel;
-import eu.europa.esig.dss.enumerations.SignerTextPosition;
-import eu.europa.esig.dss.enumerations.TextWrapping;
+import eu.europa.esig.dss.enumerations.*;
 import eu.europa.esig.dss.model.*;
 import eu.europa.esig.dss.pades.PAdESSignatureParameters;
 import eu.europa.esig.dss.pades.SignatureFieldParameters;
@@ -54,35 +52,43 @@ public class DigitalSignature implements SignaturePort {
         XmlDefinerUtils.getInstance().setSchemaFactoryBuilder(schemaFactoryBuilder);
     }
 
-    public void signDocument(String userCertificatePath, String certificatePassword, String pdfPath, String outputFile,int singerNumber) {
+    public void signDocument(String userCertificatePath, String certificatePassword, String pdfPath,int signerNumber) {
         try (Pkcs12SignatureToken token = new Pkcs12SignatureToken(new FileInputStream(userCertificatePath), new KeyStore.PasswordProtection(certificatePassword.toCharArray()))) {
 
             List<DSSPrivateKeyEntry> keys = token.getKeys();
             DSSPrivateKeyEntry privateKey = keys.getFirst();
 
+
+
             PAdESSignatureParameters parameters = new PAdESSignatureParameters();
+
+
             parameters.setSignatureLevel(SignatureLevel.PAdES_BASELINE_B);
             parameters.setSigningCertificate(privateKey.getCertificate());
             parameters.setCertificateChain(privateKey.getCertificateChain());
 
 
+
             SignatureImageParameters imageParameters = new SignatureImageParameters();
             SignatureFieldParameters fieldParameters = new SignatureFieldParameters();
-            fieldParameters.setFieldId("Signature" + singerNumber); // campul pre-creat
+            fieldParameters.setFieldId("Signature" + signerNumber);
             imageParameters.setFieldParameters(fieldParameters);
 
 
 
             SignatureImageTextParameters textParameters = new SignatureImageTextParameters();
             textParameters.setText(
-                    "Signed by: " + getCommonName(privateKey) + "\n" +
+                    "Digitally signed by: " + getCommonName(privateKey) + "\n" +
                             "Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
             );
+
             textParameters.setTextWrapping(TextWrapping.FILL_BOX_AND_LINEBREAK);
             textParameters.setSignerTextPosition(SignerTextPosition.LEFT);
             imageParameters.setTextParameters(textParameters);
 
             parameters.setImageParameters(imageParameters);
+
+            parameters.setDigestAlgorithm(DigestAlgorithm.SHA256);
 
 
 
@@ -93,14 +99,17 @@ public class DigitalSignature implements SignaturePort {
 
             CommonCertificateVerifier commonCertificateVerifier = new CommonCertificateVerifier();
             commonCertificateVerifier.setCheckRevocationForUntrustedChains(false);
+
             PAdESService service = new PAdESService(commonCertificateVerifier);
 
             DSSDocument toSignDocument = new FileDocument(pdfPath);
+
             ToBeSigned dataToSign = service.getDataToSign(toSignDocument, parameters);
             SignatureValue signatureValue = token.sign(dataToSign, parameters.getDigestAlgorithm(), privateKey);
             DSSDocument signedDocument = service.signDocument(toSignDocument, parameters, signatureValue);
 
-            signedDocument.save(outputFile);
+            signedDocument.save(pdfPath);
+
         } catch (Exception e) {
             throw new RuntimeException("Eroare la semnarea PDF-ului", e);
         }
@@ -110,10 +119,10 @@ public class DigitalSignature implements SignaturePort {
         try {
             byte[] pdfBytes = DSSUtils.toByteArray(signedPdf);
             DSSDocument document = new InMemoryDocument(pdfBytes);
-
             SignedDocumentValidator validator = SignedDocumentValidator.fromDocument(document);
 
             CommonTrustedCertificateSource trustedSource = new CommonTrustedCertificateSource();
+
             X509Certificate caCert = certificationAuthority.loadCertificate();
             trustedSource.addCertificate(DSSUtils.loadCertificate(caCert.getEncoded()));
 
@@ -123,7 +132,14 @@ public class DigitalSignature implements SignaturePort {
             certificateVerifier.setCheckRevocationForUntrustedChains(false);
             validator.setCertificateVerifier(certificateVerifier);
 
-            Reports reports = validator.validateDocument();
+            Reports reports;
+            try (InputStream policyStream = getClass().getResourceAsStream("/custom-policy.xml")) {
+                if (policyStream == null) {
+                    throw new RuntimeException("Nu am gasit fisierul custom-policy.xml in resources!");
+                }
+
+                reports = validator.validateDocument(policyStream);
+            }
             SimpleReport report = reports.getSimpleReport();
 
             List<SignatureInfo> signatureInfos = new ArrayList<>();
@@ -132,8 +148,26 @@ public class DigitalSignature implements SignaturePort {
                 String name = report.getSignedBy(sigId);
                 java.util.Date date = report.getSigningTime(sigId);
 
-                boolean isValid = !eu.europa.esig.dss.enumerations.Indication.FAILED.equals(report.getIndication(sigId));
+                System.out.println(report.getIndication(sigId));
 
+                boolean isValid ;
+                if(Indication.TOTAL_PASSED.equals(report.getIndication(sigId))) {
+                    isValid = true;
+
+                } else if (Indication.TOTAL_FAILED.equals(report.getIndication(sigId))) {
+                    isValid = false;
+                } else if (Indication.INDETERMINATE.equals(report.getIndication(sigId))) {
+                    isValid = true;
+                }
+                else if(Indication.PASSED.equals(report.getIndication(sigId))) {
+                    isValid = true;
+                }
+                else if(Indication.FAILED.equals(report.getIndication(sigId))) {
+                    isValid = false;
+                }
+                else {
+                    isValid = false;
+                }
 
                 signatureInfos.add(new SignatureInfo(name, date,isValid));
             }
@@ -145,8 +179,7 @@ public class DigitalSignature implements SignaturePort {
         }
     }
 
-    public void prepareForSigning(String pdfPath, int numberOfSigners) {
-        String tempPath = pdfPath + ".tmp";
+    public void prepareForSigning(String pdfPath,int numberOfSigners) {
 
         try (PDDocument pdDoc = PDDocument.load(new File(pdfPath))) {
 
@@ -167,7 +200,7 @@ public class DigitalSignature implements SignaturePort {
             int targetPage = pdDoc.getNumberOfPages();
             int sigsPerRow = (int) ((pageWidth - 2 * marginSide) / (sigWidth + marginBetween));
 
-            DSSDocument result = new FileDocument(pdfPath); // ← inițializare
+            DSSDocument result = new FileDocument(pdfPath);
 
             for (int i = 0; i < numberOfSigners; i++) {
                 int col = i % sigsPerRow;
@@ -177,7 +210,7 @@ public class DigitalSignature implements SignaturePort {
                 float y = pageHeight - marginTop - sigHeight - row * (sigHeight + marginBetween);
 
                 SignatureFieldParameters field = new SignatureFieldParameters();
-                field.setFieldId("Signature" + (i + 1));
+                field.setFieldId("Signature" + (i));
                 field.setOriginX(x);
                 field.setOriginY(y);
                 field.setWidth(sigWidth);
@@ -187,22 +220,12 @@ public class DigitalSignature implements SignaturePort {
                 result = service.addNewSignatureField(result, field);
             }
 
-            result.save(tempPath); // ← temp, nu pdfPath direct
+            result.save(pdfPath);
 
         } catch (Exception e) {
             throw new RuntimeException("Eroare la pregatirea documentului", e);
         }
 
-        // Înlocuiești după ce PDDocument e închis
-        try {
-            Files.move(
-                    Path.of(tempPath),
-                    Path.of(pdfPath),
-                    StandardCopyOption.REPLACE_EXISTING
-            );
-        } catch (IOException e) {
-            throw new RuntimeException("Eroare la salvarea documentului", e);
-        }
     }
 
 
