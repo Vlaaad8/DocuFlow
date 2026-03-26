@@ -137,6 +137,11 @@
   color: #9ca3af;
   border-color: #e5e7eb;
 }
+.missing{
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
 
 /* ═══════════════════════════════════════
    ACTION BUTTONS

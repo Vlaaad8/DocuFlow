@@ -6,7 +6,8 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <app-pdf-viewer *ngIf="documentURL!= ''" [pdfUrl]="documentURL" (closeViewer)="handleViewerClose()"></app-pdf-viewer>
+    <app-pdf-viewer *ngIf="documentURL!= ''" [pdfUrl]="documentURL"
+                    (closeViewer)="handleViewerClose()"></app-pdf-viewer>
     <div class="description-section">
       <div class="first-row">
         <h2>Requests Manager</h2>
@@ -19,22 +20,40 @@
         <mat-tab label="Pending Requests" *ngIf="user.role!='Employee'">
           <div class="tab-content">
             <app-document-approval [loading]="loading" *ngFor="let approval of approvals" [approval]="approval"
-              (approvalAction)="handleDecision($event)" (previewDocument)="handlePreview($event)"></app-document-approval>
+                                   (approvalAction)="handleDecision($event)"
+                                   (previewDocument)="handlePreview($event)"></app-document-approval>
           </div>
-          <div *ngIf="approvals.length == 0" class="no-requests">
+          <div *ngIf="approvals.length == 0 then noRequests">
             <p>No pending requests available.</p>
           </div>
         </mat-tab>
         <mat-tab label="My Requests">
           <div class="tab-section">
-            <div class="filter-section">
+            <div class="filter-section" *ngIf="requests.length > 0">
               <button [ngClass]="currentFilter == null ? 'selected' : ''" (click)="handleFilter(null)">All</button>
-              <button [ngClass]="currentFilter == 'ACCEPTED' ? 'selected' : ''" (click)="handleFilter('ACCEPTED')">Accepted</button>
-              <button [ngClass]="currentFilter == 'PENDING' ? 'selected' : ''" (click)="handleFilter('PENDING')">Pending</button>
-              <button [ngClass]="currentFilter == 'REJECTED' ? 'selected' : ''" (click)="handleFilter('REJECTED')">Rejected</button>
+              <button [ngClass]="currentFilter == 'ACCEPTED' ? 'selected' : ''" (click)="handleFilter('ACCEPTED')">
+                Accepted
+              </button>
+              <button [ngClass]="currentFilter == 'PENDING' ? 'selected' : ''" (click)="handleFilter('PENDING')">
+                Pending
+              </button>
+              <button [ngClass]="currentFilter == 'REJECTED' ? 'selected' : ''" (click)="handleFilter('REJECTED')">
+                Rejected
+              </button>
             </div>
-            <div class=requests-list>
-              <app-my-request *ngFor="let request of requestsToDisplay" [request]="request"></app-my-request>
+            <div class=requests-list *ngIf="limitedRequests.length > 0; else noRequests">
+              <app-my-request *ngFor="let request of limitedRequests | slice:0:5"
+                              [request]="request"></app-my-request>
+              <div class="page-section">
+                <button class="page-button" [disabled]="currentPage === 0" (click)="handlePageChange(currentPage - 1)">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="page-info">Page {{ currentPage + 1}} of {{ totalPages }}</span>
+                <button class="page-button" [disabled]="currentPage + 1 === totalPages"
+                        (click)="handlePageChange(currentPage + 1)">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
         </mat-tab>
@@ -43,3 +62,23 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #noRequests>
+  <div class="info-state-container">
+    <mat-icon class="info-icon">find_in_page</mat-icon>
+
+    <div class="info-text">
+      <h3>No records to display</h3>
+
+      <p *ngIf="isFilterActive">
+        It looks like your current filters are too specific.
+        Try <strong>adjusting your search criteria</strong> or clearing the filters r to see more results.
+      </p>
+
+      <p *ngIf="!isFilterActive">
+        Your request history is currently empty.
+        Once you create a document, it will appear here in this list.
+      </p>
+    </div>
+  </div>
+</ng-template>

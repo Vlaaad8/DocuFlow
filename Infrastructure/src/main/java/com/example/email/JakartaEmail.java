@@ -42,7 +42,7 @@ public class JakartaEmail implements EmailPort {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("no-reply@docuflow.social"));
             message.setRecipients(
-                    Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@stud.ubbcluj.ro"));
+                    Message.RecipientType.TO, InternetAddress.parse(email));
             message.setSubject("Document Generation");
 
             String msg = "<p class=\"isSelectedEnd\">Dear " + firstName + " " + lastName + ",</p>\n" +
@@ -83,7 +83,7 @@ public class JakartaEmail implements EmailPort {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("no-reply@docuflow.social"));
             message.setRecipients(
-                    Message.RecipientType.TO, InternetAddress.parse("vlad.balahura@stud.ubbcluj.ro"));
+                    Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
             message.setSubject("Welcome to DocuFlow!");
 
             String msg = "<p>Dear " + user.getFirstName() + " " + user.getLastName() + ",</p>\n" +

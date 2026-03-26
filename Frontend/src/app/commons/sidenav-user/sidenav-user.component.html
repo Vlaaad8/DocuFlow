@@ -12,10 +12,10 @@
   <div [ngClass]="selectedGenerateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleGenerate()">
     <mat-icon class="icon-design">file_present</mat-icon>Generate Document
   </div>
-  <div [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
+  <div *ngIf="user.role != 'Employee'" [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
     <mat-icon class="icon-design">attach_file_add</mat-icon>Template Manager
   </div>
-  <div [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'"
+  <div  *ngIf="user.role != 'Employee'" [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleTemplateCreator()">
     <mat-icon class="icon-design">create</mat-icon>Template Creator
   </div>
@@ -27,7 +27,7 @@
     (click)="handleHumanResource()">
     <mat-icon class="icon-design">person_3</mat-icon>Human Resource
   </div>
-  <div [ngClass]="selectedApprovalFlowsTab ? 'dashboard-item selected' : 'dashboard-item'"
+  <div *ngIf="user.role != 'Employee'" [ngClass]="selectedApprovalFlowsTab ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleApprovalFlows()">
     <mat-icon class="icon-design">add_link</mat-icon>Approval Flows
   </div>

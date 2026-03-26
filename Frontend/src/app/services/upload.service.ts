@@ -22,8 +22,8 @@ export class UploadService {
     return this.http.post<ExtractedField[]>(`${URL}`, formData);
   }
 
-  public saveExtractedData(data: ExtractedField[]): void {
-    this.http.post<void>(`${URL}/extracted-fields`, data).subscribe({
+  public saveExtractedData(data: ExtractedField[],userID: number): void {
+    this.http.post<void>(`${URL}/extracted-fields?userID=${userID}`, data).subscribe({
       next: () => {
         console.log('Extracted data saved successfully.');
       },

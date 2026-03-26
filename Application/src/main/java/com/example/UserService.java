@@ -10,6 +10,7 @@ import com.example.login.User;
 import com.example.security.CertificatePort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public void register(String firstName, String lastName, String email, String password, String username, String role){
          if(userRepository.existsByEmail(email)) {
              throw new UserException("Email already exists");
@@ -47,14 +49,14 @@ public class UserService {
          user.setUsername(username);
          user.setRole(Role.valueOf(role));
          user.setCertificatePassword(password);
+
+         int userID = userRepository.saveAndFlush(user).getId();
         try {
-            certificatePort.issueCertificate(user.getFirstName(),user.getLastName(),user.getEmail(),user.getRole().toString(),user.getId());
+            certificatePort.issueCertificate(user.getFirstName(),user.getLastName(),user.getEmail(),user.getRole().toString(),userID);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-         userRepository.save(user);
-
-        this.emailPort.sendRegisterEmail(user);
+         this.emailPort.sendRegisterEmail(user);
     }
 
 }

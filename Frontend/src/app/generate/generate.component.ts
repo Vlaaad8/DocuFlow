@@ -27,8 +27,27 @@ export class GenerateComponent implements OnInit {
   templateFields: FieldTemplate[] = [];
   templateApprovers: TemplateApprovers[] = [];
   selectedTemplateId: number | null = null;
-  modalStage: string = 'presentation'; // presentation | loading 
+  modalStage: string = 'presentation'; // presentation | loading
   dataProfile: { category: string, value: number }[] = [];
+
+  private importanceMap: { [key: string]: number } = {
+    'First Name': 1,
+    'Last Name': 2,
+    'Personal Number ': 3,
+    'Date of Birth': 4,
+    'Sex': 5,
+    'Address': 6,
+    'Nationality': 7,
+    'Document Number': 8,
+    'Document Discriminator': 9,
+    'Document Type': 10,
+    'Document Issue Date ': 11,
+    'Document Expiration Date': 12,
+    'Place Of Issue': 13,
+    'Issuing Authority': 14,
+    'Place of Birth': 15,
+    'Issued By': 16
+  };
 
 
   constructor(private service: GenerateService, private snackBar: SnackBarService, private dialog: MatDialog) { }
@@ -79,6 +98,7 @@ export class GenerateComponent implements OnInit {
     }).subscribe({
       next: ({ fields, approvers }) => {
         this.templateFields = fields;
+        this.sortFieldsByImportance()
         this.templateApprovers = approvers;
         this.modalStage = 'presentation';
         console.log("Template data loaded:", { fields, approvers });
@@ -146,5 +166,14 @@ export class GenerateComponent implements OnInit {
       default:
         return "Unknown";
     }
+  }
+
+  private sortFieldsByImportance(): void {
+    this.templateFields.sort((a, b) => {
+      const rankA = this.importanceMap[a.name] || 99;
+      const rankB = this.importanceMap[b.name] || 99;
+
+      return rankA - rankB;
+    });
   }
 }

@@ -27,8 +27,29 @@ export class UploadComponent implements OnInit {
   currentStage: String = 'upload'; // upload, processing, results
   errorMessage: string | null = null;
   formGroup!: FormGroup;
+
+  loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+
   constructor(private service: UploadService, private formBuilder: FormBuilder, private snackBar: SnackBarService) { }
 
+  private importanceMap: { [key: string]: number } = {
+    'FirstName': 1,
+    'LastName': 2,
+    'PersonalNumber': 3,
+    'DateOfBirth': 4,
+    'Sex': 5,
+    'Address': 6,
+    'Nationality': 7,
+    'DocumentNumber': 8,
+    'DocumentDiscriminator': 9,
+    'DocumentType': 10,
+    'DateOfIssue': 11,
+    'DateOfExpiration': 12,
+    'PlaceOfIssue': 13,
+    'IssuingAuthority': 14,
+    'PlaceOfBirth': 15,
+    'IssuedBy': 16
+  };
 
   get inputFormFields(): FormArray<FormGroup> {
     return this.formGroup.get('fields') as FormArray;
@@ -91,6 +112,7 @@ export class UploadComponent implements OnInit {
         next: (data: ExtractedField[]) => {
           console.log(data);
           this.extractedFields = data;
+          this.sortFieldsByImportance();
           this.buildFormsForFields(this.extractedFields);
           this.currentStage = 'results';
         },
@@ -116,7 +138,7 @@ export class UploadComponent implements OnInit {
   public onSaveData(): void {
     const extractedData: ExtractedField[] = this.inputFormFields.value;
     console.log('Saved extracted data:', extractedData);
-    this.service.saveExtractedData(extractedData);
+    this.service.saveExtractedData(extractedData,this.loggedUser.id);
     this.snackBar.showMessage("Extracted data saved successfully!", "success");
     this.clear();
   }
@@ -126,5 +148,15 @@ export class UploadComponent implements OnInit {
     this.selectedFile = null;
     this.extractedFields = [];
     this.currentStage = 'upload';
+  }
+
+  private sortFieldsByImportance(): void {
+    this.extractedFields.sort((a, b) => {
+
+      const rankA = this.importanceMap[a.label] || 99;
+      const rankB = this.importanceMap[b.label] || 99;
+
+      return rankA - rankB;
+    });
   }
 }

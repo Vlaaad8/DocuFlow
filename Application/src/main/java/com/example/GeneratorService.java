@@ -69,7 +69,7 @@ public class GeneratorService {
             filledTemplateRepository.save(filledTemplate);
 
             this.signaturePort.prepareForSigning(destination.toString(), template.getApprovalChain().getSteps().size());
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(),0);
+            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), 0);
 
             ApprovalRequest approvalRequest = new ApprovalRequest();
             approvalRequest.setTemplate(filledTemplate);
@@ -101,21 +101,26 @@ public class GeneratorService {
         List<Template> templates = this.templateRepository.findAll();
         List<Field> userFilledFields = this.userFieldValueRepository.findByUser_Id(userId);
 
+        //TODO daca tot verific lantul, sa il trimit direct in front end si sa verific acolo daca userul are dreptul sa genereze documentul, pentru a nu mai face atatea interogari la baza de date
         List<GeneratorTemplateDTO> templateDTOs = new ArrayList<>();
         for (Template template : templates) {
-            GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill(template, userFilledFields));
+            List<String> missingFields = new ArrayList<>();
+            if (!verifyEligibility(userId, template)) {
+                continue;
+            }
+            GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill(template, userFilledFields,missingFields),missingFields);
             templateDTOs.add(generatorTemplateDTO);
         }
         return templateDTOs;
     }
 
-    private boolean canFill(Template template, List<Field> userFilledFields) {
+    private boolean canFill(Template template, List<Field> userFilledFields,List<String> missingFields) {
         for (Field field : template.getFields()) {
             if (!userFilledFields.contains(field)) {
-                return false;
+                missingFields.add(field.getFieldName());
             }
         }
-        return true;
+        return missingFields.isEmpty();
     }
 
     public List<UserFieldValueDTO> getTemplateValues(int templateId, int userID) {
@@ -162,5 +167,19 @@ public class GeneratorService {
             }
         }
         return dataProfile;
+    }
+
+    private boolean verifyEligibility(int userID, Template template) {
+        User user = this.userRepository.getReferenceById(userID);
+        List<ApprovalStep> approvalSteps = template.getApprovalChain().getSteps();
+        for (int i = 1; i < approvalSteps.size(); i++) {
+            Relation relation = this.relationRepository.findBySubordinate_IdAndBoss_Role(user.getId(), approvalSteps.get(i).getApproverRole());
+            if (relation != null) {
+                user = relation.getBoss();
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -25,8 +25,8 @@ public class OcrController {
     }
 
     @PostMapping("ocr/extracted-fields")
-    public void saveExtractedFields(@RequestBody List<ExtractedField> extractedFields){
-        extractedFields.forEach(field-> this.mappingService.mapField(field,7));
+    public void saveExtractedFields(@RequestBody List<ExtractedField> extractedFields,@RequestParam int userID){
+        extractedFields.forEach(field-> this.mappingService.mapField(field,userID));
 
     }
 }

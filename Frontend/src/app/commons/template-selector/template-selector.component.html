@@ -20,6 +20,12 @@
       <span *ngFor="let label of schema.template.fields" class="field-tag field-tag--locked">{{ label.fieldName }}</span>
     </div>
   </div>
+  <div class="card-fields" *ngIf="schema.missingFields && schema.missingFields.length > 0">
+    <p class="fields-label">Missing Fields</p>
+    <div class="field-list">
+      <span *ngFor="let label of schema.missingFields" class="field-tag missing">{{ label }}</span>
+    </div>
+  </div>
   <div class="card-actions">
     <button class="btn btn--locked" disabled>
       <mat-icon>block</mat-icon>

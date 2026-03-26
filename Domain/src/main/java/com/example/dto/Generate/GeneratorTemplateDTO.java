@@ -6,10 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class GeneratorTemplateDTO {
     private TemplateDTO template;
     private boolean canGenerate;
+    private List<String> missingFields;
 }

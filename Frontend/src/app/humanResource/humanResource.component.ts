@@ -46,7 +46,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   @ViewChild('network') networkContainer!: ElementRef;
   @ViewChild('createUserDialog') createUserDialog: any;
 
-  private loggedUser! :User;
+  protected loggedUser! :User;
   public registerForm!: FormGroup;
 
   constructor(private service: HrService,private snackBar: SnackBarService,private dialog: MatDialog,private formBuilder: FormBuilder) { }
@@ -62,7 +62,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       username: new FormControl('', [Validators.required, Validators.minLength(4)])
     });
    }
-  
+
   ngAfterViewInit(): void {
 
     forkJoin([
@@ -88,7 +88,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
           background: this.determineHighlightColor(user.role),
           border: '#bdc3c7'
         },
-        
+
       },
       borderWidth: this.determineBorderWidth(user.id),
       level: this.determineLevel(user.role),
@@ -186,7 +186,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       return '#e74c3c';
     } else if (role === "Manager") {
       return '#2ecc71';
-    } else if (role === "HR") {
+    } else if (role === "HumanResources") {
       return '#9b59b6';
     } else if (role === "IT") {
       return '#3498db';
@@ -211,7 +211,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     switch (role) {
       case "CEO": return '👑';
       case "Manager": return '🧑‍💼';
-      case "HR": return '🧑‍🤝‍🧑';
+      case "HumanResources": return '🧑‍🤝‍🧑';
       case "IT": return '💻';
       case "Finance": return '💰';
       case "Law": return '⚖️';
@@ -227,7 +227,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     switch (role) {
       case "CEO": return '#b03a2e';
       case "Manager": return '#1e8449';
-      case "HR": return '#7d3c98';
+      case "HumanResources": return '#7d3c98';
       case "IT": return '#21618c';
       case "Finance": return '#1b5e20';
       case "Law": return '#9a7d0a';
@@ -246,7 +246,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
     else if (role === "Manager") {
       return 1;
     }
-    else if (role === "HR" || role === "IT" || role === "Finance" || role === "Law") {
+    else if (role === "HumanResources" || role === "IT" || role === "Finance" || role === "Law") {
       return 2;
     }
     else if (role === "Marketing" || role === "Sales") {
@@ -276,7 +276,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   }
   determineBorderWidth(userID:number): number {
     if (userID == this.loggedUser.id) {
-      return 5; 
+      return 5;
     }
    return 2;
   }
@@ -290,7 +290,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   registerUser(): void {
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
-     
+
       this.closeCreateModal();
       this.service.addUser(formData.firstname, formData.lastName, formData.email, formData.role, formData.password, formData.username).subscribe({
         next: () => {

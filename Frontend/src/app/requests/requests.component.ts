@@ -12,12 +12,13 @@ import {MyRequestComponent} from "../commons/my-request/my-request.component";
 import {SnackBarService} from '../services/snackBar.service';
 import {PdfViewer} from '../commons/pdf-viewer/pdf-viewer';
 import {DocumentLoader} from '../services/document-loader';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
   styleUrls: ['./requests.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, DocumentApprovalComponent, CommonModule, MyRequestComponent, PdfViewer]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, DocumentApprovalComponent, CommonModule, MyRequestComponent, PdfViewer, MatIconModule]
 })
 export class RequestsComponent implements OnInit {
 
@@ -30,6 +31,11 @@ export class RequestsComponent implements OnInit {
   documentURL: string = "";
   public user!: User;
 
+
+  currentPage:number = 0;
+  totalPages:number = 0;
+  itemsPerPage:number = 5;
+  isFilterActive: boolean = false;
   constructor(private service: RequestService, private snackBar: SnackBarService, private documentView: DocumentLoader) {
   }
 
@@ -58,6 +64,7 @@ export class RequestsComponent implements OnInit {
       (data: ApprovalRequest[]) => {
         this.requests = data;
         this.requestsToDisplay = data;
+        this.totalPages = Math.ceil(this.requestsToDisplay.length / this.itemsPerPage);
         this.sortRequests();
       },
       (error) => {
@@ -117,8 +124,14 @@ export class RequestsComponent implements OnInit {
     this.currentFilter = status;
     if (status) {
       this.requestsToDisplay = this.requests.filter(request => request.status === status);
+      this.totalPages = Math.ceil(this.requestsToDisplay.length / this.itemsPerPage);
+      this.currentPage = 0;
+      this.isFilterActive = true;
     } else {
+      this.totalPages = Math.ceil(this.requests.length / this.itemsPerPage);
+      this.currentPage = 0;
       this.requestsToDisplay = this.requests;
+      this.isFilterActive = false;
     }
   }
 
@@ -135,6 +148,17 @@ export class RequestsComponent implements OnInit {
 
   handleViewerClose(): void {
     this.documentURL = "";
+  }
+
+  handlePageChange(newPage: number): void {
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.currentPage = newPage;
+    }
+  }
+
+  get limitedRequests(): ApprovalRequest[] {
+    const startIndex = this.currentPage * this.itemsPerPage;
+    return this.requestsToDisplay.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
 }
