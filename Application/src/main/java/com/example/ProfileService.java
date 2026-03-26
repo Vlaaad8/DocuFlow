@@ -2,6 +2,9 @@ package com.example;
 
 import com.example.dto.CertificateDTO;
 import com.example.dto.SignatureInfo;
+import com.example.dto.UserFieldValueDTO;
+import com.example.dto.UserSavedValueDTO;
+import com.example.jpa.UserFieldValueRepository;
 import com.example.ocr.DocumentPort;
 import com.example.security.CertificatePort;
 import com.example.security.SignaturePort;
@@ -20,6 +23,7 @@ public class ProfileService {
 
     private CertificatePort certificatePort;
     private SignaturePort documentPort;
+    private UserFieldValueRepository userFieldValueRepository;
 
     public CertificateDTO getCertificateInfo(int userID) {
         Path certificate = Path.of("storage/security/certificates/user_" + userID + ".p12");
@@ -34,5 +38,15 @@ public class ProfileService {
 
     public List<SignatureInfo> verifyDocument(InputStream document) {
         return this.documentPort.verifySignatures(document);
+    }
+
+    public List<UserSavedValueDTO> getSavedData(int userID) {
+       return  this.userFieldValueRepository.findAllByUser_Id(userID)
+                .stream().map(
+                        userFieldValue ->
+                                new UserSavedValueDTO(userFieldValue.getId(), userFieldValue.getValue(), userFieldValue.getSourceOfData().toString(), userFieldValue.getField().getFieldName(), userFieldValue.getUser().getId())
+
+                ).toList();
+
     }
 }

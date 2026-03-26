@@ -3,6 +3,7 @@ package com.example.web;
 import com.example.ProfileService;
 import com.example.dto.CertificateDTO;
 import com.example.dto.SignatureInfo;
+import com.example.dto.UserSavedValueDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,5 +30,10 @@ public class ProfileController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("profile/savedData")
+    public List<UserSavedValueDTO> getSavedData(@RequestParam("userID") int userID){
+        return this.service.getSavedData(userID);
     }
 }

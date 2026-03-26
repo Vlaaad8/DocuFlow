@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SignatureInfo, UserCertificate } from '../model/user-certificate';
 import { Observable } from 'rxjs';
+import {UserStoredValue} from '../model/ExtractedField';
 
 
 const URL = 'http://localhost:8080/profile';
@@ -21,5 +22,17 @@ public getUserCertificate(userID: number) : Observable<UserCertificate> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<SignatureInfo[]>(`${URL}/verify`, formData);
+  }
+
+  //
+  // public updateUserField(userId: number, field: string, value: string): Observable<void> {
+  //   const payload: any = {};
+  //   payload[field] = value;
+  //   return this.http.patch<void>(`${URL}/user/${userId}`, payload);
+  // }
+
+
+  public getStoredData(userId: number) : Observable<UserStoredValue[]> {
+    return this.http.get<UserStoredValue[]>(`${URL}/savedData?userID=${userId}`);
   }
 }

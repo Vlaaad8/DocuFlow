@@ -78,28 +78,61 @@
         </div>
       </mat-tab>
       <mat-tab label="Personal Information">
-        <div class="tab-content">
-          <div class="card">
-            <div class="info-section">
-              <h4>First Name</h4>
-              <p>{{ user?.firstName }}</p>
+        <div class="signature-grid">
+          <section class="signature-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <mat-icon class="panel-icon">person</mat-icon>
+                <div>
+                  <h3>Personal Data Overview</h3>
+                  <p>This data cannot be modified</p>
+                </div>
+              </div>
             </div>
-            <div class="info-section">
-              <h4>Last Name</h4>
-              <p>{{ user?.lastName }}</p>
-            </div>
-            <div class="info-section">
-              <h4>Email Address</h4>
-              <p>{{ user?.email }}</p>
+            <div class="panel-body">
+              <div class="simple-info-row">
+                <div class="simple-info-label">Full name:</div>
+                <div
+                  class="simple-info-value">{{ (user?.firstName || '') + (user?.lastName ? (' ' + user?.lastName) : '') || '-' }}
+                </div>
+              </div>
+
+              <div class="simple-info-row">
+                <div class="simple-info-label">Email:</div>
+                <div class="simple-info-value">{{ user?.email }}</div>
+              </div>
+              <div class="simple-info-row">
+                <div class="simple-info-label">Role:</div>
+                <div class="simple-info-role">{{ user?.role }}</div>
+              </div>
             </div>
 
-          </div>
+          </section>
+          <section class="signature-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <mat-icon class="panel-icon">save</mat-icon>
+                <div>
+                  <h3>Saved Data Overview</h3>
+                  <p>Modify or add more data</p>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+
+              <app-editable-field *ngFor="let field of storedData"
+                [value]="field"
+                [editable]="true">
+              </app-editable-field>
+
+            </div>
+          </section>
+
         </div>
       </mat-tab>
 
       <mat-tab label="Check Document Signature">
         <div class="signature-grid">
-          <!-- Left: Upload / Actions -->
           <section class="signature-panel signature-panel--upload">
             <div class="panel-header">
               <div class="panel-title">
@@ -147,7 +180,8 @@
                 <button class="action-btn action-btn--secondary" type="button" (click)="resetSignatureCheck()">
                   Clear
                 </button>
-                <button class="action-btn" type="button" (click)="retrySignatureCheck()" [disabled]="stage === 'loading'">
+                <button class="action-btn" type="button" (click)="retrySignatureCheck()"
+                        [disabled]="stage === 'loading'">
                   Re-check
                 </button>
               </div>
@@ -163,7 +197,8 @@
                 <div>
                   <h3>Results</h3>
                   <p *ngIf="!selectedFile">Upload a document to see signers and validation status.</p>
-                  <p *ngIf="selectedFile && stage !== 'loading'">Summary and signer details for the uploaded document.</p>
+                  <p *ngIf="selectedFile && stage !== 'loading'">Summary and signer details for the uploaded
+                    document.</p>
                 </div>
               </div>
 
@@ -189,7 +224,8 @@
                 </div>
               </div>
 
-              <div *ngIf="selectedFile && !errorMessage && stage !== 'loading' && signatures.length === 0" class="empty-state">
+              <div *ngIf="selectedFile && !errorMessage && stage !== 'loading' && signatures.length === 0"
+                   class="empty-state">
                 <mat-icon>search_off</mat-icon>
                 <h4>No signatures found</h4>
                 <p>This document doesn’t seem to contain any digital signatures.</p>

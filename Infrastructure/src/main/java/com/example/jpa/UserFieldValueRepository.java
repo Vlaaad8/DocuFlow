@@ -35,4 +35,5 @@ public interface UserFieldValueRepository extends JpaRepository<UserFieldValue, 
     @Query("select  distinct ufv.sourceOfData from UserFieldValue ufv where ufv.user.id = :userId")
     SourceOfData[] findSourceCounts(@Param("userId") Long userId);
 
+    List<UserFieldValue> findAllByUser_Id(int userID);
 }

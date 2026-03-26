@@ -90,6 +90,7 @@ export class RequestsComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         this.snackBar.showMessage("Error handling action", "error");
+        console.log(error)
       }
     });
 

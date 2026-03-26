@@ -11,12 +11,14 @@ import { User } from '../model/User';
 import { CommonModule } from '@angular/common';
 import {LoadingComponent} from '../commons/loading/loading.component';
 import {PdfViewer} from '../commons/pdf-viewer/pdf-viewer';
+import { EditableFieldComponent } from '../commons/editable-field/editable-field.component';
+import {UserStoredValue} from '../model/ExtractedField';
 
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent, PdfViewer]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent, PdfViewer, EditableFieldComponent]
 })
 export class MyProfileComponent implements OnInit {
 
@@ -28,7 +30,7 @@ export class MyProfileComponent implements OnInit {
   selectedFile: File | null = null;
   errorMessage: string | null = null;
 
-
+  public storedData: UserStoredValue[] = [];
   stage: 'none' | 'loading' = 'none';
 
   signatures: SignatureInfo[] = [];
@@ -45,6 +47,16 @@ export class MyProfileComponent implements OnInit {
         console.error('Error fetching certificate:', error);
       }
     });
+
+    this.service.getStoredData(this.userID).subscribe({
+      next: (data) => {
+        this.storedData = data ?? [];
+        console.log('Stored user data fetched successfully:', data);
+      },
+      error: (error) => {
+        console.error('Error fetching stored user data:', error);
+      }
+    })
   }
 
   determineProcent(): number {
@@ -161,4 +173,21 @@ export class MyProfileComponent implements OnInit {
   statusClass(isValid: boolean): string {
     return isValid ? 'status status--valid' : 'status status--invalid';
   }
+
+  // Handle save events from editable fields
+  // onFieldSaved(event: { fieldKey: string; value: string }) {
+  //   // Update locally first for instant feedback
+  //   (this.user as any)[event.fieldKey] = event.value;
+  //
+  //   // Try to persist to server
+  //   this.service.updateUserField(this.userID, event.fieldKey, event.value).subscribe({
+  //     next: () => {
+  //       console.log('User field updated', event.fieldKey);
+  //     },
+  //     error: (err) => {
+  //       console.error('Failed to update user field', err);
+  //       // Optionally revert local value or show a toast; for now just log
+  //     }
+  //   });
+  // }
 }

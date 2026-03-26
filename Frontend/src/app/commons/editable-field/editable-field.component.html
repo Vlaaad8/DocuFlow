@@ -1,0 +1,17 @@
+<div class="editable-row" [class.is-editing]="editing" (dblclick)="onDblClick()">
+  <div class="label">{{ value.fieldName }}</div>
+
+  <div *ngIf="!editing" class="value-row">
+    <div class="value">  {{ value.value || '-' }}</div>
+    <div class="container">
+      <div class="field-tag">{{ formatSourceOfData(value.source) }}</div>
+      <button *ngIf="editable" class="edit-btn" (click)="startEdit()" title="Edit">✎</button>
+    </div>
+  </div>
+
+  <div *ngIf="editing" class="editor-row">
+    <input class="editor-input" [value]="draft" (input)="draft = $any($event.target).value" />
+    <button class="save-btn" (click)="save()">Save</button>
+    <button class="cancel-btn" (click)="cancel()">Cancel</button>
+  </div>
+</div>

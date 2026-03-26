@@ -4,3 +4,11 @@ export interface ExtractedField {
     confidence: number;
     sourceOfData: string;
 }
+
+export interface UserStoredValue{
+  id: number;
+  value: string;
+  source: string;
+  fieldName: string;
+  userID: number;
+}

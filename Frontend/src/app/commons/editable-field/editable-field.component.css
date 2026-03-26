@@ -1,0 +1,131 @@
+:host { display: block; }
+
+.editable-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 8px;
+  transition: background 0.12s;
+}
+
+.editable-row:hover {
+  background: #f8faff;
+}
+
+.editable-row:hover .edit-btn {
+  opacity: 1;
+}
+
+.label {
+  min-width: 130px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.value-row {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.value {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 500;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-tag {
+  font-size: 11px;
+  font-weight: 500;
+  background: #eff6ff;
+  color: #1e40af;
+  border-radius: 8px;
+  border: 1px solid #dbeafe;
+  padding: 3px 9px;
+  letter-spacing: 0.02em;
+}
+
+.edit-btn {
+  opacity: 0;
+  border: none;
+  background: #eff6ff;
+  color: #1e40af;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  transition: opacity 0.15s, background 0.12s;
+  line-height: 1;
+}
+
+.edit-btn:hover {
+  background: #e0e7ff;
+}
+
+.editor-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+
+.editor-input {
+  flex: 1;
+  padding: 7px 11px;
+  border: 1px solid #e0e7ff;
+  border-radius: 7px;
+  background: #f8faff;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.editor-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.save-btn {
+  background: #4f46e5;
+  color: #ffffff;
+  border: none;
+  padding: 7px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.save-btn:hover {
+  background: #4338ca;
+}
+
+.save-btn:active {
+  transform: scale(0.97);
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #9ca3af;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: color 0.12s;
+}
+
+.cancel-btn:hover {
+  color: #374151;
+}
