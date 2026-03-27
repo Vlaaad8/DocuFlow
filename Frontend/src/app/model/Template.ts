@@ -8,6 +8,7 @@ export interface Template{
     fields: Field[];
 }
 
+
 export interface ApprovalFlowTemplate {
     id : number;
     name: string;

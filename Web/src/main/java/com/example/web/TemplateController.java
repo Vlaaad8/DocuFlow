@@ -2,6 +2,7 @@ package com.example.web;
 
 
 import com.example.TemplateService;
+import com.example.dto.Approval.ApprovalChainDTO;
 import com.example.dto.Approval.ApprovalChainOptionDTO;
 import com.example.dto.HtmlRequest;
 import com.example.dto.TemplateDTO;
@@ -49,7 +50,7 @@ public class TemplateController {
                             @RequestParam("description") String description,
                             @RequestParam("category") TemplateCategory category,
                             @RequestParam("approvalFlow") int approvalFlowID) throws IOException {
-        this.templateService.uploadService(file.getInputStream(), name, description, category,approvalFlowID);
+        this.templateService.uploadService(file.getInputStream(), name, description, category, approvalFlowID);
     }
 
     @GetMapping(value = "template/html", produces = "application/json")
@@ -63,14 +64,19 @@ public class TemplateController {
         this.templateService.updateTemplate(updateRequest.html(), updateRequest.fileName());
     }
 
-    @GetMapping(value="template/approvalFlows")
-    public List<ApprovalChainOptionDTO> getApprovalFlows(){
+    @GetMapping(value = "template/approvalFlows")
+    public List<ApprovalChainOptionDTO> getApprovalFlows() {
         return this.templateService.getApprovalChains();
     }
 
-    @PostMapping(value="template/validate/html")
-    public void validateTemplateHTML(@RequestParam("html") String html){
+    @PostMapping(value = "template/validate/html")
+    public void validateTemplateHTML(@RequestParam("html") String html) {
         this.templateService.validateHTMLTemplate(html);
     }
 
+    @GetMapping(value = "template/chain/{id}")
+    public ApprovalChainDTO getApprovalChainById(@PathVariable("id") int id) {
+        return this.templateService.getApprovalChainForTemplate(id);
+
+    }
 }

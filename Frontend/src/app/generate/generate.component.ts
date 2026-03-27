@@ -35,6 +35,7 @@ export class GenerateComponent implements OnInit {
   fromDate: string = '';
   toDate: string = '';
   whenDate: string = '';
+  currentDate: string = '';
 
   private importanceMap: { [key: string]: number } = {
     'First Name': 1,
@@ -122,6 +123,7 @@ export class GenerateComponent implements OnInit {
       width: '900px',
       maxWidth: '95vw'
     });
+    this.currentDate = new Date().toISOString().split('T')[0];
   }
   handleLeave(): void {
     this.templateFields = [];
@@ -134,7 +136,6 @@ export class GenerateComponent implements OnInit {
     const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     const userID = user.id;
     this.modalStage = 'loading';
-
     const dateValues = {'Date Interval': this.fromDate+"-"+this.toDate,'Specific Date': this.whenDate,'Today\'s Date': new Date().toISOString().split('T')[0]};
 
     this.service.generateDocument(this.selectedTemplate?.template.id!, userID,dateValues).subscribe({

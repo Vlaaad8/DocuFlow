@@ -83,7 +83,7 @@
               </div>
               <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Today\'s Date')">
                 <div class="input-time">
-                    The following document will be filled with the current date!
+                    The following document will be filled with the current date: {{ currentDate | date:'longDate' }}
                 </div>
               </div>
               <h3>Approval preview</h3>

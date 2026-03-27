@@ -26,6 +26,20 @@
       <span *ngFor="let field of template.fields" class="field-tag">{{ field.fieldName }}</span>
     </div>
   </div>
+  <div class="card-fields">
+    <p class="fields-label">Approval Chain</p>
+    <div class="steps-row">
+      <div class="step-item" *ngFor="let step of approvalChain.steps; let i = index">
+        <div class="step-badge" [title]="step.approverRole" [class]="step.approverRole">
+          {{ getRoleAbbreviation(step.approverRole) }}
+        </div>
+        <span class="step-role">{{ step.approverRole }}</span>
+        <div class="step-connector" *ngIf="i < approvalChain.steps.length - 1">
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Actions -->
   <div class="card-actions">

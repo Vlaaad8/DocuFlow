@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApprovalFlowTemplate, Template } from '../model/Template';
+import {ApprovalChain} from '../model/Approval';
 
 export interface HtmlRequest {
   content: string;
@@ -61,5 +62,9 @@ export class TemplateService {
     const formData = new FormData();
     formData.append('html', html);
     return this.http.post<void>(URL + '/validate/html', formData);
+  }
+
+  public getTemplateChain(templateId: number): Observable<ApprovalChain> {
+    return this.http.get<ApprovalChain>(`${URL}/chain/${templateId}`);
   }
 }

@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApprovalChainRepository extends JpaRepository<ApprovalChain, Integer> {
+
+    ApprovalChain getById(int id);
+
 }

@@ -191,3 +191,130 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   transform: translateY(-2px);
 }
+.card-body {
+  padding: 0 24px 24px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px;
+}
+
+.steps-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.step-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.step-badge:hover {
+  transform: scale(1.1);
+}
+
+.step-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.step-connector {
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  margin: 0 2px;
+}
+
+.step-connector mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ═══════════════════════════════════════
+   ROLE COLORS (kept from original)
+   ═══════════════════════════════════════ */
+.CEO {
+  background-color: #f2a5a0;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;
+  color: #1f2937;
+}
+
+.Manager {
+  background-color: #9fe0b7;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe0b7;
+  color: #1f2937;
+}
+
+.Employee {
+  background-color: #d1d5db;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d1d5db;
+  color: #1f2937;
+}
+
+.HumanResource {
+  background-color: #d7b5e6;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #d7b5e6;
+  color: #1f2937;
+}
+
+.IT {
+  background-color: #a7cbee;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #a7cbee;
+  color: #1f2937;
+}
+
+.Finance {
+  background-color: #86efac;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #86efac;
+  color: #1f2937;
+}
+
+.Law {
+  background-color: #fcd34d;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fcd34d;
+  color: #1f2937;
+}
+
+.Sales {
+  background-color: #fde3b5;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fde3b5;
+  color: #1f2937;
+}
+
+.Support {
+  background-color: #9fe4ef;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #9fe4ef;
+  color: #1f2937;
+}
+
+.Marketing {
+  background-color: #fdba74;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #fdba74;
+  color: #1f2937;
+}

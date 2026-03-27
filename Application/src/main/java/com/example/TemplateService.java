@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.approval.ApprovalChain;
 import com.example.converter.Convertors;
+import com.example.dto.Approval.ApprovalChainDTO;
 import com.example.dto.Approval.ApprovalChainOptionDTO;
 import com.example.dto.HtmlRequest;
 import com.example.dto.TemplateDTO;
@@ -234,6 +235,13 @@ public class TemplateService {
     public List<ApprovalChainOptionDTO> getApprovalChains() {
         return this.approvalChainRepository.findAll().stream().map(approvalChainMapper::toApprovalChainOption).toList();
     }
+
+    public ApprovalChainDTO getApprovalChainForTemplate(int templateID) {
+        Template template = this.templateRepository.getReferenceById(templateID);
+        ApprovalChain approvalChain = template.getApprovalChain();
+        return approvalChainMapper.toApprovalChainDTO(approvalChain);
+    }
+
 
 
 }
