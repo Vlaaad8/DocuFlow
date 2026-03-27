@@ -11,12 +11,19 @@ import com.example.exceptions.TemplateValidationException;
 import com.example.jpa.ApprovalChainRepository;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
-import com.example.template.*;
+import com.example.template.Field;
+import com.example.template.Template;
+import com.example.template.TemplateCategory;
+import com.example.template.TemplateTextPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +41,7 @@ public class TemplateService {
     private final Path rootFolder = Paths.get("storage");
 
 
-    public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory,int approvalFlowID) {
+    public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory, int approvalFlowID) {
 
         try {
             Files.createDirectories(rootFolder);
@@ -43,11 +50,11 @@ public class TemplateService {
 
             Path destination = rootFolder.resolve(saveName);
 
-           try(InputStream in = stream){
-               Files.copy(in, destination, StandardCopyOption.REPLACE_EXISTING);
-           }
+            try (InputStream in = stream) {
+                Files.copy(in, destination, StandardCopyOption.REPLACE_EXISTING);
+            }
 
-           //TODO validare structurala a DOCX
+            //TODO validare structurala a DOCX
 
 
             String path = destination.toAbsolutePath().toString();
@@ -55,22 +62,22 @@ public class TemplateService {
             String extractedText = textPort.extract(new FileInputStream(path));
             Set<Field> fields = extractFields(extractedText);
             ApprovalChain approvalFlow = this.approvalChainRepository.getReferenceById(approvalFlowID);
-            Template template = new Template(name, templateCategory, description, path, fields,approvalFlow);
+            Template template = new Template(name, templateCategory, description, path, fields, approvalFlow);
 
             templateRepository.save(template);
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean validateTemplate(InputStream inputStream){
+    public boolean validateTemplate(InputStream inputStream) {
         try {
             byte[] content = inputStream.readAllBytes();
             String extractedText = textPort.extract(new ByteArrayInputStream(content));
 
             if (extractedText != null) {
-                extractedText = extractedText.replace('\u00A0', ' '); // Non-breaking space
-                extractedText = extractedText.replaceAll("\\h", " "); // Orice alt tip de spațiu orizontal
+                extractedText = extractedText.replace('\u00A0', ' ');
+                extractedText = extractedText.replaceAll("\\h", " ");
             }
 
             if (!hasValidFormat(extractedText)) {
@@ -81,22 +88,22 @@ public class TemplateService {
             if (!hasRequiredFields(fields)) {
                 throw new TemplateValidationException("Some required fields are missing from this template");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return true;
 
     }
-    public void delete(int id){
+
+    public void delete(int id) {
         Template template = this.templateRepository.getReferenceById(id);
-            Path path = Path.of(template.getStoragePath());
-            try {
-                Files.deleteIfExists(path);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            templateRepository.deleteById(id);
+        Path path = Path.of(template.getStoragePath());
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        templateRepository.deleteById(id);
     }
 
     private boolean verifyParenthesis(String text) {
@@ -171,50 +178,62 @@ public class TemplateService {
         return templateRepository.findAll().stream().map(templateMapper::toTemplateDTO).toList();
     }
 
-    public List<String> getTemplateCategories(){
+    public List<String> getTemplateCategories() {
         List<String> all = new ArrayList<>();
         Arrays.stream(TemplateCategory.values()).map(Enum::name).forEach(all::add);
         return all;
     }
 
-    public HtmlRequest getTemplateHTML(int id){
+    public HtmlRequest getTemplateHTML(int id) {
         Template template = this.templateRepository.getReferenceById(id);
         Path path = Path.of(template.getStoragePath());
 
-        try(InputStream stream = Files.newInputStream(path)){
-                byte[] content = stream.readAllBytes();
-           return new HtmlRequest(Convertors.convertWordToHTML(content),path.toString());
-        }
-         catch (Exception e) {
+        try (InputStream stream = Files.newInputStream(path)) {
+            byte[] content = stream.readAllBytes();
+            return new HtmlRequest(Convertors.convertWordToHTML(content), path.toString());
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void updateTemplate(String htmlContent,String fileName){
+    //TODO updateaza si campurile din baza de date daca e nevoie
+    @Transactional
+    public void updateTemplate(String htmlContent, String fileName) {
         validateHTMLTemplate(htmlContent);
 
         Path destination = Path.of(fileName);
-        try{
-        Convertors.convertHTMLToWord(htmlContent,destination);
-        }
-        catch (Exception e){
+        try {
+            Convertors.convertHTMLToWord(htmlContent, destination);
+        } catch (Exception e) {
 
+            throw new RuntimeException(e);
+        }
+
+
+        try {
+            String content = this.textPort.extract(new FileInputStream(destination.toFile()));
+            Set<Field> fields = extractFields(content);
+            for(Field field : fields) {
+                System.out.println(field.getFieldName());
+            }
+            Template template = this.templateRepository.findTemplateByStoragePath(fileName).orElseThrow(() -> new RuntimeException("Template not found"));
+            template.setFields(fields);
+            this.templateRepository.save(template);
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void validateHTMLTemplate(String htmlContent){
+    public void validateHTMLTemplate(String htmlContent) {
         String sanitizedContent = this.htmlCleanerPort.clean(htmlContent);
         sanitizedContent = sanitizedContent.replace("\u00A0", " ");
         InputStream stream = new ByteArrayInputStream(sanitizedContent.getBytes());
         validateTemplate(stream);
     }
 
-    public List<ApprovalChainOptionDTO> getApprovalChains(){
+    public List<ApprovalChainOptionDTO> getApprovalChains() {
         return this.approvalChainRepository.findAll().stream().map(approvalChainMapper::toApprovalChainOption).toList();
     }
-
-
 
 
 }

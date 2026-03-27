@@ -19,7 +19,9 @@
             <h3>Your Data Profile</h3>
             <ul class="data-list">
               <li *ngFor="let item of dataProfile">
-                <mat-icon [class]="item.value === 1 ? 'valid' : 'missing'">{{ item.value === 1 ? 'check' : 'question_mark' }}</mat-icon>
+                <mat-icon
+                  [class]="item.value === 1 ? 'valid' : 'missing'">{{ item.value === 1 ? 'check' : 'question_mark' }}
+                </mat-icon>
                 {{ formatSourceOfData(item.category) }}
               </li>
             </ul>
@@ -27,7 +29,7 @@
         </div>
         <div class="second-part">
           <app-template-selector [schema]="template" (event)="handleGenerateEvent($event)"
-            *ngFor="let template of templates"></app-template-selector>
+                                 *ngFor="let template of templates"></app-template-selector>
         </div>
       </div>
     </div>
@@ -42,43 +44,75 @@
 
         <ng-template #presentationDialog>
           <div class="card-body">
-            <h3>Document preview</h3>
-            <div class="detail-card">
-              <p>Document will be generated with you following personal data:</p>
-              <div>
-                <div class="field-item" *ngFor="let field of templateFields">
-                  <div>
-                    <span class="field-label">{{field.name}}:</span>
-                    <span>{{field.value}}</span>
-                  </div>
-                  <div class="source"> {{formatSourceOfData(field.sourceOfData)}}</div>
-                </div>
-              </div>
-            </div>
-            <h3>Approval preview</h3>
-            <div class="detail-card">
-              <div class="step-container">
-                <div class="steps-visualization" *ngFor="let step of templateApprovers; let last = last">
-                  <div class="step-item">
-                    <div class="step-badge" [title]="step.approverName" [class]="step.approverRole">
-                      {{ getRoleAbbreviation(step.approverName) }}
+            <div>
+              <h3>Document preview</h3>
+              <div class="detail-card">
+                <p>Document will be generated with you following personal data:</p>
+                <div>
+                  <div class="field-item" *ngFor="let field of templateFields">
+                    <div>
+                      <span class="field-label">{{ field.name }}:</span>
+                      <span>{{ field.value }}</span>
                     </div>
-                    <div class="step-label">
-                      <span class="step-name">{{ step.approverName }}</span>
-                      <span class="step-role">{{ step.approverRole }}</span>
-                    </div>
-                    <div *ngIf="!last" class="step-arrow">→</div>
+                    <div class="source"> {{ formatSourceOfData(field.sourceOfData) }}</div>
                   </div>
                 </div>
               </div>
             </div>
             <div>
+              <h3>Date specifier</h3>
+              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Date Interval')">
+                <div class="input-time">
+                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                    <label>From</label>
+                    <input type="date" lang="ro" [(ngModel)]="fromDate" name="fromDate">
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                    <label>To</label>
+                    <input type="date" lang="ro" [(ngModel)]="toDate" name="toDate">
+                  </div>
+                </div>
+              </div>
+              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Specific Date')">
+                <div class="input-time">
+                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                    <label>When</label>
+                    <input type="date" lang="ro" [(ngModel)]="whenDate" name="whenDate">
+                  </div>
+                </div>
+              </div>
+              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Today\'s Date')">
+                <div class="input-time">
+                    The following document will be filled with the current date!
+                </div>
+              </div>
+              <h3>Approval preview</h3>
+              <div class="detail-card">
+                <div class="step-container">
+                  <div class="steps-visualization" *ngFor="let step of templateApprovers; let last = last">
+                    <div class="step-item">
+                      <div class="step-badge" [title]="step.approverName" [class]="step.approverRole">
+                        {{ getRoleAbbreviation(step.approverName) }}
+                      </div>
+                      <div class="step-label">
+                        <span class="step-name">{{ step.approverName }}</span>
+                        <span class="step-role">{{ step.approverRole }}</span>
+                      </div>
+                      <div *ngIf="!last" class="step-arrow">→</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="buttonSection">
+                <button type="submit" (click)="generateDocument()">Request Approval</button>
+                <button type="button" class="close-button" (click)="handleLeave()">Cancel</button>
+              </div>
+            </div>
+          </div>
 
-            </div>
-            <div class="buttonSection">
-              <button type="submit" (click)="generateDocument()">Request Approval</button>
-              <button type="button" class="close-button" (click)="handleLeave()">Cancel</button>
-            </div>
+          <div>
+
+
           </div>
         </ng-template>
 

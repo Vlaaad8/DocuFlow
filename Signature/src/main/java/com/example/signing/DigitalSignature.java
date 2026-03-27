@@ -3,6 +3,7 @@ package com.example.signing;
 import com.example.certificate.CertificationAuthority;
 import com.example.dto.SignatureInfo;
 import com.example.security.SignaturePort;
+import eu.europa.esig.dss.alert.LogOnStatusAlert;
 import eu.europa.esig.dss.alert.SilentOnStatusAlert;
 import eu.europa.esig.dss.enumerations.*;
 import eu.europa.esig.dss.model.*;
@@ -128,8 +129,12 @@ public class DigitalSignature implements SignaturePort {
 
             CommonCertificateVerifier certificateVerifier = new CommonCertificateVerifier();
             certificateVerifier.setTrustedCertSources(trustedSource);
-
             certificateVerifier.setCheckRevocationForUntrustedChains(false);
+
+            certificateVerifier.setAlertOnMissingRevocationData(new LogOnStatusAlert());
+            certificateVerifier.setAlertOnUncoveredPOE(new LogOnStatusAlert());
+            certificateVerifier.setAlertOnInvalidTimestamp(new LogOnStatusAlert());
+
             validator.setCertificateVerifier(certificateVerifier);
 
             Reports reports;

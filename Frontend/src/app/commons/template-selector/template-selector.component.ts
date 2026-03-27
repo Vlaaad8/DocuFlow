@@ -13,14 +13,14 @@ import { GenerateTemplate } from '../../model/GenerateTemplate';
 export class TemplateSelectorComponent implements OnInit {
 
   @Input() schema! : GenerateTemplate;
-  @Output() event = new EventEmitter<Template>();
+  @Output() event = new EventEmitter<GenerateTemplate>();
 
   constructor() { }
 
   ngOnInit() {
   }
   handleGenerate(): void {
-    this.event.emit(this.schema.template);
+    this.event.emit(this.schema);
   }
 
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { GenerateTemplate, TemplateApprovers } from '../model/GenerateTemplate';
@@ -21,11 +21,12 @@ export class GenerateService {
     return this.http.get<FieldTemplate[]>(URL + '/' + templateID + '/' + userID);
   }
 
-  public generateDocument(templateID: number, userID: number): Observable<void> {
-    const formData = new FormData();
-    formData.append('templateID', templateID.toString());
-    formData.append('userID', userID.toString());
-    return this.http.post<void>(URL, formData);
+  public generateDocument(templateID: number, userID: number, data: { [key: string]: string }): Observable<void> {
+    const params = new HttpParams()
+      .set('templateID', templateID.toString())
+      .set('userID', userID.toString());
+
+    return this.http.post<void>(URL, data, { params: params });
   }
 
   public getTemplateApprovers(templateId: number, userId: number): Observable<TemplateApprovers[]> {

@@ -18,6 +18,7 @@ import { Field } from '../model/Field';
 import { LoadingComponent } from "../commons/loading/loading.component";
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ApprovalFlowTemplate } from '../model/Template';
+import {MatProgressBar} from '@angular/material/progress-bar';
 
 
 const defaultContent = '<p>Create your template…</p>';
@@ -25,7 +26,7 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule, MatProgressSpinner, MatProgressBar]
 })
 export class CreatorComponent implements OnInit {
 
@@ -156,7 +157,7 @@ export class CreatorComponent implements OnInit {
       }
     });
   }
-  
+
 
   closeDialog(): void {
     this.dialog.closeAll();

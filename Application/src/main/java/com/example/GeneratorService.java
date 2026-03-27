@@ -42,12 +42,22 @@ public class GeneratorService {
 
 
     @Transactional
-    public void generateFile(int templateID, int userID) {
+    public void generateFile(int templateID, int userID, Map<String, String> dateValues) {
 
         Template template = this.templateRepository.getReferenceById(templateID);
         Map<String, String> values = new HashMap<>();
 
         for (Field field : template.getFields()) {
+            if (field.getFieldName().equals("Specific Date") || field.getFieldName().equals("Today's Date") ||
+                    field.getFieldName().equals("Date Interval")) {
+                if (dateValues.containsKey(field.getFieldName())) {
+                    values.put(field.getRepresentation(), dateValues.get(field.getFieldName()));
+                } else {
+                    throw new RuntimeException("Missing value for date field: " + field.getFieldName());
+                }
+                continue;
+            }
+
             UserFieldValue userFieldValue = this.userFieldValueRepository.findByUser_IdAndField_id(userID, field.getId()).orElseThrow(() -> new RuntimeException("Value for field " + field.getFieldName() + " not found for user " + userID));
             if (userFieldValue != null) {
                 values.put(userFieldValue.getField().getRepresentation(), userFieldValue.getValue());
@@ -100,24 +110,30 @@ public class GeneratorService {
 
         List<Template> templates = this.templateRepository.findAll();
         List<Field> userFilledFields = this.userFieldValueRepository.findByUser_Id(userId);
+        List<String> temporalFields = new ArrayList<>();
 
-        //TODO daca tot verific lantul, sa il trimit direct in front end si sa verific acolo daca userul are dreptul sa genereze documentul, pentru a nu mai face atatea interogari la baza de date
         List<GeneratorTemplateDTO> templateDTOs = new ArrayList<>();
         for (Template template : templates) {
             List<String> missingFields = new ArrayList<>();
             if (!verifyEligibility(userId, template)) {
                 continue;
             }
-            GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill(template, userFilledFields,missingFields),missingFields);
+            boolean canFill = canFill(template, userFilledFields, missingFields, temporalFields);
+            GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill, missingFields, temporalFields);
             templateDTOs.add(generatorTemplateDTO);
         }
         return templateDTOs;
     }
 
-    private boolean canFill(Template template, List<Field> userFilledFields,List<String> missingFields) {
+    private boolean canFill(Template template, List<Field> userFilledFields, List<String> missingFields, List<String> temporalFields) {
         for (Field field : template.getFields()) {
             if (!userFilledFields.contains(field)) {
-                missingFields.add(field.getFieldName());
+                if (field.getFieldName().equals("Specific Date") || field.getFieldName().equals("Today's Date") ||
+                        field.getFieldName().equals("Date Interval")) {
+                    temporalFields.add(field.getFieldName());
+                } else {
+                    missingFields.add(field.getFieldName());
+                }
             }
         }
         return missingFields.isEmpty();

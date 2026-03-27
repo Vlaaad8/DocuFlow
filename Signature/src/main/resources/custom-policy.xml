@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ConstraintsParameters Name="TEST_NO_REVOCATION_POLICY" xmlns="http://dss.esig.europa.eu/validation/policy">
-    <Description>Politica de test pentru validarea semnaturii fara CRL</Description>
+<ConstraintsParameters Name="CUSTOM_POLICY"
+                       xmlns="http://dss.esig.europa.eu/validation/policy">
+
+    <Description>Politica custom - accepta self-signed si certificate oficiale fara revocation</Description>
+
     <SignatureConstraints>
         <BasicSignatureConstraints>
             <ReferenceDataExistence Level="FAIL"/>
             <ReferenceDataIntact Level="FAIL"/>
             <SignatureIntact Level="FAIL"/>
+            <SignatureDuplicated Level="FAIL"/>
+            <ProspectiveCertificateChain Level="WARN"/>
 
-            <ProspectiveCertificateChain Level="FAIL"/>
+            <SigningCertificate>
+                <Recognition Level="FAIL"/>
+                <Signature Level="FAIL"/>
+                <NotExpired Level="FAIL"/>
+                <RevocationDataAvailable Level="WARN"/>
+                <CRLNextUpdatePresent Level="WARN"/>
+                <RevocationFreshness Level="IGNORE" Unit="DAYS" Value="0"/>
+                <NotRevoked Level="WARN"/>
+                <NotOnHold Level="WARN"/>
+            </SigningCertificate>
+
+            <CACertificate>
+                <Signature Level="FAIL"/>
+                <NotExpired Level="FAIL"/>
+                <RevocationDataAvailable Level="WARN"/>
+                <CRLNextUpdatePresent Level="WARN"/>
+                <RevocationFreshness Level="IGNORE" Unit="DAYS" Value="0"/>
+                <NotRevoked Level="WARN"/>
+                <NotOnHold Level="WARN"/>
+            </CACertificate>
         </BasicSignatureConstraints>
+
+        <SignedAttributes>
+            <SigningCertificatePresent Level="WARN"/>
+            <CertDigestPresent Level="WARN"/>
+            <CertDigestMatch Level="FAIL"/>
+            <SigningTime Level="WARN"/>
+        </SignedAttributes>
     </SignatureConstraints>
+
+    <Timestamp>
+        <TimestampDelay Level="WARN" Unit="DAYS" Value="0"/>
+        <RevocationTimeAgainstBestSignatureTime Level="WARN"/>
+        <BestSignatureTimeBeforeExpirationDateOfSigningCertificate Level="WARN"/>
+        <Coherence Level="WARN"/>
+        <BasicSignatureConstraints>
+            <ReferenceDataExistence Level="WARN"/>
+            <ReferenceDataIntact Level="WARN"/>
+            <SignatureIntact Level="WARN"/>
+            <SigningCertificate>
+                <RevocationDataAvailable Level="WARN"/>
+                <NotRevoked Level="WARN"/>
+            </SigningCertificate>
+        </BasicSignatureConstraints>
+    </Timestamp>
+
+    <Revocation>
+        <BasicSignatureConstraints>
+            <ReferenceDataExistence Level="WARN"/>
+            <ReferenceDataIntact Level="WARN"/>
+            <SignatureIntact Level="WARN"/>
+        </BasicSignatureConstraints>
+    </Revocation>
+
 </ConstraintsParameters>

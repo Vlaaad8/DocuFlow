@@ -15,4 +15,5 @@ public class GeneratorTemplateDTO {
     private TemplateDTO template;
     private boolean canGenerate;
     private List<String> missingFields;
+    private List<String> dateFields;
 }

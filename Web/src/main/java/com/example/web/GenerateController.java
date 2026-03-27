@@ -31,8 +31,8 @@ public class GenerateController {
     private final GeneratorService generatorService;
 
     @PostMapping("generate")
-    public void generateTemplate(@RequestParam("userID") int userID, @RequestParam("templateID") int templateID ) {
-        this.generatorService.generateFile(templateID,userID);
+    public void generateTemplate(@RequestParam("userID") int userID, @RequestParam("templateID") int templateID, @RequestBody Map<String, String> dateValues ) {
+        this.generatorService.generateFile(templateID,userID,dateValues);
     }
 
     @GetMapping("generate/{userID}")

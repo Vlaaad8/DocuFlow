@@ -13,22 +13,28 @@ import { Template } from '../model/Template';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { SnackBarService } from '../services/snackBar.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
+import {forkJoin, timestamp} from 'rxjs';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-generate',
   templateUrl: './generate.component.html',
   styleUrls: ['./generate.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, TemplateSelectorComponent, CommonModule, MatIconModule, MatProgressSpinner, MatDialogModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, TemplateSelectorComponent, CommonModule, MatIconModule, MatProgressSpinner, MatDialogModule,FormsModule]
 })
 export class GenerateComponent implements OnInit {
 
   templates: GenerateTemplate[] = [];
   templateFields: FieldTemplate[] = [];
   templateApprovers: TemplateApprovers[] = [];
-  selectedTemplateId: number | null = null;
+  selectedTemplate: GenerateTemplate | null = null;
   modalStage: string = 'presentation'; // presentation | loading
   dataProfile: { category: string, value: number }[] = [];
+
+
+  fromDate: string = '';
+  toDate: string = '';
+  whenDate: string = '';
 
   private importanceMap: { [key: string]: number } = {
     'First Name': 1,
@@ -65,7 +71,6 @@ export class GenerateComponent implements OnInit {
     this.service.getDataProfile(userID).subscribe({
       next: (data) => {
         this.dataProfile = data.filter(item => item.category!="UNKNOWN").sort((a, b) => b.value - a.value);
-        console.log("Data profile loaded:", this.dataProfile);
       },
       error: (error) => {
         console.error("Error loading data profile:", error);
@@ -80,7 +85,7 @@ export class GenerateComponent implements OnInit {
       next: (data) => {
         data.sort((a, b) => a.canGenerate === b.canGenerate ? 0 : a.canGenerate ? -1 : 1);
         this.templates = data;
-        console.log("Templates loaded:", this.templates);
+        console.log(data)
       },
       error: (error) => {
         console.error("Error loading templates:", error);
@@ -101,7 +106,6 @@ export class GenerateComponent implements OnInit {
         this.sortFieldsByImportance()
         this.templateApprovers = approvers;
         this.modalStage = 'presentation';
-        console.log("Template data loaded:", { fields, approvers });
       },
       error: (error) => {
         console.error("Error loading template data:", error);
@@ -111,14 +115,17 @@ export class GenerateComponent implements OnInit {
   }
 
 
-  handleGenerateEvent($event: Template): void {
-    this.selectedTemplateId = $event.id;
-    this.loadTemplateData(this.selectedTemplateId);
-    this.dialog.open(this.generateDialog);
+  handleGenerateEvent($event: GenerateTemplate): void {
+    this.selectedTemplate = $event;
+    this.loadTemplateData(this.selectedTemplate.template.id);
+    this.dialog.open(this.generateDialog, {
+      width: '900px',
+      maxWidth: '95vw'
+    });
   }
   handleLeave(): void {
     this.templateFields = [];
-    this.selectedTemplateId = null;
+    this.selectedTemplate = null;
     this.dialog.closeAll();
     this.modalStage = 'presentation';
   }
@@ -127,7 +134,10 @@ export class GenerateComponent implements OnInit {
     const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
     const userID = user.id;
     this.modalStage = 'loading';
-    this.service.generateDocument(this.selectedTemplateId!, userID).subscribe({
+
+    const dateValues = {'Date Interval': this.fromDate+"-"+this.toDate,'Specific Date': this.whenDate,'Today\'s Date': new Date().toISOString().split('T')[0]};
+
+    this.service.generateDocument(this.selectedTemplate?.template.id!, userID,dateValues).subscribe({
       next: () => {
         this.handleLeave();
         this.snackBar.showMessage("Document generated successfully!", "success");
@@ -176,4 +186,14 @@ export class GenerateComponent implements OnInit {
       return rankA - rankB;
     });
   }
+
+  public containsElement(template: GenerateTemplate | null, value: string): boolean {
+    if(template == null) {
+      return false;
+    }
+    template.dateFields.forEach(field => {console.log(field)})
+    return template.dateFields.some(field => field == value);
+  }
+
+  protected readonly timestamp = timestamp;
 }
