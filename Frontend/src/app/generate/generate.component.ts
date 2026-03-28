@@ -129,11 +129,11 @@ export class GenerateComponent implements OnInit {
     this.service.getTemplateSources(this.selectedTemplate.template.id, userID).subscribe({
       next: (sources) => {
         this.sources = sources;
-        // 1. Întâi setăm categoria! (Ne asigurăm că avem cel puțin una)
+
         if (this.sources && this.sources.length > 0) {
           this.selectedCategory = this.sources[0];
         }
-        // 2. Acum încărcăm datele, folosind categoria setată mai sus
+
         // @ts-ignore
         this.loadTemplateData(this.selectedTemplate.template.id);
       },
@@ -159,12 +159,11 @@ export class GenerateComponent implements OnInit {
     const userID = user.id;
     this.modalStage = 'loading';
 
-    // Inițializăm dicționarul gol
     const dateValues: { [key: string]: string } = {};
 
-    // Populăm DOAR ce cere șablonul curent
+
     if (this.containsElement(this.selectedTemplate, 'Date Interval')) {
-      dateValues['Date Interval'] = this.fromDate + " - " + this.toDate; // Am pus spații pentru un PDF mai frumos
+      dateValues['Date Interval'] = this.fromDate + " - " + this.toDate;
     }
 
     if (this.containsElement(this.selectedTemplate, 'Specific Date')) {
@@ -175,15 +174,14 @@ export class GenerateComponent implements OnInit {
       dateValues['Today\'s Date'] = new Date().toISOString().split('T')[0];
     }
 
-    // Aici ai un mic typo în codul original. Sursa ('this.selectedCategory')
-    // trebuie să fie al treilea parametru, iar dicționarul al patrulea, conform serviciului tău!
+
     this.service.generateDocument(this.selectedTemplate?.template.id!, userID,  dateValues,this.selectedCategory).subscribe({
       next: () => {
         this.snackBar.showMessage("Document generated successfully!", "success");
-        this.handleLeave(); // Mutat după snackBar ca să se închidă lin
+        this.handleLeave();
       },
       error: (error) => {
-        console.error("Error generating document:", error); // Adăugat log pentru debug
+        console.error("Error generating document:", error);
         this.snackBar.showMessage("Error generating document. Please try again.", "error");
         this.handleLeave();
       }

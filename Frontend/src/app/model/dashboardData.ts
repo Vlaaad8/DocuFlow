@@ -3,6 +3,8 @@ export interface DashboardData {
     totalGeneratedDocuments: number;
     pendingApprovals: number;
     receivedApprovals: number;
+    chartData: {title: string, timestamp: string, status: string}[];
+    sourceDistribution: {source: string, value: number}[];
 }
 
 export interface Notification {

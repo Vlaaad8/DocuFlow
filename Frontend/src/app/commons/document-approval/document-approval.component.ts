@@ -22,7 +22,6 @@ export class DocumentApprovalComponent implements OnInit ,OnChanges {
   ngOnInit() {
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Changes detected in DocumentApprovalComponent:', changes);
    if (changes['loading'].currentValue == false) {
       this.internalLock = false;
    }

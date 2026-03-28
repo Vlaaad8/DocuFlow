@@ -50,7 +50,7 @@
                 <div class="select-wrapper">
                   <label for="data-source">Source of data:</label>
                   <select id="data-source" [(ngModel)]="selectedCategory" name="dataSource" (ngModelChange)="handleChange()">
-                    <option *ngFor="let value of sources" [value]="value">{{value}}</option>
+                    <option *ngFor="let value of sources" [value]="value">{{formatSourceOfData(value)}}</option>
                   </select>
                 </div>
               </div>

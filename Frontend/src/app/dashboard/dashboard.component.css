@@ -104,9 +104,7 @@ span {
 
 .generated {
     background: #f5f3ff;
-    /* Un mov foarte deschis, odihnitor */
     color: #5b21b6;
-    /* Un violet intens pentru contrast și lizibilitate */
 }
 
 .chart-section {
@@ -122,7 +120,7 @@ span {
     gap: 24px;
     margin-top: 24px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .title h3 {
@@ -297,4 +295,68 @@ span {
 
 ::ng-deep .mat-badge-content {
     color: white !important;
+}
+
+.chart-wrapper {
+  width: 100%;
+  margin-top: 16px;
+
+  /* Modificări noi: */
+  flex: 1; /* Forțează containerul de canvas să ocupe tot spațiul rămas liber */
+  height: 300px; /* Înlocuiește max-height cu o înălțime exactă */
+  position: relative; /* CRITIC: Fără asta, Chart.js nu știe cum să se dimensioneze! */
+}
+.chart-section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+  /* Modificări noi: */
+  flex: 1; /* Forțează lățimi perfect egale (50% - 50%) */
+  display: flex;
+  flex-direction: column; /* Organizează textul sus și graficul jos */
+}
+.chart-container {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  align-items: stretch; /* Modificat: forțează înălțime egală pentru ambele carduri */
+  justify-content: center;
+}
+.chart-container {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  align-items: stretch;
+}
+
+.chart-section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.chart-section .title {
+  min-height: 80px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
 }

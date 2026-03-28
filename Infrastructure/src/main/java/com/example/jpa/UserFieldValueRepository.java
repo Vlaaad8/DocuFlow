@@ -38,4 +38,6 @@ public interface UserFieldValueRepository extends JpaRepository<UserFieldValue, 
     List<UserFieldValue> findAllByUser_Id(int userID);
     List<UserFieldValue> findByUser_IdAndSourceOfData(int userID, SourceOfData sourceOfData);
     Optional<UserFieldValue> findByUser_IdAndField_IdAndSourceOfData(int userID, int fieldID, SourceOfData sourceOfData);
+
+    int countByUser_IdAndSourceOfData(int userID, SourceOfData sourceOfData);
 }
