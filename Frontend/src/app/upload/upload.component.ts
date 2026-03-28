@@ -137,7 +137,7 @@ export class UploadComponent implements OnInit {
   }
 
   public onSaveData(): void {
-    const extractedData: ExtractedField[] = this.inputFormFields.value;
+    const extractedData: ExtractedField[] = this.mapExtractedData(this.extractedFields);
     console.log('Saved extracted data:', extractedData);
     this.service.saveExtractedData(extractedData,this.loggedUser.id);
     this.snackBar.showMessage("Extracted data saved successfully!", "success");
@@ -160,4 +160,15 @@ export class UploadComponent implements OnInit {
       return rankA - rankB;
     });
   }
+  private mapExtractedData(data: ExtractedField[]): ExtractedField[] {
+    return data.map(field => {
+       if (field.label == "IssuedBy") {
+         return {
+           ...field,
+           label: "IssuingAuthority"
+         };
+       }
+       return field;
+     });
+   }
 }

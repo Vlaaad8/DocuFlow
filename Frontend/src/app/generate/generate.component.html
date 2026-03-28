@@ -45,7 +45,15 @@
         <ng-template #presentationDialog>
           <div class="card-body">
             <div>
-              <h3>Document preview</h3>
+              <div class="preview-section">
+                <h3>Document preview</h3>
+                <div class="select-wrapper">
+                  <label for="data-source">Source of data:</label>
+                  <select id="data-source" [(ngModel)]="selectedCategory" name="dataSource" (ngModelChange)="handleChange()">
+                    <option *ngFor="let value of sources" [value]="value">{{value}}</option>
+                  </select>
+                </div>
+              </div>
               <div class="detail-card">
                 <p>Document will be generated with you following personal data:</p>
                 <div>
@@ -83,7 +91,7 @@
               </div>
               <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Today\'s Date')">
                 <div class="input-time">
-                    The following document will be filled with the current date: {{ currentDate | date:'longDate' }}
+                  The following document will be filled with the current date: {{ currentDate | date:'longDate' }}
                 </div>
               </div>
               <h3>Approval preview</h3>

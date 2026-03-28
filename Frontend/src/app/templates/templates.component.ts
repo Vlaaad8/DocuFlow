@@ -11,12 +11,13 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingComponent } from "../commons/loading/loading.component";
+import {PdfViewer} from '../commons/pdf-viewer/pdf-viewer';
 
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
   styleUrls: ['./templates.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent, MatProgressSpinner, ReactiveFormsModule, LoadingComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, MatIcon, CommonModule, TemplateContainerComponent, ExitButtonComponent, MatProgressSpinner, ReactiveFormsModule, LoadingComponent, PdfViewer]
 })
 export class TemplatesComponent implements OnInit {
 
@@ -29,6 +30,8 @@ export class TemplatesComponent implements OnInit {
   approvalFlows!: ApprovalFlowTemplate[];
   formGroup!: FormGroup
   errorMessage: string | null = null;
+
+  pdfUrl: string = '';
 
 
   constructor(private service: TemplateService, private formBuilder: FormBuilder, private router: Router) { }
@@ -180,4 +183,21 @@ export class TemplatesComponent implements OnInit {
     this.isTemplateValid = false;
     this.errorMessage = null;
   }
+
+  handlePreview(templateId: number): void {
+    this.service.loadDocument(templateId).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        this.pdfUrl = url;
+        console.log(url);
+      },
+      error: (error) => {
+        console.error('Error loading document for preview:', error);
+      }
+    })
+  }
+  handleClose() : void {
+      this.pdfUrl = "";
+    }
+
 }

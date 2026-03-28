@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "field_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "field_id","source_of_data"}))
 public class UserFieldValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +31,17 @@ public class UserFieldValue {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "source_of_data", nullable = false)
     private SourceOfData sourceOfData;
 
-    public UserFieldValue(String value, Field field, User user,SourceOfData sourceOfData) {
+    public UserFieldValue(String value, Field field, User user,SourceOfData sourceOfData, float confidence) {
         this.value = value;
         this.field = field;
         this.user = user;
         this.sourceOfData = sourceOfData;
+        this.confidence = confidence;
     }
+
+    @Column(nullable = false)
+    private float confidence;
 }

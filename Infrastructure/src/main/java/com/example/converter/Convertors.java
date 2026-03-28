@@ -1,6 +1,7 @@
 package com.example.converter;
 
 
+import com.example.ConvertPort;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.xwpf.usermodel.BreakType;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -15,6 +16,7 @@ import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Entities;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class Convertors {
+@Component
+public class Convertors implements ConvertPort {
     static {
         System.setProperty("docx4j.jaxb.Context", "org.docx4j.jaxb.Context");
         org.docx4j.Docx4jProperties.setProperty("docx4j.fonts.RunFontSelector.DefaultFont", "Times New Roman");
@@ -87,4 +90,12 @@ public class Convertors {
         return doc.body().html();
     }
 
+    @Override
+    public void convertWordToPDF(String path) throws Exception {
+        XWPFDocument document;
+        try (InputStream stream = Files.newInputStream(Path.of(path))) {
+            document = new XWPFDocument(stream);
+        }
+        convertWordToPDF(document, Path.of(path.replace(".docx", ".pdf")));
+    }
 }

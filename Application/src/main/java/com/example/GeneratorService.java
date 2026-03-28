@@ -40,9 +40,13 @@ public class GeneratorService {
     private final SignaturePort signaturePort;
     private final TemplateMapper templateMapper;
 
+    private final List<String> staticInformation = List.of("First Name", "Date of Birth", "Place of Birth", "Personal Number", "Sex");
+    private final List<String> volatileInformation = List.of("Address", "Nationality", "Last Name");
+    private final List<String> documentInformation = List.of("Document Number", "Document Expiration Date", "Issuing Authority", "Document Type", "Document Issue Date", "Document Discriminator", "Issued by");
+
 
     @Transactional
-    public void generateFile(int templateID, int userID, Map<String, String> dateValues) {
+    public void generateFile(int templateID, int userID, Map<String, String> dateValues, String sourceOfData) {
 
         Template template = this.templateRepository.getReferenceById(templateID);
         Map<String, String> values = new HashMap<>();
@@ -58,11 +62,29 @@ public class GeneratorService {
                 continue;
             }
 
-            UserFieldValue userFieldValue = this.userFieldValueRepository.findByUser_IdAndField_id(userID, field.getId()).orElseThrow(() -> new RuntimeException("Value for field " + field.getFieldName() + " not found for user " + userID));
+            UserFieldValue userFieldValue = null;
+
+            if (documentInformation.contains(field.getFieldName())) {
+
+                SourceOfData targetSource = SourceOfData.valueOf(sourceOfData);
+
+                userFieldValue = this.userFieldValueRepository
+                        .findByUser_IdAndField_IdAndSourceOfData(userID, field.getId(), targetSource)
+                        .orElseThrow(() -> new RuntimeException("Informația '" + field.getFieldName() + "' nu există în sursa selectată (" + sourceOfData + ")"));
+
+            } else {
+
+                userFieldValue = this.userFieldValueRepository
+                        .findByUser_IdAndField_id(userID, field.getId())
+                        .orElseThrow(() -> new RuntimeException("Value for field " + field.getFieldName() + " not found for user " + userID));
+            }
+
+
             if (userFieldValue != null) {
-                values.put(userFieldValue.getField().getRepresentation(), userFieldValue.getValue());
+                values.put(field.getRepresentation(), userFieldValue.getValue());
             }
         }
+
         try {
             Files.createDirectories(rootFolder);
         } catch (IOException e) {
@@ -118,39 +140,102 @@ public class GeneratorService {
             if (!verifyEligibility(userId, template)) {
                 continue;
             }
-            boolean canFill = canFill(template, userFilledFields, missingFields, temporalFields);
+            boolean canFill = canFill(template, userId,userFilledFields, missingFields, temporalFields);
             GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill, missingFields, temporalFields);
             templateDTOs.add(generatorTemplateDTO);
         }
         return templateDTOs;
     }
 
-    private boolean canFill(Template template, List<Field> userFilledFields, List<String> missingFields, List<String> temporalFields) {
+    private boolean canFill(Template template, int userID, List<Field> userFilledFields, List<String> missingFields, List<String> temporalFields) {
+        List<String> requiredDocFields = new ArrayList<>();
+
         for (Field field : template.getFields()) {
-            if (!userFilledFields.contains(field)) {
-                if (field.getFieldName().equals("Specific Date") || field.getFieldName().equals("Today's Date") ||
-                        field.getFieldName().equals("Date Interval")) {
-                    temporalFields.add(field.getFieldName());
-                } else {
+            if (field.getFieldName().equals("Specific Date") || field.getFieldName().equals("Today's Date") ||
+                    field.getFieldName().equals("Date Interval")) {
+                temporalFields.add(field.getFieldName());
+                continue;
+            }
+
+            // Dacă e informație de document (Serie, Nr, etc.), o punem deoparte ca să o verificăm pe surse
+            if (documentInformation.contains(field.getFieldName())) {
+                requiredDocFields.add(field.getFieldName());
+            } else {
+                // Dacă e informație normală (Statică/Volatilă), verificăm direct dacă user-ul o are
+                if (!userFilledFields.contains(field)) {
                     missingFields.add(field.getFieldName());
                 }
             }
         }
-        return missingFields.isEmpty();
-    }
 
-    public List<UserFieldValueDTO> getTemplateValues(int templateId, int userID) {
-        Template template = this.templateRepository.getReferenceById(templateId);
-        List<UserFieldValue> userFilledFields = this.userFieldValueRepository.findForUserAndTemplate(userID, template.getId());
-        List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
-        for (UserFieldValue userFieldValue : userFilledFields) {
-            UserFieldValueDTO fieldValueDTO = new UserFieldValueDTO(userFieldValue.getField().getFieldName(), userFieldValue.getValue(), userFieldValue.getSourceOfData());
-            fieldValueDTOs.add(fieldValueDTO);
+        // Dacă îi lipsesc informații de bază (ex: Nume, Adresă), clar nu poate genera
+        if (!missingFields.isEmpty()) {
+            return false;
         }
-        return fieldValueDTOs;
 
+        // Dacă documentul nu cere nicio informație specifică actelor de identitate, e gata de generat
+        if (requiredDocFields.isEmpty()) {
+            return true;
+        }
+
+        // MAGIA AICI: Căutăm dacă MĂCAR O SURSĂ are toate `requiredDocFields`
+        boolean foundAtLeastOneValidSource = false;
+        for (SourceOfData source : SourceOfData.values()) {
+            if (verifyInfoSource(requiredDocFields, userID, source)) {
+                foundAtLeastOneValidSource = true;
+                break; // Am găsit o sursă completă! Oprim căutarea.
+            }
+        }
+
+        // Dacă nu a găsit nicio sursă completă, adăugăm câmpurile de document la lista de lipsuri
+        if (!foundAtLeastOneValidSource) {
+            missingFields.addAll(requiredDocFields);
+            return false;
+        }
+
+        return true;
     }
 
+    public List<UserFieldValueDTO> getTemplateValues(int templateId, int userID, String sourceOfData) {
+        Template template = this.templateRepository.getReferenceById(templateId);
+        List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
+
+        // Convertim string-ul venit din Angular în Enum
+        SourceOfData selectedSource = SourceOfData.valueOf(sourceOfData);
+
+        for (Field field : template.getFields()) {
+            // 1. Sărim peste câmpurile de timp, pentru că ele sunt completate din input-urile de pe frontend
+            if (field.getFieldName().equals("Specific Date") ||
+                    field.getFieldName().equals("Today's Date") ||
+                    field.getFieldName().equals("Date Interval")) {
+                continue;
+            }
+
+            Optional<UserFieldValue> userFieldValueOpt;
+
+            // 2. Dacă este un câmp de document (ex: Document Number), forțăm sursa selectată
+            if (documentInformation.contains(field.getFieldName())) {
+                userFieldValueOpt = this.userFieldValueRepository
+                        .findByUser_IdAndField_IdAndSourceOfData(userID, field.getId(), selectedSource);
+            } else {
+                // 3. Dacă este o informație generală (Nume, Adresă), o luăm standard
+                userFieldValueOpt = this.userFieldValueRepository
+                        .findByUser_IdAndField_id(userID, field.getId());
+            }
+
+            // 4. Dacă am găsit valoarea, o adăugăm în lista pentru frontend
+            if (userFieldValueOpt.isPresent()) {
+                UserFieldValue val = userFieldValueOpt.get();
+                fieldValueDTOs.add(new UserFieldValueDTO(
+                        val.getField().getFieldName(),
+                        val.getValue(),
+                        val.getSourceOfData()
+                ));
+            }
+        }
+
+        return fieldValueDTOs;
+    }
     public List<GeneratorTemplateApproverDTO> getApprovesForTemplate(int templateID, int userID) {
         Template template = this.templateRepository.getReferenceById(templateID);
         User user = this.userRepository.getReferenceById(userID);
@@ -198,4 +283,51 @@ public class GeneratorService {
         }
         return true;
     }
+
+    private boolean verifyInfoSource(List<String> requiredDocumentInformation, int userID, SourceOfData sourceOfData) {
+        // 1. Luăm toate valorile pe care le are user-ul din sursa respectivă (ex: tot ce are din PASSPORT)
+        List<UserFieldValue> userFieldValues = this.userFieldValueRepository.findByUser_IdAndSourceOfData(userID, sourceOfData);
+
+        // 2. Extragem doar numele câmpurilor pe care le are
+        List<String> availableFields = new ArrayList<>();
+        for (UserFieldValue userFieldValue : userFieldValues) {
+            availableFields.add(userFieldValue.getField().getFieldName());
+        }
+
+        // 3. Verificăm dacă TOATE câmpurile necesare documentului se regăsesc în ce are el completat
+        for (String requiredField : requiredDocumentInformation) {
+            if (!availableFields.contains(requiredField)) {
+                return false; // Îi lipsește măcar un câmp vital din sursa asta -> Sursa e invalidă
+            }
+        }
+
+        return true; // Are absolut tot ce îi trebuie din sursa asta -> Sursa e validă!
+    }
+
+    public List<SourceOfData> getValidSourcesForTemplate(int templateID, int userID) {
+        Template template = this.templateRepository.getReferenceById(templateID);
+        List<String> requiredDocFields = new ArrayList<>();
+
+        for (Field field : template.getFields()) {
+            if (documentInformation.contains(field.getFieldName())) {
+                requiredDocFields.add(field.getFieldName());
+            }
+        }
+
+        List<SourceOfData> validSources = new ArrayList<>();
+
+        if (requiredDocFields.isEmpty()) {
+            return Arrays.asList(SourceOfData.values());
+        }
+
+
+        for (SourceOfData source : SourceOfData.values()) {
+            if (verifyInfoSource(requiredDocFields, userID, source)) {
+                validSources.add(source);
+            }
+        }
+
+        return validSources;
+    }
+
 }

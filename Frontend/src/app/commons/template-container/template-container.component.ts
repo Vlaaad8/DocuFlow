@@ -15,7 +15,7 @@ import {TemplateService} from '../../services/template.service';
 export class TemplateContainerComponent implements OnInit {
   @Input({required: true}) template!: Template;
   @Output() event = new EventEmitter<String>();
-
+  @Output() preview = new EventEmitter<number>();
   approvalChain!: ApprovalChain
 
   constructor(private service: TemplateService) {
@@ -43,6 +43,9 @@ export class TemplateContainerComponent implements OnInit {
     } else {
       return words.map(word => word.charAt(0).toUpperCase()).join('');
     }
+  }
+  handlePreview(): void {
+    this.preview.emit(this.template.id);
   }
 
 }

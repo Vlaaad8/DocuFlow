@@ -31,8 +31,8 @@ public class GenerateController {
     private final GeneratorService generatorService;
 
     @PostMapping("generate")
-    public void generateTemplate(@RequestParam("userID") int userID, @RequestParam("templateID") int templateID, @RequestBody Map<String, String> dateValues ) {
-        this.generatorService.generateFile(templateID,userID,dateValues);
+    public void generateTemplate(@RequestParam("userID") int userID, @RequestParam("templateID") int templateID, @RequestBody Map<String, String> dateValues , @RequestParam("source") String source) {
+        this.generatorService.generateFile(templateID,userID,dateValues,source);
     }
 
     @GetMapping("generate/{userID}")
@@ -40,8 +40,8 @@ public class GenerateController {
         return this.generatorService.giveTemplatesWithLock(userID);
     }
     @GetMapping("generate/{templateId}/{userId}")
-    public List<UserFieldValueDTO> getFields(@PathVariable("templateId") int templateId, @PathVariable("userId") int userID) {
-        return this.generatorService.getTemplateValues(templateId,userID);
+    public List<UserFieldValueDTO> getFields(@PathVariable("templateId") int templateId, @PathVariable("userId") int userID,@RequestParam("source") String source) {
+        return this.generatorService.getTemplateValues(templateId,userID,source);
     }
     @GetMapping("generate/approver/{templateId}/{userId}")
     public List<GeneratorTemplateApproverDTO> getApproverTemplates(@PathVariable("templateId") int templateId, @PathVariable("userId") int userID) {
@@ -67,6 +67,15 @@ public class GenerateController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/template-sources") // Am schimbat numele rutei aici
+    public ResponseEntity<List<SourceOfData>> getTemplateSources(
+            @RequestParam("templateID") int templateID,
+            @RequestParam("userID") int userID) {
+
+        List<SourceOfData> sources = this.generatorService.getValidSourcesForTemplate(templateID, userID);
+        return ResponseEntity.ok(sources);
     }
 }
 

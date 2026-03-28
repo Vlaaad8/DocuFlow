@@ -39,6 +39,7 @@ public class TemplateService {
     private final ApprovalChainMapper approvalChainMapper;
     private final TemplateMapper templateMapper;
     private final HTMLCleanerPort htmlCleanerPort;
+    private final ConvertPort convertPort;
     private final Path rootFolder = Paths.get("storage");
 
 
@@ -240,6 +241,23 @@ public class TemplateService {
         Template template = this.templateRepository.getReferenceById(templateID);
         ApprovalChain approvalChain = template.getApprovalChain();
         return approvalChainMapper.toApprovalChainDTO(approvalChain);
+    }
+
+    public String getTemplatePathByID(int id) {
+        Template template = this.templateRepository.getReferenceById(id);
+        String path = template.getStoragePath();
+
+        String PDFPath = path.replace(".docx", ".pdf");
+        if (Files.exists(Path.of(PDFPath))) {
+            return PDFPath;
+        }
+        try {
+            this.convertPort.convertWordToPDF(path);
+            return PDFPath;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

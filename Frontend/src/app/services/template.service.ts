@@ -67,4 +67,8 @@ export class TemplateService {
   public getTemplateChain(templateId: number): Observable<ApprovalChain> {
     return this.http.get<ApprovalChain>(`${URL}/chain/${templateId}`);
   }
+
+  loadDocument(id: number) : Observable<Blob> {
+    return this.http.post(URL+'/pdf',id,{responseType: 'blob', headers: {'Content-Type': 'application/json'}});
+  }
 }
