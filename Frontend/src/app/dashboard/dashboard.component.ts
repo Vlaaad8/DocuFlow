@@ -199,14 +199,22 @@ export class DashboardComponent implements OnInit {
         plugins: {
           legend: {
             display: true,
-            position: 'right'
+            position: 'right',
+            labels: {
+
+              filter: (legendItem: any) => {
+
+                const allowed = ['ID Card', 'Passport', 'Driving License', 'Residence Permit'];
+                return allowed.includes(legendItem.text);
+              }
+            }
           },
           tooltip: {
             callbacks: {
               label: (context: any) => {
                 const label = context.source || '';
                 const value = context.parsed || 0;
-                return `${label}: ${value}`;
+                return `${label} Number of entries: ${value}`;
               }
             }
           }
@@ -232,5 +240,10 @@ export class DashboardComponent implements OnInit {
       default:
         return "Unknown";
     }
+  }
+
+
+  filterLegend(legend: string[]): string[] {
+    return legend.filter(item => item == 'ID Card' || item == 'Passport' || item == 'Driving License' || item == 'Residence Permit');
   }
 }
