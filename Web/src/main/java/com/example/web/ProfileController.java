@@ -4,6 +4,7 @@ import com.example.ProfileService;
 import com.example.dto.CertificateDTO;
 import com.example.dto.SignatureInfo;
 import com.example.dto.UserSavedValueDTO;
+import com.example.template.UserFieldValue;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,5 +36,10 @@ public class ProfileController {
     @GetMapping("profile/savedData")
     public List<UserSavedValueDTO> getSavedData(@RequestParam("userID") int userID){
         return this.service.getSavedData(userID);
+    }
+
+    @PutMapping("profile/savedData")
+    public void updateSavedData(@RequestParam("fieldID") int fieldID, @RequestParam("value") String value){
+         this.service.updateField(fieldID, value);
     }
 }

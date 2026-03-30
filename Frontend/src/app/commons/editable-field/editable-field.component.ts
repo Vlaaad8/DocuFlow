@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {UserStoredValue} from '../../model/ExtractedField';
@@ -10,14 +10,23 @@ import {UserStoredValue} from '../../model/ExtractedField';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class EditableFieldComponent {
+export class EditableFieldComponent implements OnInit {
   @Input({required: true}) value!: UserStoredValue
-  @Input() editable: boolean = true;
+  editable: boolean = false;
 
-  @Output() saved = new EventEmitter<{ fieldKey: string; value: string }>();
+  @Output() saved = new EventEmitter<{ fieldID: number; value: string }>();
 
   editing: boolean = false;
   draft: string = '';
+
+
+  ngOnInit(){
+    this.editable = this.isEditable(this.value.fieldName);
+  }
+  private importanceMap: { [key: string]: number } = {
+    'Personal Number': 3,
+    'Address': 7,
+  };
 
   startEdit() {
     if (!this.editable) return;
@@ -31,11 +40,11 @@ export class EditableFieldComponent {
   }
 
   save() {
-    // this.editing = false;
-    // const newValue = this.draft ?? '';
-    // if (newValue !== this.value) {
-    //   this.saved.emit({ fieldKey: this., value: newValue });
-    // }
+    this.editing = false;
+    const newValue = this.draft ?? '';
+    if (newValue !== this.value.value) {
+      this.saved.emit({ fieldID: this.value.id, value: newValue });
+    }
   }
 
   onDblClick() {
@@ -48,9 +57,14 @@ export class EditableFieldComponent {
         return 'Passport';
       case("NATIONAL_IDENTITY_CARD"):
         return 'Identity Card';
+      case("MANUAL_ENTRY"):
+        return 'Manual Entry';
       default:
         return source;
     }
   }
 
+  isEditable(field: string): boolean {
+    return this.importanceMap[field] != undefined;
+  }
 }

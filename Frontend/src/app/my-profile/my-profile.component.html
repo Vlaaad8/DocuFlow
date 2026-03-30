@@ -120,10 +120,22 @@
             </div>
             <div class="panel-body">
 
-              <app-editable-field *ngFor="let field of storedData"
+              <app-editable-field *ngFor="let field of limitedRequests"
                 [value]="field"
-                [editable]="true">
+                                  (saved)="updateSavedField($event)"
+              >
               </app-editable-field>
+
+              <div class="page-section">
+                <button class="page-button" [disabled]="currentPage === 0" (click)="handlePageChange(currentPage - 1)">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="page-info">Page {{ currentPage + 1}} of {{ totalPages }}</span>
+                <button class="page-button" [disabled]="currentPage + 1 === totalPages"
+                        (click)="handlePageChange(currentPage + 1)">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
 
             </div>
           </section>

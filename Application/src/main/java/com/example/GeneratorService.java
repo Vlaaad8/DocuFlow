@@ -227,6 +227,7 @@ public class GeneratorService {
             if (userFieldValueOpt.isPresent()) {
                 UserFieldValue val = userFieldValueOpt.get();
                 fieldValueDTOs.add(new UserFieldValueDTO(
+                        val.getId(),
                         val.getField().getFieldName(),
                         val.getValue(),
                         val.getSourceOfData()

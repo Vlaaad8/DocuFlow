@@ -164,21 +164,29 @@ export class DashboardComponent implements OnInit {
     const dataValues = sourceData.map(req => req.value);
 
 
-    const backgroundColors = [
-      'rgba(54, 162, 235, 0.6)',
-      'rgba(255, 159, 64, 0.6)',
-      'rgba(153, 102, 255, 0.6)',
-      'rgba(201, 203, 207, 0.6)',
-      'rgba(255, 205, 86, 0.6)'
-    ];
+    const backgroundColors = labels.map(label => {
+      switch (label) {
+        case 'ID Card': return 'rgba(54, 162, 235, 0.6)';
+        case 'Passport': return 'rgba(255, 159, 64, 0.6)';
+        case 'Driving License': return 'rgba(153, 102, 255, 0.6)';
+        case 'Residence Permit': return 'rgba(201, 203, 207, 0.6)';
+        case 'US Social Security Card': return 'rgba(255, 205, 86, 0.6)';
+        case 'Manual Entry': return 'rgba(75, 192, 192, 0.6)';
+        default: return 'rgba(160, 160, 160, 0.6)';
+      }
+    });
 
-    const borderColors = [
-      'rgba(54, 162, 235, 1)',
-      'rgba(255, 159, 64, 1)',
-      'rgba(153, 102, 255, 1)',
-      'rgba(201, 203, 207, 1)',
-      'rgba(255, 205, 86, 1)'
-    ];
+    const borderColors = labels.map(label => {
+      switch (label) {
+        case 'ID Card': return 'rgba(54, 162, 235, 1)';
+        case 'Passport': return 'rgba(255, 159, 64, 1)';
+        case 'Driving License': return 'rgba(153, 102, 255, 1)';
+        case 'Residence Permit': return 'rgba(201, 203, 207, 1)';
+        case 'US Social Security Card': return 'rgba(255, 205, 86, 1)';
+        case 'Manual Entry': return 'rgba(75, 192, 192, 1)';
+        default: return 'rgba(160, 160, 160, 1)';
+      }
+    });
 
     return {
       type: 'doughnut',
@@ -204,7 +212,7 @@ export class DashboardComponent implements OnInit {
 
               filter: (legendItem: any) => {
 
-                const allowed = ['ID Card', 'Passport', 'Driving License', 'Residence Permit'];
+                const allowed = ['ID Card', 'Passport', 'Driving License', 'Residence Permit','Manual Entry'];
                 return allowed.includes(legendItem.text);
               }
             }
@@ -243,7 +251,4 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  filterLegend(legend: string[]): string[] {
-    return legend.filter(item => item == 'ID Card' || item == 'Passport' || item == 'Driving License' || item == 'Residence Permit');
-  }
 }

@@ -10,5 +10,4 @@ export interface UserStoredValue{
   value: string;
   source: string;
   fieldName: string;
-  userID: number;
 }

@@ -129,3 +129,10 @@
 .cancel-btn:hover {
   color: #374151;
 }
+.make-movement{
+  transform: translateX(40px);
+}
+.editable-row:hover .make-movement{
+  transform: translateX(-15px);
+  transition: transform 0.12s;
+}

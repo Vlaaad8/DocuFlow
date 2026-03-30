@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SignatureInfo, UserCertificate } from '../model/user-certificate';
 import { Observable } from 'rxjs';
@@ -24,15 +24,17 @@ public getUserCertificate(userID: number) : Observable<UserCertificate> {
     return this.http.post<SignatureInfo[]>(`${URL}/verify`, formData);
   }
 
-  //
-  // public updateUserField(userId: number, field: string, value: string): Observable<void> {
-  //   const payload: any = {};
-  //   payload[field] = value;
-  //   return this.http.patch<void>(`${URL}/user/${userId}`, payload);
-  // }
-
 
   public getStoredData(userId: number) : Observable<UserStoredValue[]> {
     return this.http.get<UserStoredValue[]>(`${URL}/savedData?userID=${userId}`);
+  }
+
+  public updateUserField(fieldID: number, value: string): Observable<void> {
+
+    const params = new HttpParams()
+      .set('fieldID', fieldID)
+      .set('value', value);
+
+    return this.http.put<void>(`${URL}/savedData`, null, { params: params });
   }
 }

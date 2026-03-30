@@ -834,3 +834,33 @@
     justify-self: start;
   }
 }
+.page-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.page-button{
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 4px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+}
+.page-button:hover{
+  color: #1e40af;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.page-info {
+  color: #4b5563;
+  font-weight: 500;
+  font-size: 14px;
+}
+.page-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+}

@@ -8,6 +8,8 @@ import com.example.jpa.UserFieldValueRepository;
 import com.example.ocr.DocumentPort;
 import com.example.security.CertificatePort;
 import com.example.security.SignaturePort;
+import com.example.template.SourceOfData;
+import com.example.template.UserFieldValue;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +50,12 @@ public class ProfileService {
 
                 ).toList();
 
+    }
+
+    public void updateField(int fieldID, String value) {
+        UserFieldValue userFieldValue = this.userFieldValueRepository.findById(fieldID).orElseThrow(() -> new RuntimeException("Field not found"));
+        userFieldValue.setValue(value);
+        userFieldValue.setSourceOfData(SourceOfData.MANUAL_ENTRY);
+        this.userFieldValueRepository.save(userFieldValue);
     }
 }

@@ -13,12 +13,15 @@ import {LoadingComponent} from '../commons/loading/loading.component';
 import {PdfViewer} from '../commons/pdf-viewer/pdf-viewer';
 import { EditableFieldComponent } from '../commons/editable-field/editable-field.component';
 import {UserStoredValue} from '../model/ExtractedField';
+import {ApprovalRequest} from '../model/Approval';
+import {filter} from 'rxjs';
+import {SnackBarService} from '../services/snackBar.service';
 
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent, PdfViewer, EditableFieldComponent]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, MatTabsModule, MatIconModule, MatProgressBarModule, CommonModule, LoadingComponent, EditableFieldComponent]
 })
 export class MyProfileComponent implements OnInit {
 
@@ -35,7 +38,32 @@ export class MyProfileComponent implements OnInit {
 
   signatures: SignatureInfo[] = [];
 
-  constructor(private service: ProfileService) { }
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = 7;
+
+
+  private importanceMap: { [key: string]: number } = {
+    'First Name': 1,
+    'Last Name': 2,
+    'Personal Number': 3,
+    'Date of Birth': 4,
+    'Place of Birth': 5,
+    'Sex': 6,
+    'Address': 7,
+    'Nationality': 8,
+    'Document Number': 9,
+    'Document Discriminator': 10,
+    'Document Type': 11,
+    'Document Issue Date': 12,
+    'Document Expiration Date': 13,
+    'Place Of Issue': 14,
+    'Issuing Authority': 15,
+    'Issued By': 16
+  };
+
+  constructor(private service: ProfileService,private snackBar: SnackBarService) {
+  }
 
   ngOnInit() {
     this.service.getUserCertificate(this.userID).subscribe({
@@ -51,6 +79,8 @@ export class MyProfileComponent implements OnInit {
     this.service.getStoredData(this.userID).subscribe({
       next: (data) => {
         this.storedData = data ?? [];
+        this.sortFieldsByImportance();
+        this.totalPages = Math.ceil(this.storedData.length / this.itemsPerPage);
         console.log('Stored user data fetched successfully:', data);
       },
       error: (error) => {
@@ -174,20 +204,38 @@ export class MyProfileComponent implements OnInit {
     return isValid ? 'status status--valid' : 'status status--invalid';
   }
 
-  // Handle save events from editable fields
-  // onFieldSaved(event: { fieldKey: string; value: string }) {
-  //   // Update locally first for instant feedback
-  //   (this.user as any)[event.fieldKey] = event.value;
-  //
-  //   // Try to persist to server
-  //   this.service.updateUserField(this.userID, event.fieldKey, event.value).subscribe({
-  //     next: () => {
-  //       console.log('User field updated', event.fieldKey);
-  //     },
-  //     error: (err) => {
-  //       console.error('Failed to update user field', err);
-  //       // Optionally revert local value or show a toast; for now just log
-  //     }
-  //   });
-  // }
+  handlePageChange(newPage: number): void {
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.currentPage = newPage;
+    }
+  }
+
+  get limitedRequests(): UserStoredValue[] {
+    const startIndex = this.currentPage * this.itemsPerPage;
+    return this.storedData.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+
+  private sortFieldsByImportance(): void {
+    this.storedData.sort((a, b) => {
+      const rankA = this.importanceMap[a.fieldName] || 99;
+      const rankB = this.importanceMap[b.fieldName] || 99;
+
+      return rankA - rankB;
+    });
+  }
+
+
+  updateSavedField(event: { fieldID: number, value: string }) {
+
+    this.service.updateUserField(event.fieldID, event.value).subscribe({
+      next: () => {
+        this.snackBar.showMessage("Field update successfully",'success')
+        this.storedData.map((field) => {field.id == event.fieldID ? field.value = event.value : field})
+      },
+      error: (err) => {
+        console.error('Error updating field:', err);
+      }
+    });
+  }
 }

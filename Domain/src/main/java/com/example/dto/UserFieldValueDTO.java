@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserFieldValueDTO {
+    int id;
     String name;
     String value;
     SourceOfData sourceOfData;

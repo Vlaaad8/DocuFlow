@@ -4,7 +4,7 @@
   <div *ngIf="!editing" class="value-row">
     <div class="value">  {{ value.value || '-' }}</div>
     <div class="container">
-      <div class="field-tag">{{ formatSourceOfData(value.source) }}</div>
+      <div class="field-tag" [ngClass]="editable ? 'make-movement' : '' ">{{ formatSourceOfData(value.source) }}</div>
       <button *ngIf="editable" class="edit-btn" (click)="startEdit()" title="Edit">✎</button>
     </div>
   </div>
