@@ -28,6 +28,7 @@ export class EditableFieldComponent implements OnInit {
     'Address': 7,
   };
 
+
   startEdit() {
     if (!this.editable) return;
     this.draft = this.value.value ?? '';
@@ -45,6 +46,7 @@ export class EditableFieldComponent implements OnInit {
     if (newValue !== this.value.value) {
       this.saved.emit({ fieldID: this.value.id, value: newValue });
     }
+    this.value.source="MANUAL_ENTRY"
   }
 
   onDblClick() {
@@ -59,6 +61,10 @@ export class EditableFieldComponent implements OnInit {
         return 'Identity Card';
       case("MANUAL_ENTRY"):
         return 'Manual Entry';
+      case("DRIVER_LICENSE"):
+        return 'Driver Licence';
+      case("RESIDENCE_PERMIT"):
+        return 'Residence Permit';
       default:
         return source;
     }

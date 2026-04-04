@@ -25,7 +25,7 @@ public class MappingService {
     private final UserRepository userRepository;
     private final UserFieldValueRepository userFieldValueRepository;
 
-    private final List<String> staticInformation = List.of("First Name", "Date of Birth", "Place of Birth", "Personal Number","Sex");
+    private final List<String> staticInformation = List.of("First Name", "Date of Birth", "Place of Birth", "Personal Number","Sex", "Vehicle Classifications");
     private final List<String> volatileInformation = List.of("Address", "Nationality", "Last Name");
     private final List<String> documentInformation = List.of("Document Number", "Document Expiration Date", "Issuing Authority", "Document Type", "Document Issue Date", "Document Discriminator","Issued by");
 
@@ -81,7 +81,7 @@ public class MappingService {
         // Step 4: Update fields based on business rules
         updateStaticInformation(staticValues, newStaticValues);
 
-        // Extragem datele de emitere pentru a compara ce document e mai nou
+
         String oldIssueDate = extractFieldValue(documentValues);
         String newIssueDate = extractFieldValue(newDocumentValues);
         updateVolatileInformation(volatileValues, newVolatileValues, oldIssueDate, newIssueDate);
@@ -93,7 +93,7 @@ public class MappingService {
         return switch (source) {
             case "idDocument.nationalIdentityCard" -> SourceOfData.NATIONAL_IDENTITY_CARD;
             case "idDocument.passport" -> SourceOfData.PASSPORT;
-            case "idDocument.driversLicense" -> SourceOfData.DRIVER_LICENSE;
+            case "idDocument.driverLicense" -> SourceOfData.DRIVER_LICENSE;
             case "idDocument.residencePermit" -> SourceOfData.RESIDENCE_PERMIT;
             case "idDocument.usSocialSecurityCard" -> SourceOfData.SOCIAL_SECURITY_CARD;
             case "manualEntry" -> SourceOfData.MANUAL_ENTRY;

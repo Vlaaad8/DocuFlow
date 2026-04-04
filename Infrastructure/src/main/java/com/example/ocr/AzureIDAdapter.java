@@ -10,6 +10,10 @@ import com.example.template.SourceOfData;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,47 +107,43 @@ public class AzureIDAdapter implements IdPort {
         AzureElement expElement = extractedData.get("DateOfExpiration");
         AzureElement issueElement = extractedData.get("DateOfIssue");
 
-
-        if (expElement != null && issueElement != null) {
-            String expirationDate = expElement.value();
-            String issueDate = issueElement.value();
+        String expirationDateRaw = expElement != null ? expElement.value() : null;
+        String issueDateRaw = issueElement != null ? issueElement.value() : null;
 
 
-            if (expirationDate != null && expirationDate.equals(issueDate)) {
+        if (expirationDateRaw != null && expirationDateRaw.equals(issueDateRaw) && expirationDateRaw.contains("-")) {
+            String[] dateParts = expirationDateRaw.split("-");
+            if (dateParts.length == 2) {
+                String standardizedIssue = standardizeDate(dateParts[0].trim());
+                String standardizedExp = standardizeDate(dateParts[1].trim());
 
-                if (expirationDate.contains("-")) {
-
-                    String[] dateParts = expirationDate.split("-");
-
-
-                    extractedData.put("DateOfExpiration", new AzureElement(
-                            dateParts[1],
-                            expElement.confidence(),
-                            expElement.documentType()
-                    ));
-
-                    extractedData.put("DateOfIssue", new AzureElement(
-                            dateParts[0],
-                            expElement.confidence(),
-                            expElement.documentType()
-                    ));
-
-                }
+                extractedData.put("DateOfIssue", new AzureElement(standardizedIssue, issueElement.confidence(), issueElement.documentType()));
+                extractedData.put("DateOfExpiration", new AzureElement(standardizedExp, expElement.confidence(), expElement.documentType()));
+                return;
             }
-            if (expirationDate != null && issueDate != null) {
-                if (expirationDate.compareTo(issueDate) < 0) {
-                    extractedData.put("DateOfExpiration", new AzureElement(
-                            issueDate,
-                            expElement.confidence(),
-                            expElement.documentType()
-                    ));
+        }
 
-                    extractedData.put("DateOfIssue", new AzureElement(
-                            expirationDate,
-                            expElement.confidence(),
-                            expElement.documentType()
-                    ));
-                }
+
+        String stdIssue = issueDateRaw != null ? standardizeDate(issueDateRaw) : null;
+        String stdExp = expirationDateRaw != null ? standardizeDate(expirationDateRaw) : null;
+
+        if (stdIssue != null && stdExp != null) {
+
+            if (stdExp.compareTo(stdIssue) < 0) {
+                extractedData.put("DateOfExpiration", new AzureElement(stdIssue, expElement.confidence(), expElement.documentType()));
+                extractedData.put("DateOfIssue", new AzureElement(stdExp, issueElement.confidence(), issueElement.documentType()));
+            } else {
+
+                extractedData.put("DateOfExpiration", new AzureElement(stdExp, expElement.confidence(), expElement.documentType()));
+                extractedData.put("DateOfIssue", new AzureElement(stdIssue, issueElement.confidence(), issueElement.documentType()));
+            }
+        } else {
+
+            if (stdIssue != null) {
+                extractedData.put("DateOfIssue", new AzureElement(stdIssue, issueElement.confidence(), issueElement.documentType()));
+            }
+            if (stdExp != null) {
+                extractedData.put("DateOfExpiration", new AzureElement(stdExp, expElement.confidence(), expElement.documentType()));
             }
         }
     }
@@ -214,4 +214,75 @@ public class AzureIDAdapter implements IdPort {
     private record AzureElement(String value, float confidence, String documentType) {
 
     }
+    private String standardizeDate(String rawDate) {
+        if (rawDate == null || rawDate.isBlank()) return rawDate;
+
+
+        String cleaned = rawDate.trim().replaceAll("\\s+", " ");
+
+
+        String[] parts = cleaned.split("[\\s./\\-]+");
+
+        if (parts.length != 3) {
+            return cleaned;
+        }
+
+        try {
+            int a = Integer.parseInt(parts[0]);
+            int b = Integer.parseInt(parts[1]);
+            int c = Integer.parseInt(parts[2]);
+
+            int day, month, year;
+
+
+            if (c > 31) {
+
+                year = c;
+                if (a > 12) {
+
+                    day = a;
+                    month = b;
+                } else if (b > 12) {
+
+                    day = b;
+                    month = a;
+                } else {
+
+                    day = a;
+                    month = b;
+                }
+            } else if (a > 31) {
+
+                year = a;
+                month = b;
+                day = c;
+            } else {
+
+                if (a > 12 || (a <= 12 && b > 12)) {
+                    day = a;
+                    month = b;
+                    year = c;
+                } else {
+
+                    day = a;
+                    month = b;
+                    year = c;
+                }
+            }
+
+
+            if (year >= 0 && year <= 99) {
+                year += 2000;
+            }
+
+
+            LocalDate date = LocalDate.of(year, month, day);
+            return date.toString();
+
+        } catch (NumberFormatException | DateTimeException e) {
+
+            return cleaned;
+        }
+    }
+
 }

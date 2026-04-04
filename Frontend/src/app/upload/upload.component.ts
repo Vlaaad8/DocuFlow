@@ -137,7 +137,9 @@ export class UploadComponent implements OnInit {
   }
 
   public onSaveData(): void {
-    const extractedData: ExtractedField[] = this.mapExtractedData(this.extractedFields);
+    const currentFormValues = this.inputFormFields.getRawValue() as ExtractedField[];
+    const extractedData: ExtractedField[] = this.mapExtractedData(currentFormValues);
+
     console.log('Saved extracted data:', extractedData);
     this.service.saveExtractedData(extractedData,this.loggedUser.id);
     this.snackBar.showMessage("Extracted data saved successfully!", "success");
