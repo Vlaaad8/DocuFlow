@@ -177,16 +177,6 @@ public class TemplateService {
         return true;
     }
 
-//    private Set<Field> extractFields(String text) {
-//        Set<Field> fields = new HashSet<>();
-//        for (Field field : fieldRepository.findAll()) {
-//            if (text.contains(field.getRepresentation())) {
-//                fields.add(field);
-//            }
-//        }
-//        return fields;
-//    }
-
     public List<TemplateDTO> getTemplates() {
         return templateRepository.findAll().stream().map(templateMapper::toTemplateDTO).toList();
     }

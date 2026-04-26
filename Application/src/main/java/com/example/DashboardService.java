@@ -38,9 +38,16 @@ public class DashboardService {
 
 
     private void receiveNotification(int userId) {
-        this.notificationRepository.findAll().forEach(
+        this.notificationRepository.findAllByRecipient_IdAndRead(userId,false).forEach(
                 notification -> notificationPort.sendToUser(userId, notification)
         );
+    }
+
+    public void markAsRead(List<Notification> notifications) {
+        for (Notification notification : notifications) {
+            notification.setRead(true);
+            notificationRepository.save(notification);
+        }
     }
 
     private List<ChartData> getApprovalRequestsForUser(int userId) {

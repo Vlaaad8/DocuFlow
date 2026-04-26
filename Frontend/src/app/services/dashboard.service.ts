@@ -16,4 +16,9 @@ export class DashboardService {
   public getDashboardData(userID: number): Observable<DashboardData> {
     return this.http.get<DashboardData>(`${URL}?userID=${userID}`);
   }
+
+  public markNotificationsAsRead(notifications: any[]): Observable<void> {
+    const url = `${URL}/notification`;
+    return this.http.post<void>(url, notifications);
+  }
 }

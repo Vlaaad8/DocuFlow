@@ -2,12 +2,12 @@ package com.example.web;
 
 
 import com.example.DashboardService;
+import com.example.Notification;
 import com.example.dto.DashboardDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -19,5 +19,9 @@ public class DashboardController {
     @GetMapping("dashboard")
     public DashboardDTO getDashboardData(@RequestParam("userID") int userID) {
         return this.dashboardService.getDashboardData(userID);
+    }
+    @PostMapping("dashboard/notification")
+    public void markNotificationAsRead(@RequestBody List<Notification> notifications) {
+        this.dashboardService.markAsRead(notifications);
     }
 }

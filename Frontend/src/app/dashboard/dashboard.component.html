@@ -14,10 +14,10 @@
         </div>
         <div class="buttonSection">
           <div *ngIf="notifications.length != 0" matBadge="{{notifications.length}}" class="notificationButton"
-               [matMenuTriggerFor]="notificationMenu">
+               [matMenuTriggerFor]="notificationMenu" (menuClosed)="markNotificationAsRead()">
             <mat-icon>notifications_active</mat-icon>
           </div>
-          <div *ngIf="notifications.length == 0" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
+          <div *ngIf="notifications.length == 0" class="notificationButton">
             <mat-icon>notifications</mat-icon>
           </div>
           <app-exit-button></app-exit-button>

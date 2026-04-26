@@ -296,5 +296,22 @@ export class DashboardComponent implements OnInit {
     return 'task_alt'
   }
 
+  markNotificationAsRead(): void {
+    if (!this.notifications || this.notifications.length === 0) {
+      return;
+    }
+    const payload = this.notifications.map(notif => notif.message);
 
+
+    this.service.markNotificationsAsRead(payload).subscribe({
+      next: () => {
+        console.log('Notificările au fost marcate ca citite!');
+
+        this.notificationsService.clearNotifications();
+      },
+      error: (err) => {
+        console.error('Eroare la marcarea ca citite:', err);
+      }
+    });
+  }
 }
