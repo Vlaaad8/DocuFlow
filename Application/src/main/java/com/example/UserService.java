@@ -17,7 +17,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserService {
-    //TODO rolul support are o problema in baza de date
 
     private final UserRepository userRepository;
     private final CertificatePort certificatePort;

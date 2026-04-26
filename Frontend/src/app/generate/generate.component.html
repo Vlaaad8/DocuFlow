@@ -8,7 +8,7 @@
   <mat-sidenav-content>
     <div class="description-section">
       <div class="first-row">
-        <h2>Generate Document</h2>
+        <h2>Issue Document</h2>
         <app-exit-button></app-exit-button>
       </div>
       <p>Autofill and sign your document with ease using our generation tools.</p>
@@ -49,8 +49,9 @@
                 <h3>Document preview</h3>
                 <div class="select-wrapper">
                   <label for="data-source">Source of data:</label>
-                  <select id="data-source" [(ngModel)]="selectedCategory" name="dataSource" (ngModelChange)="handleChange()">
-                    <option *ngFor="let value of sources" [value]="value">{{formatSourceOfData(value)}}</option>
+                  <select id="data-source" [(ngModel)]="selectedCategory" name="dataSource"
+                          (ngModelChange)="handleChange()">
+                    <option *ngFor="let value of sources" [value]="value">{{ formatSourceOfData(value) }}</option>
                   </select>
                 </div>
               </div>
@@ -68,30 +69,33 @@
               </div>
             </div>
             <div>
+
               <h3>Date specifier</h3>
-              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Date Interval')">
-                <div class="input-time">
-                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
-                    <label>From</label>
-                    <input type="date" lang="ro" [(ngModel)]="fromDate" name="fromDate">
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
-                    <label>To</label>
-                    <input type="date" lang="ro" [(ngModel)]="toDate" name="toDate">
-                  </div>
-                </div>
-              </div>
-              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Specific Date')">
-                <div class="input-time">
-                  <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
-                    <label>When</label>
-                    <input type="date" lang="ro" [(ngModel)]="whenDate" name="whenDate">
+              <div class="date-container">
+                <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Date Interval')">
+                  <div class="input-time">
+                    <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                      <label>From</label>
+                      <input type="date" lang="ro" [(ngModel)]="fromDate" name="fromDate">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                      <label>To</label>
+                      <input type="date" lang="ro" [(ngModel)]="toDate" name="toDate">
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Today\'s Date')">
-                <div class="input-time">
-                  The following document will be filled with the current date: {{ currentDate | date:'longDate' }}
+                <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Specific Date')">
+                  <div class="input-time">
+                    <div style="display: flex; flex-direction: column; gap: 4px; width: 100%">
+                      <label>When</label>
+                      <input type="date" lang="ro" [(ngModel)]="whenDate" name="whenDate">
+                    </div>
+                  </div>
+                </div>
+                <div class="detail-card" *ngIf="containsElement(selectedTemplate,'Today\'s Date')">
+                  <div class="input-time">
+                    The following document will be filled with the current date: {{ currentDate | date:'longDate' }}
+                  </div>
                 </div>
               </div>
               <h3>Approval preview</h3>

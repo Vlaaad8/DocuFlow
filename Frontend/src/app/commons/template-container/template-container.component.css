@@ -5,10 +5,10 @@
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
   transition: all 0.25s ease;
   max-width: 1200px;
   min-width: 300px;
+
 }
 
 .card:hover {

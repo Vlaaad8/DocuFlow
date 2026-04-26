@@ -213,9 +213,7 @@
   width: 80%;
   display: flex;
   gap: 20px;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: initial;
+  flex-direction: column;
 }
 
 .close-button:hover {
@@ -496,4 +494,9 @@ mat-icon.missing {
 
 .preview-section select:focus {
   border-color: #3b82f6;
+}
+.date-container{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

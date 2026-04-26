@@ -5,6 +5,7 @@ import com.example.dto.Generate.GeneratorTemplateApproverDTO;
 import com.example.dto.Generate.GeneratorTemplateDTO;
 import com.example.dto.UserFieldValueDTO;
 import com.example.dtoMapper.TemplateMapper;
+import com.example.facade.GenerationFacade;
 import com.example.jpa.*;
 import com.example.login.Relation;
 import com.example.login.User;
@@ -30,117 +31,85 @@ public class GeneratorService {
     private final TemplateRepository templateRepository;
     private final UserFieldValueRepository userFieldValueRepository;
     private final UserRepository userRepository;
-    private final FilledTemplateRepository filledTemplateRepository;
     private final RelationRepository relationRepository;
-    private final ApprovalRequestRepository approvalRequestRepository;
-    private final ApprovalRepository approvalRepository;
-
     private final Path rootFolder = Paths.get("storage/generated");
-    private final MappingPort mappingPort;
-    private final SignaturePort signaturePort;
     private final TemplateMapper templateMapper;
-
-    private final List<String> staticInformation = List.of("First Name", "Date of Birth", "Place of Birth", "Personal Number", "Sex");
-    private final List<String> volatileInformation = List.of("Address", "Nationality", "Last Name");
     private final List<String> documentInformation = List.of("Document Number", "Document Expiration Date", "Issuing Authority", "Document Type", "Document Issue Date", "Document Discriminator", "Issued by");
 
+    private final GenerationFacade documentGenerationFacade;
 
     @Transactional
-    public void generateFile(int templateID, int userID, Map<String, String> dateValues, String sourceOfData) {
-
-        Template template = this.templateRepository.getReferenceById(templateID);
-        Map<String, String> values = new HashMap<>();
-
-        for (Field field : template.getFields()) {
-            if (field.getFieldName().equals("Specific Date") || field.getFieldName().equals("Today's Date") ||
-                    field.getFieldName().equals("Date Interval")) {
-                if (dateValues.containsKey(field.getFieldName())) {
-                    values.put(field.getRepresentation(), dateValues.get(field.getFieldName()));
-                } else {
-                    throw new RuntimeException("Missing value for date field: " + field.getFieldName());
-                }
-                continue;
-            }
-
-            UserFieldValue userFieldValue = null;
-
-            if (documentInformation.contains(field.getFieldName())) {
-
-                SourceOfData targetSource = SourceOfData.valueOf(sourceOfData);
-
-                userFieldValue = this.userFieldValueRepository
-                        .findByUser_IdAndField_IdAndSourceOfData(userID, field.getId(), targetSource)
-                        .orElseThrow(() -> new RuntimeException("Informația '" + field.getFieldName() + "' nu există în sursa selectată (" + sourceOfData + ")"));
-
-            } else {
-
-                userFieldValue = this.userFieldValueRepository
-                        .findByUser_IdAndField_id(userID, field.getId())
-                        .orElseThrow(() -> new RuntimeException("Value for field " + field.getFieldName() + " not found for user " + userID));
-            }
-
-
-            if (userFieldValue != null) {
-                values.put(field.getRepresentation(), userFieldValue.getValue());
-            }
-        }
+    public void generateFile(int templateID, int userID,
+                             Map<String, String> dateValues, String sourceOfData) {
+        Template template = templateRepository.getReferenceById(templateID);
+        User user = userRepository.getReferenceById(userID);
+        Map<String, String> values = collectValues(template, userID, dateValues, sourceOfData);
 
         try {
             Files.createDirectories(rootFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String generateName = UUID.randomUUID() + ".pdf";
-        Path destination = rootFolder.resolve(generateName);
+            Path destination = rootFolder.resolve(UUID.randomUUID() + ".pdf");
 
-        try {
-            //TODO fix error from here
-            this.mappingPort.fillTemplate(Path.of(template.getStoragePath()), destination, values);
-            User user = this.userRepository.getReferenceById(userID);
-            FilledTemplate filledTemplate = new FilledTemplate(destination.toString(), user, template);
-            filledTemplateRepository.save(filledTemplate);
+            documentGenerationFacade.generateAndSubmit(template, user, destination, values);
 
-            this.signaturePort.prepareForSigning(destination.toString(), template.getApprovalChain().getSteps().size());
-            this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_" + userID + ".p12", "parola", destination.toString(), 0);
-
-            ApprovalRequest approvalRequest = new ApprovalRequest();
-            approvalRequest.setTemplate(filledTemplate);
-            approvalRequest.setApprovalChain(template.getApprovalChain());
-            approvalRequest.setStatus(ApprovalRequestStatus.PENDING);
-            approvalRequest.setCurrentStep(1);
-
-            ApprovalRequest savedApprovalRequest = this.approvalRequestRepository.saveAndFlush(approvalRequest);
-
-            Approval approval = new Approval();
-            approval.setStatus(ApprovalStatus.IN_PROGRESS);
-            approval.setApprovalRequest(approvalRequest);
-            User approver = this.relationRepository.findBossBySubordinate_IdAndBoss_Role(userID, filledTemplate.getTemplate().getApprovalChain().getSteps().get(1).getApproverRole());
-            approval.setApprover(approver);
-            approval.setStepNumber(1);
-            approval.setDecisionDate(Timestamp.from(Instant.now()));
-            this.approvalRepository.save(approval);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Document generation failed", e);
         }
+    }
+
+    private boolean isTemporalField(String name) {
+        return name.equals("Specific Date") ||
+                name.equals("Today's Date") ||
+                name.equals("Date Interval");
+
+    }
+
+    private Map<String, String> collectValues(Template template, int userID,
+                                              Map<String, String> dateValues,
+                                              String sourceOfData) {
+        Map<String, String> values = new HashMap<>();
+        SourceOfData targetSource = SourceOfData.valueOf(sourceOfData);
+
+        for (Field field : template.getFields()) {
+            if (isTemporalField(field.getFieldName())) {
+                String dateVal = dateValues.get(field.getFieldName());
+                if (dateVal == null) throw new RuntimeException(
+                        "Missing value for date field: " + field.getFieldName());
+                values.put(field.getRepresentation(), dateVal);
+                continue;
+            }
+
+            UserFieldValue userFieldValue;
+            if (documentInformation.contains(field.getFieldName())) {
+                userFieldValue = userFieldValueRepository
+                        .findByUser_IdAndField_IdAndSourceOfData(userID, field.getId(), targetSource)
+                        .orElseThrow(() -> new RuntimeException(
+                                "Informația '" + field.getFieldName() +
+                                        "' nu există în sursa selectată (" + sourceOfData + ")"));
+            } else {
+                userFieldValue = userFieldValueRepository
+                        .findByUser_IdAndField_id(userID, field.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "Value for field " + field.getFieldName() +
+                                        " not found for user " + userID));
+            }
+            values.put(field.getRepresentation(), userFieldValue.getValue());
+        }
+        return values;
     }
 
     public List<GeneratorTemplateDTO> giveTemplatesWithLock(int userId) {
 
         List<Template> templates = this.templateRepository.findAll();
         List<Field> userFilledFields = this.userFieldValueRepository.findByUser_Id(userId);
-        List<String> temporalFields = new ArrayList<>();
 
         List<GeneratorTemplateDTO> templateDTOs = new ArrayList<>();
         for (Template template : templates) {
+            List<String> temporalFields = new ArrayList<>();
             List<String> missingFields = new ArrayList<>();
             if (!verifyEligibility(userId, template)) {
                 continue;
             }
-            boolean canFill = canFill(template, userId,userFilledFields, missingFields, temporalFields);
+            boolean canFill = canFill(template, userId, userFilledFields, missingFields, temporalFields);
             GeneratorTemplateDTO generatorTemplateDTO = new GeneratorTemplateDTO(templateMapper.toTemplateDTO(template), canFill, missingFields, temporalFields);
             templateDTOs.add(generatorTemplateDTO);
         }
@@ -157,37 +126,37 @@ public class GeneratorService {
                 continue;
             }
 
-            // Dacă e informație de document (Serie, Nr, etc.), o punem deoparte ca să o verificăm pe surse
+
             if (documentInformation.contains(field.getFieldName())) {
                 requiredDocFields.add(field.getFieldName());
             } else {
-                // Dacă e informație normală (Statică/Volatilă), verificăm direct dacă user-ul o are
+
                 if (!userFilledFields.contains(field)) {
                     missingFields.add(field.getFieldName());
                 }
             }
         }
 
-        // Dacă îi lipsesc informații de bază (ex: Nume, Adresă), clar nu poate genera
+
         if (!missingFields.isEmpty()) {
             return false;
         }
 
-        // Dacă documentul nu cere nicio informație specifică actelor de identitate, e gata de generat
+
         if (requiredDocFields.isEmpty()) {
             return true;
         }
 
-        // MAGIA AICI: Căutăm dacă MĂCAR O SURSĂ are toate `requiredDocFields`
+
         boolean foundAtLeastOneValidSource = false;
         for (SourceOfData source : SourceOfData.values()) {
             if (verifyInfoSource(requiredDocFields, userID, source)) {
                 foundAtLeastOneValidSource = true;
-                break; // Am găsit o sursă completă! Oprim căutarea.
+                break;
             }
         }
 
-        // Dacă nu a găsit nicio sursă completă, adăugăm câmpurile de document la lista de lipsuri
+
         if (!foundAtLeastOneValidSource) {
             missingFields.addAll(requiredDocFields);
             return false;
@@ -200,11 +169,10 @@ public class GeneratorService {
         Template template = this.templateRepository.getReferenceById(templateId);
         List<UserFieldValueDTO> fieldValueDTOs = new ArrayList<>();
 
-        // Convertim string-ul venit din Angular în Enum
+
         SourceOfData selectedSource = SourceOfData.valueOf(sourceOfData);
 
         for (Field field : template.getFields()) {
-            // 1. Sărim peste câmpurile de timp, pentru că ele sunt completate din input-urile de pe frontend
             if (field.getFieldName().equals("Specific Date") ||
                     field.getFieldName().equals("Today's Date") ||
                     field.getFieldName().equals("Date Interval")) {
@@ -213,17 +181,16 @@ public class GeneratorService {
 
             Optional<UserFieldValue> userFieldValueOpt;
 
-            // 2. Dacă este un câmp de document (ex: Document Number), forțăm sursa selectată
+
             if (documentInformation.contains(field.getFieldName())) {
                 userFieldValueOpt = this.userFieldValueRepository
                         .findByUser_IdAndField_IdAndSourceOfData(userID, field.getId(), selectedSource);
             } else {
-                // 3. Dacă este o informație generală (Nume, Adresă), o luăm standard
                 userFieldValueOpt = this.userFieldValueRepository
                         .findByUser_IdAndField_id(userID, field.getId());
             }
 
-            // 4. Dacă am găsit valoarea, o adăugăm în lista pentru frontend
+
             if (userFieldValueOpt.isPresent()) {
                 UserFieldValue val = userFieldValueOpt.get();
                 fieldValueDTOs.add(new UserFieldValueDTO(
@@ -237,6 +204,7 @@ public class GeneratorService {
 
         return fieldValueDTOs;
     }
+
     public List<GeneratorTemplateApproverDTO> getApprovesForTemplate(int templateID, int userID) {
         Template template = this.templateRepository.getReferenceById(templateID);
         User user = this.userRepository.getReferenceById(userID);

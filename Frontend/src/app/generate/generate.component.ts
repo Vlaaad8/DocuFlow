@@ -139,6 +139,7 @@ export class GenerateComponent implements OnInit {
       },
       error: (error) => console.error("Error loading template sources:", error)
     });
+    console.log(this.selectedTemplate);
     this.dialog.open(this.generateDialog, {
       width: '900px',
       maxWidth: '95vw'

@@ -7,32 +7,28 @@
     Dashboard
   </div>
   <div [ngClass]="selectedUploadTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleUpload()"><mat-icon
-      class="icon-design">document_scanner</mat-icon>Upload Document
+      class="icon-design">document_scanner</mat-icon>Identity Scanner
   </div>
   <div [ngClass]="selectedGenerateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleGenerate()">
-    <mat-icon class="icon-design">file_present</mat-icon>Generate Document
+    <mat-icon class="icon-design">file_present</mat-icon>Issue Document
   </div>
   <div *ngIf="user.role != 'Employee'" [ngClass]="selectedTemplateTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleTemplate()">
-    <mat-icon class="icon-design">attach_file_add</mat-icon>Template Manager
+    <mat-icon class="icon-design">attach_file_add</mat-icon>Template Library
   </div>
   <div  *ngIf="user.role != 'Employee'" [ngClass]="selectemTemplteCreator ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleTemplateCreator()">
-    <mat-icon class="icon-design">create</mat-icon>Template Creator
+    <mat-icon class="icon-design">create</mat-icon>Template Studio
   </div>
-  <div *ngIf="user.role == 'Employee'" [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
+  <div  [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleHumanResource()">
-    <mat-icon class="icon-design">person_3</mat-icon>Organization Structure
-  </div>
-    <div *ngIf="user.role != 'Employee'" [ngClass]="selectedHumanResourceTab ? 'dashboard-item selected' : 'dashboard-item'"
-    (click)="handleHumanResource()">
-    <mat-icon class="icon-design">person_3</mat-icon>Human Resource
+    <mat-icon class="icon-design">person_3</mat-icon>Organization
   </div>
   <div *ngIf="user.role != 'Employee'" [ngClass]="selectedApprovalFlowsTab ? 'dashboard-item selected' : 'dashboard-item'"
     (click)="handleApprovalFlows()">
-    <mat-icon class="icon-design">add_link</mat-icon>Approval Flows
+    <mat-icon class="icon-design">add_link</mat-icon>Approval Chains
   </div>
   <div [ngClass]="selectedRequestsTab ? 'dashboard-item selected' : 'dashboard-item'" (click)="handleRequests()">
-    <mat-icon class="icon-design">done_all</mat-icon>Requests Manager
+    <mat-icon class="icon-design">done_all</mat-icon>Requests
   </div>
 
   <div class="user-section">

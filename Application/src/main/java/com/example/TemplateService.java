@@ -219,7 +219,8 @@ public class TemplateService {
                 System.out.println(field.getFieldName());
             }
             Template template = this.templateRepository.findTemplateByStoragePath(fileName).orElseThrow(() -> new RuntimeException("Template not found"));
-            template.setFields(fields);
+            template.getFields().clear();
+            template.getFields().addAll(fields);
             this.templateRepository.save(template);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

@@ -17,6 +17,8 @@ import com.example.jpa.RelationRepository;
 import com.example.login.Role;
 import com.example.login.User;
 import com.example.security.SignaturePort;
+import com.example.state.RequestContext;
+import com.example.state.RequestPipeline;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +33,9 @@ public class RequestService {
 
     private final ApprovalRepository approvalRepository;
     private final ApprovalMapper approvalMapper;
-    private final RelationRepository relationRepository;
     private final ApprovalRequestRepository approvalRequestRepository;
     private final ApprovalRequestMapper approvalRequestMapper;
-    private final EmailPort emailPort;
-    private final SignaturePort signaturePort;
-    private final NotificationRepository notificationRepository;
+    private final RequestPipeline requestPipeline;
 
     public List<ApprovalDTO> getToApproveRequestsForUser(int userId) {
         return approvalRepository.findByApprover_IdAndStatus(userId, ApprovalStatus.IN_PROGRESS).stream()
@@ -47,78 +46,11 @@ public class RequestService {
 
     @Transactional
     public void answerRequest(int requestId, int approverId, String answer) {
-        Approval approval = approvalRepository.findById(requestId).orElseThrow(() ->
-                new ApprovalException("Approval with id " + requestId + " not found"));
-        if (approval.getApprover().getId() != approverId) {
-            throw new ApprovalException("User with id " + approverId + " is not the approver of this request");
-        }
-        if (approval.getStatus() != ApprovalStatus.IN_PROGRESS) {
-            throw new ApprovalException("Request is already answered");
-        }
-
-        ApprovalStatus status = ApprovalStatus.valueOf(answer.toUpperCase());
-        approval.setStatus(status);
-        approval.setDecisionDate(Timestamp.from(Instant.now()));
-
-        approvalRepository.save(approval);
-
-        if(status == ApprovalStatus.REJECTED) {
-            ApprovalRequest approvalRequest = approval.getApprovalRequest();
-            approvalRequest.setStatus(ApprovalRequestStatus.REJECTED);
-            approvalRequestRepository.save(approvalRequest);
-
-            Notification notification = new Notification();
-            notification.setRecipient(approvalRequest.getTemplate().getUser());
-            notification.setMessage("Your approval request for template " + approvalRequest.getTemplate().getTemplate().getName() + " has been rejected.");
-            notification.setTitle("Approval Request Rejected");
-            notificationRepository.save(notification);
-        }
-        else {
-            try {
-                this.signaturePort.signDocument("D:\\Licenta\\DocuFlow\\storage\\security\\certificates\\user_"+approverId+".p12", "parola", approval.getApprovalRequest().getTemplate().getPath(),approval.getApprovalRequest().getCurrentStep());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            continueAnswerRequest(approval.getApprovalRequest());
-            Notification notification = new Notification();
-            notification.setRecipient(approval.getApprovalRequest().getTemplate().getUser());
-            notification.setMessage(approval.getApprover().getFirstName()+ " " + approval.getApprover().getLastName() +  " approved a request for template " + approval.getApprovalRequest().getTemplate().getTemplate().getName() + ".");
-            notification.setTitle("New Approval");
-            notificationRepository.save(notification);
-        }
-
+        RequestContext context = new RequestContext(requestId,approverId,answer);
+        requestPipeline.execute(context);
     }
 
-    private void continueAnswerRequest(ApprovalRequest approvalRequest) {
-        approvalRequest.setCurrentStep(approvalRequest.getCurrentStep() + 1);
 
-        if (approvalRequest.getCurrentStep() == approvalRequest.getApprovalChain().getSteps().size()) {
-            approvalRequest.setStatus(ApprovalRequestStatus.ACCEPTED);
-
-            this.emailPort.sendEmail(approvalRequest.getTemplate().getPath(), approvalRequest.getTemplate().getUser().getEmail(), approvalRequest.getTemplate().getUser().getFirstName(), approvalRequest.getTemplate().getUser().getLastName());
-            Notification notification = new Notification();
-            notification.setRecipient(approvalRequest.getTemplate().getUser());
-            notification.setMessage("Your approval request for template " + approvalRequest.getTemplate().getTemplate().getName() + " has been accepted.");
-            notification.setTitle("Approval Request Accepted");
-            notificationRepository.save(notification);
-
-        } else {
-            Role nextApproverRole = approvalRequest.getApprovalChain().getSteps().get(approvalRequest.getCurrentStep()).getApproverRole();
-            int previousApprover = approvalRequest.getSteps().get(approvalRequest.getCurrentStep() - 2).getApprover().getId();
-            User nextApprover = relationRepository.findBossBySubordinate_IdAndBoss_Role(previousApprover, nextApproverRole);
-
-            Approval nextApproval = new Approval();
-            nextApproval.setApprover(nextApprover);
-            nextApproval.setStatus(ApprovalStatus.IN_PROGRESS);
-            nextApproval.setStepNumber(approvalRequest.getCurrentStep());
-            nextApproval.setApprovalRequest(approvalRequest);
-            nextApproval.setDecisionDate(Timestamp.from(Instant.now()));
-
-            approvalRepository.save(nextApproval);
-        }
-        approvalRequestRepository.save(approvalRequest);
-
-    }
 
     public List<ApprovalRequestDTO> getMyRequests(int userId) {
         return approvalRequestRepository.getByTemplate_User_Id(userId).stream()
