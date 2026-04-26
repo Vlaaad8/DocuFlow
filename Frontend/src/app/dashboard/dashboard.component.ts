@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule, MatToolbar } from '@angular/material/toolbar';
-import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
-import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
-import { DashboardService } from '../services/dashboard.service';
-import { User } from '../model/User';
-import Chart, { Legend } from 'chart.js/auto';
-import { DashboardData, Notification } from '../model/dashboardData';
-import { MatBadgeModule } from '@angular/material/badge';
-import { LoadingComponent } from "../commons/loading/loading.component";
-import { CommonModule } from '@angular/common';
-import { MatMenuModule } from '@angular/material/menu';
-import { WebSocketService } from '../services/notifications.service';
-import { ConvertDatePipe } from '../pipes/convertDate.pipe';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule, MatToolbar} from '@angular/material/toolbar';
+import {SidenavUserComponent} from "../commons/sidenav-user/sidenav-user.component";
+import {ExitButtonComponent} from "../commons/exit-button/exit-button.component";
+import {DashboardService} from '../services/dashboard.service';
+import {User} from '../model/User';
+import Chart, {Legend} from 'chart.js/auto';
+import {DashboardData, Notification} from '../model/dashboardData';
+import {MatBadgeModule} from '@angular/material/badge';
+import {LoadingComponent} from "../commons/loading/loading.component";
+import {CommonModule} from '@angular/common';
+import {MatMenuModule} from '@angular/material/menu';
+import {WebSocketService} from '../services/notifications.service';
+import {ConvertDatePipe} from '../pipes/convertDate.pipe';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -28,11 +29,13 @@ export class DashboardComponent implements OnInit {
   public dailyChart!: Chart;
   public user!: User;
   public dashboardData!: DashboardData;
-  public notiifications:any[] = [];
+  public notifications: any[] = [];
+
+  private notifSub!: Subscription;
 
   public status: string = 'loading' // 'loading' , 'present'
 
-  constructor(private service: DashboardService,private notificationsService: WebSocketService) {
+  constructor(private service: DashboardService, private notificationsService: WebSocketService) {
     sessionStorage.getItem('loggedInUser')
     this.user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
 
@@ -51,19 +54,20 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching dashboard data:', err);
       }
     });
-    this.notificationsService.connect(this.user.id.toString());
-    this.notificationsService.getNotifications().subscribe({
-      next: (notification) => {
-        console.log('Received notification:', notification);
-        this.notiifications.push(notification);
+    this.notifSub = this.notificationsService.getNotifications().subscribe({
+      next: (notificationsArray) => {
+        this.notifications = notificationsArray;
       },
-      error: (err) => {
-        console.error('Error receiving notifications:', err);
-      }
+      error: (err) => console.error('Error receiving notifications:', err)
     });
   }
+  ngOnDestroy() {
+    if (this.notifSub) {
+      this.notifSub.unsubscribe();
+    }
+  }
+
   private createCharts() {
-    // Only initialize if they haven't been created yet
     if (!this.chart) {
       this.chart = new Chart('activityChart', this.getChartConfigRequests(this.dashboardData.chartData));
     }
@@ -78,29 +82,41 @@ export class DashboardComponent implements OnInit {
 
     const dataValues = requests.map(req => {
       switch (req.status?.toUpperCase()) {
-        case 'ACCEPTED': return 3;
-        case 'PENDING': return 2;
-        case 'REJECTED': return 1;
-        default: return 0;
+        case 'ACCEPTED':
+          return 3;
+        case 'PENDING':
+          return 2;
+        case 'REJECTED':
+          return 1;
+        default:
+          return 0;
       }
     });
 
 
     const backgroundColors = requests.map(req => {
       switch (req.status?.toUpperCase()) {
-        case 'ACCEPTED': return 'rgba(75, 192, 192, 0.6)';
-        case 'PENDING': return 'rgba(255, 206, 86, 0.6)';
-        case 'REJECTED': return 'rgba(255, 99, 132, 0.6)';
-        default: return 'rgba(201, 203, 207, 0.6)';
+        case 'ACCEPTED':
+          return 'rgba(75, 192, 192, 0.6)';
+        case 'PENDING':
+          return 'rgba(255, 206, 86, 0.6)';
+        case 'REJECTED':
+          return 'rgba(255, 99, 132, 0.6)';
+        default:
+          return 'rgba(201, 203, 207, 0.6)';
       }
     });
 
     const borderColors = requests.map(req => {
       switch (req.status?.toUpperCase()) {
-        case 'ACCEPTED': return 'rgba(75, 192, 192, 1)';
-        case 'PENDING': return 'rgba(255, 206, 86, 1)';
-        case 'REJECTED': return 'rgba(255, 99, 132, 1)';
-        default: return 'rgba(201, 203, 207, 1)';
+        case 'ACCEPTED':
+          return 'rgba(75, 192, 192, 1)';
+        case 'PENDING':
+          return 'rgba(255, 206, 86, 1)';
+        case 'REJECTED':
+          return 'rgba(255, 99, 132, 1)';
+        default:
+          return 'rgba(201, 203, 207, 1)';
       }
     });
 
@@ -157,8 +173,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
-  getChartConfigSourceDistribution(sourceData: {source: string, value: number}[]): any {
+  getChartConfigSourceDistribution(sourceData: { source: string, value: number }[]): any {
 
     const labels = sourceData.map(req => this.formatSourceOfData(req.source));
     const dataValues = sourceData.map(req => req.value);
@@ -166,25 +181,39 @@ export class DashboardComponent implements OnInit {
 
     const backgroundColors = labels.map(label => {
       switch (label) {
-        case 'ID Card': return 'rgba(54, 162, 235, 0.6)';
-        case 'Passport': return 'rgba(255, 159, 64, 0.6)';
-        case 'Driving License': return 'rgba(153, 102, 255, 0.6)';
-        case 'Residence Permit': return 'rgba(201, 203, 207, 0.6)';
-        case 'US Social Security Card': return 'rgba(255, 205, 86, 0.6)';
-        case 'Manual Entry': return 'rgba(75, 192, 192, 0.6)';
-        default: return 'rgba(160, 160, 160, 0.6)';
+        case 'ID Card':
+          return 'rgba(54, 162, 235, 0.6)';
+        case 'Passport':
+          return 'rgba(255, 159, 64, 0.6)';
+        case 'Driving License':
+          return 'rgba(153, 102, 255, 0.6)';
+        case 'Residence Permit':
+          return 'rgba(201, 203, 207, 0.6)';
+        case 'US Social Security Card':
+          return 'rgba(255, 205, 86, 0.6)';
+        case 'Manual Entry':
+          return 'rgba(75, 192, 192, 0.6)';
+        default:
+          return 'rgba(160, 160, 160, 0.6)';
       }
     });
 
     const borderColors = labels.map(label => {
       switch (label) {
-        case 'ID Card': return 'rgba(54, 162, 235, 1)';
-        case 'Passport': return 'rgba(255, 159, 64, 1)';
-        case 'Driving License': return 'rgba(153, 102, 255, 1)';
-        case 'Residence Permit': return 'rgba(201, 203, 207, 1)';
-        case 'US Social Security Card': return 'rgba(255, 205, 86, 1)';
-        case 'Manual Entry': return 'rgba(75, 192, 192, 1)';
-        default: return 'rgba(160, 160, 160, 1)';
+        case 'ID Card':
+          return 'rgba(54, 162, 235, 1)';
+        case 'Passport':
+          return 'rgba(255, 159, 64, 1)';
+        case 'Driving License':
+          return 'rgba(153, 102, 255, 1)';
+        case 'Residence Permit':
+          return 'rgba(201, 203, 207, 1)';
+        case 'US Social Security Card':
+          return 'rgba(255, 205, 86, 1)';
+        case 'Manual Entry':
+          return 'rgba(75, 192, 192, 1)';
+        default:
+          return 'rgba(160, 160, 160, 1)';
       }
     });
 
@@ -212,7 +241,7 @@ export class DashboardComponent implements OnInit {
 
               filter: (legendItem: any) => {
 
-                const allowed = ['ID Card', 'Passport', 'Driving License', 'Residence Permit','Manual Entry'];
+                const allowed = ['ID Card', 'Passport', 'Driving License', 'Residence Permit', 'Manual Entry'];
                 return allowed.includes(legendItem.text);
               }
             }
@@ -230,6 +259,7 @@ export class DashboardComponent implements OnInit {
       }
     };
   }
+
   formatSourceOfData(source: string): string {
     switch (source) {
       case ("NATIONAL_IDENTITY_CARD"):
@@ -248,6 +278,22 @@ export class DashboardComponent implements OnInit {
       default:
         return "Unknown";
     }
+  }
+
+  notificationIconColor(title: string): string {
+    if (title == "Approval Request Rejected")
+      return 'rejected';
+    if (title == "New Approval")
+      return 'new'
+    return 'approved'
+  }
+
+  notificationIcon(title: string): string {
+    if (title == "Approval Request Rejected")
+      return 'thumb_down'
+    if (title == "New Approval")
+      return 'assignment_add'
+    return 'task_alt'
   }
 
 

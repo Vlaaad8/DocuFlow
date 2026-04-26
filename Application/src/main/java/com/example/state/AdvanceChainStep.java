@@ -1,12 +1,15 @@
 package com.example.state;
 
+import com.example.Notification;
 import com.example.approval.Approval;
 import com.example.approval.ApprovalRequest;
 import com.example.approval.ApprovalRequestStatus;
 import com.example.approval.ApprovalStatus;
+import com.example.builder.NotificationBuilder;
 import com.example.email.EmailPort;
 import com.example.jpa.ApprovalRepository;
 import com.example.jpa.ApprovalRequestRepository;
+import com.example.jpa.NotificationRepository;
 import com.example.jpa.RelationRepository;
 import com.example.login.Role;
 import com.example.login.User;
@@ -20,6 +23,7 @@ import java.sql.Timestamp;
 public class AdvanceChainStep implements RequestStep {
 
     private final ApprovalRequestRepository approvalRequestRepository;
+    private final NotificationRepository notificationRepository;
     private final EmailPort emailPort;
     private final RelationRepository relationRepository;
     private final ApprovalRepository approvalRepository;
@@ -31,6 +35,11 @@ public class AdvanceChainStep implements RequestStep {
             ApprovalRequest approvalRequest = context.getApproval().getApprovalRequest();
             approvalRequest.setStatus(ApprovalRequestStatus.REJECTED);
             approvalRequestRepository.save(approvalRequest);
+
+            User user= approvalRequest.getTemplate().getUser();
+            String message = "Your request for " + approvalRequest.getTemplate().getTemplate().getName() + " has been rejected.";
+            Notification notification = NotificationBuilder.rejected().withRecipient(user).withMessage(message).build();
+            notificationRepository.save(notification);
 
         } else {
 
@@ -44,7 +53,12 @@ public class AdvanceChainStep implements RequestStep {
 
                 String path = approvalRequest.getTemplate().getPath();
                 User user = approvalRequest.getTemplate().getUser();
+
+                String message = "Your request for " + approvalRequest.getTemplate().getTemplate().getName() + " has been rejected.";
+                Notification notification = NotificationBuilder.accepted().withRecipient(user).withMessage(message).build();
+
                 this.emailPort.sendEmail(path, user.getEmail(),user.getFirstName(), user.getLastName());
+                notificationRepository.save(notification);
 
             }
 

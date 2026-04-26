@@ -9,13 +9,11 @@ import com.example.dto.TemplateDTO;
 import com.example.dtoMapper.ApprovalChainMapper;
 import com.example.dtoMapper.TemplateMapper;
 import com.example.exceptions.TemplateValidationException;
+import com.example.flyWeight.FieldFlyweightFactory;
 import com.example.jpa.ApprovalChainRepository;
 import com.example.jpa.FieldRepository;
 import com.example.jpa.TemplateRepository;
-import com.example.template.Field;
-import com.example.template.Template;
-import com.example.template.TemplateCategory;
-import com.example.template.TemplateTextPort;
+import com.example.template.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +39,7 @@ public class TemplateService {
     private final HTMLCleanerPort htmlCleanerPort;
     private final ConvertPort convertPort;
     private final Path rootFolder = Paths.get("storage");
-
+    private final FieldFlyweightFactory fieldFlyweightFactory;
 
     public void uploadService(InputStream stream, String name, String description, TemplateCategory templateCategory, int approvalFlowID) {
 
@@ -125,24 +123,38 @@ public class TemplateService {
         return leftParenthesis == rightParenthesis;
     }
 
-    private boolean hasRequiredFields(Set<Field> fields) {
-        List<Field> requiredFields = this.fieldRepository.getFieldByRequired(true);
-        for (Field field : requiredFields) {
-            if (!fields.contains(field)) {
-                return false;
+    private Set<Field> extractFields(String textContent) {
+        Set<Field> matched = new HashSet<>();
+
+        for (FieldFlyweight flyweight :
+                fieldFlyweightFactory.getAllFlyweights()) {
+
+
+            if (flyweight.existsIn(textContent)) {
+                matched.add(fieldRepository
+                        .getReferenceById(flyweight.getId()));
             }
         }
-        return true;
+        return matched;
     }
 
-    private boolean isRealField(List<Field> fields, String text) {
-        for (Field field : fields) {
-            if (field.getRepresentation().equals(text)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasRequiredFields(Set<Field> fields) {
+        return fieldFlyweightFactory.getAllFlyweights()
+                .stream()
+                .filter(FieldFlyweight::isRequired)
+                .allMatch(required -> fields.stream()
+                        .anyMatch(f -> f.getId() == required.getId()));
     }
+
+    private boolean isRealField(String representation) {
+        // ÎNAINTE: itera lista din DB
+        // DUPĂ: verifică în cache O(1)
+        return fieldFlyweightFactory.getAllFlyweights()
+                .stream()
+                .anyMatch(f -> f.getRepresentation()
+                        .equals(representation));
+    }
+
 
     private boolean hasValidFormat(String text) {
         if (!verifyParenthesis(text)) {
@@ -150,7 +162,6 @@ public class TemplateService {
         }
         Pattern validField = Pattern.compile("\\{\\{\\s[a-zA-Z]+(_[a-zA-Z]+)*\\s\\}\\}");
         Pattern allFields = Pattern.compile("\\{\\{.*?\\}\\}");
-        List<Field> trueFields = this.fieldRepository.findAll();
         Matcher allFieldsMatcher = allFields.matcher(text);
 
         while (allFieldsMatcher.find()) {
@@ -159,22 +170,22 @@ public class TemplateService {
                 throw new TemplateValidationException("The field " + fieldName + " is not valid");
             }
 
-            if (!isRealField(trueFields, fieldName)) {
+            if (!isRealField(fieldName)) {
                 throw new TemplateValidationException("The field " + fieldName + " is not real");
             }
         }
         return true;
     }
 
-    private Set<Field> extractFields(String text) {
-        Set<Field> fields = new HashSet<>();
-        for (Field field : fieldRepository.findAll()) {
-            if (text.contains(field.getRepresentation())) {
-                fields.add(field);
-            }
-        }
-        return fields;
-    }
+//    private Set<Field> extractFields(String text) {
+//        Set<Field> fields = new HashSet<>();
+//        for (Field field : fieldRepository.findAll()) {
+//            if (text.contains(field.getRepresentation())) {
+//                fields.add(field);
+//            }
+//        }
+//        return fields;
+//    }
 
     public List<TemplateDTO> getTemplates() {
         return templateRepository.findAll().stream().map(templateMapper::toTemplateDTO).toList();

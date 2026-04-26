@@ -360,3 +360,21 @@ span {
   width: 100% !important;
   height: 100% !important;
 }
+.notification-icon {
+  color: #f97316;
+  background: #fff7ed;
+  padding: 8px;
+  border-radius: 20px;
+}
+.rejected{
+  background: #fee2e2;
+  color: #991b1b;
+}
+.approved{
+  background: #eafff5;
+  color: #065f46;
+}
+.new{
+  background: #f5f3ff;
+  color: #5b21b6;
+}

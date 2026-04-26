@@ -9,14 +9,17 @@
     <div class="description-section">
       <div class="first-row">
         <div>
-          <h2>Welcome back, {{user.firstName}}! 👋</h2>
+          <h2>Welcome back, {{ user.firstName }}! 👋</h2>
           <p>Here's a quick overview of your dashboard.</p>
         </div>
         <div class="buttonSection">
-          <div *ngIf="notiifications.length != 0" matBadge="{{notiifications.length}}" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
-            <mat-icon>notifications_active</mat-icon></div>
-            <div *ngIf="notiifications.length == 0" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
-            <mat-icon>notifications</mat-icon></div>
+          <div *ngIf="notifications.length != 0" matBadge="{{notifications.length}}" class="notificationButton"
+               [matMenuTriggerFor]="notificationMenu">
+            <mat-icon>notifications_active</mat-icon>
+          </div>
+          <div *ngIf="notifications.length == 0" class="notificationButton" [matMenuTriggerFor]="notificationMenu">
+            <mat-icon>notifications</mat-icon>
+          </div>
           <app-exit-button></app-exit-button>
         </div>
       </div>
@@ -28,28 +31,28 @@
           <div class="card">
             <mat-icon class="card-icon total">adf_scanner</mat-icon>
             <div class="card-info">
-              <p>{{dashboardData.totalTemplates}}</p>
+              <p>{{ dashboardData.totalTemplates }}</p>
               <h3>Total Templates</h3>
             </div>
           </div>
           <div class="card">
             <mat-icon class="card-icon generated">assignment_add</mat-icon>
             <div class="card-info">
-              <p>{{dashboardData.totalGeneratedDocuments}}</p>
+              <p>{{ dashboardData.totalGeneratedDocuments }}</p>
               <h3>Generated Documents</h3>
             </div>
           </div>
           <div class="card">
             <mat-icon class="card-icon pending">pending_actions</mat-icon>
             <div class="card-info">
-              <p>{{dashboardData.pendingApprovals}}</p>
+              <p>{{ dashboardData.pendingApprovals }}</p>
               <h3>Pending Approvals</h3>
             </div>
           </div>
           <div class="card">
             <mat-icon class="card-icon received">approval_delegation</mat-icon>
             <div class="card-info">
-              <p>{{dashboardData.receivedApprovals}}</p>
+              <p>{{ dashboardData.receivedApprovals }}</p>
               <h3>Received Approvals</h3>
             </div>
           </div>
@@ -98,19 +101,19 @@
   <div class="notifications-header">
     <div class="info">
       <h3>Notifications</h3>
-      <p>{{notiifications.length}} new notifications.</p>
+      <p>{{ notifications.length }} new notifications.</p>
     </div>
     <mat-icon class="close-button">close</mat-icon>
   </div>
-  <div class="notification" *ngFor="let notification of notiifications">
+  <div class="notification" *ngFor="let notification of notifications">
     <div class="notification-content">
-      <mat-icon class="notification-icon">assignment_add</mat-icon>
+      <div>
+        <mat-icon class="notification-icon" [ngClass]="notificationIconColor(notification.message?.title)">{{notificationIcon(notification.message?.title)}}</mat-icon>
+      </div>
       <div class="text-section">
-        <p><strong>{{notification.message?.title}}</strong> <br>{{notification.message?.message}}</p>
-        <span class="timestamp">{{notification.timestamp | convertDate}}</span>
+        <p><strong>{{ notification.message?.title }}</strong> <br>{{ notification.message?.message }}</p>
+        <span class="timestamp">{{ notification.timestamp | convertDate }}</span>
       </div>
     </div>
-
-
   </div>
 </mat-menu>

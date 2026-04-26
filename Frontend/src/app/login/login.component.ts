@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModul
 import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { CommonModule } from '@angular/common';
+import {WebSocketService} from '../services/notifications.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router,private service: LoginService,private formBuilder: FormBuilder) { }
+  constructor(private router: Router,private service: LoginService,private formBuilder: FormBuilder,private notificationsService: WebSocketService) { }
   public loading: boolean = false;
   formGroup!: FormGroup
    errorMessage: string | null = null;
@@ -26,13 +27,14 @@ export class LoginComponent implements OnInit {
     });
   }
   onSignUp(): void{
-    const formData = this.formGroup.value 
+    const formData = this.formGroup.value
     this.loading = true;
     this.service.login(formData.username, formData.password).subscribe({
       next: (user) => {
         if (user != null) {
         sessionStorage.setItem('loggedInUser', JSON.stringify(user));
         this.loading = false;
+        this.notificationsService.connect(user.id.toString())
         this.router.navigate(['dashboard']);
       }
       else{
@@ -46,4 +48,5 @@ export class LoginComponent implements OnInit {
       }
 });
   }
+
 }
