@@ -65,14 +65,10 @@ public class Convertors implements ConvertPort {
             String html = out.toString(StandardCharsets.UTF_8);
             html = StringEscapeUtils.unescapeHtml4(html);
 
-            // FIX: Eliminăm tag-urile specifice Microsoft Office (ex: <o:p>, </o:p>)
-            // Acestea cauzează SAXParseException în Apache Tika pentru că nu sunt XML valid
             html = html.replaceAll("(?i)</?o:[^>]*>", "");
 
-            // Opțional, pentru o curățare și mai sigură a HTML-ului generat, folosim Jsoup:
             org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-            // Jsoup va formata corect HTML-ul și va închide tag-urile lăsate deschise
             return doc.body().html();
 
         } catch (IOException | Docx4JException e) {

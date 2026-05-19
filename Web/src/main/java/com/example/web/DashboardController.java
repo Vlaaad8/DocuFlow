@@ -20,8 +20,6 @@ public class DashboardController {
     public DashboardDTO getDashboardData(@RequestParam("userID") int userID) {
         return this.dashboardService.getDashboardData(userID);
     }
-    @PostMapping("dashboard/notification")
-    public void markNotificationAsRead(@RequestBody List<Notification> notifications) {
-        this.dashboardService.markAsRead(notifications);
-    }
+
+
 }
