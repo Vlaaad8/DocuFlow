@@ -147,8 +147,6 @@ public class TemplateService {
     }
 
     private boolean isRealField(String representation) {
-        // ÎNAINTE: itera lista din DB
-        // DUPĂ: verifică în cache O(1)
         return fieldFlyweightFactory.getAllFlyweights()
                 .stream()
                 .anyMatch(f -> f.getRepresentation()
@@ -229,10 +227,19 @@ public class TemplateService {
     }
 
     public void validateHTMLTemplate(String htmlContent) {
-        String sanitizedContent = this.htmlCleanerPort.clean(htmlContent);
-        sanitizedContent = sanitizedContent.replace("\u00A0", " ");
-        InputStream stream = new ByteArrayInputStream(sanitizedContent.getBytes());
-        validateTemplate(stream);
+        String plainText = this.htmlCleanerPort.clean(htmlContent);
+        plainText = plainText.replace('\u00A0', ' ');
+        plainText = plainText.replaceAll("\\h", " ");
+
+        System.out.println(htmlContent);
+        if (!hasValidFormat(plainText)) {
+            throw new TemplateValidationException("File has not the valid format");
+        }
+
+        Set<Field> fields = extractFields(plainText);
+        if (!hasRequiredFields(fields)) {
+            throw new TemplateValidationException("Some required fields are missing from this template");
+        }
     }
 
     public List<ApprovalChainOptionDTO> getApprovalChains() {

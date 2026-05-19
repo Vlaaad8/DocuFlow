@@ -1,32 +1,33 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
-import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
-import { EditorComponent } from '@tinymce/tinymce-angular';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { TemplateService } from '../services/template.service';
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { CommonModule } from '@angular/common';
-import { SnackBarService } from '../services/snackBar.service';
-import { MatChipsModule } from "@angular/material/chips";
-import { MatExpansionModule } from '@angular/material/expansion';
-import { LabelDisplayComponent } from "../commons/label-display/label-display.component";
-import { MatIconModule } from "@angular/material/icon";
-import { CreatorService } from '../services/creator.service';
-import { Field } from '../model/Field';
-import { LoadingComponent } from "../commons/loading/loading.component";
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ApprovalFlowTemplate } from '../model/Template';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {SidenavUserComponent} from "../commons/sidenav-user/sidenav-user.component";
+import {ExitButtonComponent} from "../commons/exit-button/exit-button.component";
+import {EditorComponent} from '@tinymce/tinymce-angular';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {TemplateService} from '../services/template.service';
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {CommonModule} from '@angular/common';
+import {SnackBarService} from '../services/snackBar.service';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatExpansionModule} from '@angular/material/expansion';
+import {LabelDisplayComponent} from "../commons/label-display/label-display.component";
+import {MatIconModule} from "@angular/material/icon";
+import {CreatorService} from '../services/creator.service';
+import {Field} from '../model/Field';
+import {LoadingComponent} from "../commons/loading/loading.component";
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {ApprovalFlowTemplate} from '../model/Template';
 import {MatProgressBar} from '@angular/material/progress-bar';
 
 
 const defaultContent = '<p>Create your template…</p>';
+
 @Component({
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule, MatProgressSpinner, MatProgressBar]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule]
 })
 export class CreatorComponent implements OnInit {
 
@@ -54,32 +55,50 @@ export class CreatorComponent implements OnInit {
     height: 600,
     menubar: true,
     plugins: 'lists link table code preview',
-    content_style: "body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; }",
-    font_family_formats: "Times New Roman=times new roman,times,serif; Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace",
-    toolbar: 'undo redo | bold italic | bullist numlist | link | table | preview',
+
+    content_style: `
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    margin: 20px;
+  }
+`,
+    font_size_input_default_unit: 'pt',
+
+    font_family_formats: [
+      "Times New Roman=Times New Roman,Times,serif",
+      "Arial=Arial,Helvetica,sans-serif",
+      "Calibri=Calibri,'Gill Sans',sans-serif",
+      "Georgia=Georgia,'Times New Roman',serif",
+      "Verdana=Verdana,Geneva,sans-serif",
+      "Aptos=Aptos,Calibri,sans-serif",
+    ].join("; "),
+
+    font_size_formats: "8pt 10pt 11pt 12pt 14pt 16pt 18pt 24pt 36pt",
+
     inline_styles: true,
-    extended_valid_elements: '*[class|style|id]',
+    forced_root_block: 'p',
+
+    paste_retain_style_properties: "font-family font-size font-weight font-style",
+    paste_remove_styles_if_webkit: false,
+
+    extended_valid_elements: '*[class|style|id|lang]',
+
+    toolbar: 'undo redo | fontfamily fontsize | bold italic | bullist numlist | link | table | preview',
+
     setup: (editor: any) => {
-
       editor.on('init', () => {
-
         this.isEditorReady = true;
-
-        editor.on('dragover', (e: any) => {
-          e.preventDefault();
-          console.log('Dropped content:');
-        });
         editor.execCommand('fontName', false, 'Times New Roman');
-        console.log('Editor is ready');
-        if (this.content != defaultContent)
+        if (this.content !== defaultContent) {
           editor.setContent(this.content);
+        }
       });
-
     }
   }
 
 
-  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService, private dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService, private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -112,8 +131,7 @@ export class CreatorComponent implements OnInit {
   handleEdit(): void {
     if (this.id == null) {
       this.handleSave();
-    }
-    else {
+    } else {
       this.service.editTemplateHTML(this.content, this.path!).subscribe({
         next: () => {
           this.snackBar.showMessage('Template updated successfully!', 'success');
@@ -133,11 +151,11 @@ export class CreatorComponent implements OnInit {
   showEditor(): boolean {
     if (this.id == null) {
       return this.isEditorReady && (this.fields.length > 0);
-    }
-    else {
+    } else {
       return this.isEditorReady && ((this.content != "<p>Create your template&hellip;</p>") && (this.fields.length > 0));
     }
   }
+
   handleClear(): void {
     this.content = defaultContent;
   }
