@@ -7,7 +7,7 @@ build/
 Frontend/node_modules/
 Frontend/.angular/
 Web/src/main/resources
-
+storage/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
