@@ -156,22 +156,6 @@ ApprovalChain {
 - Database: PostgreSQL/MySQL
 - Certificate digital (PKCS#12) pentru semnare
 
-### Backend
-```bash
-cd Web
-mvn clean install
-mvn spring-boot:run
-# API disponibil la http://localhost:8080
-```
-
-### Frontend
-```bash
-cd Frontend
-npm install
-ng serve
-# Aplicație disponibilă la http://localhost:4200
-```
-
 ---
 
 ## 🔐 Roluri și Permisiuni
@@ -186,74 +170,6 @@ ng serve
 | **IT** | Configurare sistem, backup, securitate |
 | **CEO** | Aprobare finală, acces complet audit trail |
 | **Marketing, Sales, Support** | Roluri specifice departament |
-
----
-
-## 📊 Entități principale
-
-### User
-```typescript
-{
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  username: string
-  password: string (hashed)
-  role: Role enum
-  certificatePassword: string (pentru semnare digitală)
-}
-```
-
-### Template
-```typescript
-{
-  id: number
-  name: string
-  category: TemplateCategory
-  description: string
-  storagePath: string
-  fields: Field[]
-  approvalChain: ApprovalChain
-}
-```
-
-### ApprovalChain
-```typescript
-{
-  id: number
-  name: string
-  steps: ApprovalChainStep[]  // ordered
-}
-```
-
-### FilledTemplate
-```typescript
-{
-  id: number
-  path: string (la document PDF generat)
-  user: User
-  template: Template
-  approvals: ApprovalDetails[]
-}
-```
-
----
-
-## 🔧 API Endpoints (exemplu)
-
-```
-POST   /login                          — Autentificare
-GET    /hr/users                       — Lista utilizatori
-POST   /hr/user                        — Criere utilizator
-GET    /template                       — Lista template-uri
-POST   /template                       — Criere template
-POST   /ocr                            — Extragere date din imagine ID
-POST   /ocr/extracted-fields           — Salvare date OCR
-GET    /approval-flows                 — Lista fluxuri aprobare
-POST   /approval/approve               — Aproba document
-POST   /sign                           — Semnare digitală
-```
 
 ---
 
@@ -312,13 +228,3 @@ DocuFlow este în **dezvoltare activă** cu următoarele module implementate:
 - 🚧 Export/Import bulk template-uri
 
 ---
-
-## 👨‍💻 Licență
-
-Proiect privat. 
-
----
-
-## 📞 Suport
-
-Pentru întrebări sau bug reports, contactează echipa de development.
