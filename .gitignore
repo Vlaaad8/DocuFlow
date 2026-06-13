@@ -1,3 +1,4 @@
+# .gitignore
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -7,6 +8,7 @@ build/
 Frontend/node_modules/
 Frontend/.angular/
 Web/src/main/resources
+storage/
 
 
 ### IntelliJ IDEA ###
@@ -45,4 +47,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
