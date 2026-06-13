@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Field } from '../model/Field';
+import {Template} from '../model/Template';
 
 const URL = 'http://localhost:8080/creator';
 

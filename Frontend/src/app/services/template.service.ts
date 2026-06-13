@@ -71,4 +71,14 @@ export class TemplateService {
   loadDocument(id: number) : Observable<Blob> {
     return this.http.post(URL+'/pdf',id,{responseType: 'blob', headers: {'Content-Type': 'application/json'}});
   }
+
+  public uploadTemplateHTML(content: string, name: string, category: string, description: string, approvalFlowId: number): Observable<Template> {
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('description', description);
+    formData.append('approvalFlow', approvalFlowId.toString());
+    return this.http.post<Template>(`${URL}/html`, formData);
+  }
 }

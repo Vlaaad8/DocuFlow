@@ -4,11 +4,15 @@ package com.example.certificate;
 import com.example.dto.CertificateDTO;
 import com.example.security.CertificatePort;
 import lombok.AllArgsConstructor;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -24,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
@@ -102,38 +107,33 @@ public class CertificateCreator implements CertificatePort {
 
         X509Certificate certificate = (X509Certificate) ks.getCertificate("user-signature");
 
-        String subject = certificate.getSubjectX500Principal().getName("RFC2253");
-        String issuer = certificate.getIssuerX500Principal().getName("RFC2253");
+        try {
+            X500Name subject = new JcaX509CertificateHolder(certificate).getSubject();
+            X500Name issuer = new JcaX509CertificateHolder(certificate).getIssuer();
 
-        String issuerName =getAttribute(issuer,"CN");
-        String issuerCity = getAttribute(issuer,"L");
-        String cn = getAttribute(subject, "CN");
-        String email = getAttribute(subject, "EMAILADDRESS");
-        if (email == null) {
-            email = getAttribute(subject, "E");
+            String issuerName = getBcAttribute(issuer, BCStyle.CN);
+            String issuerCity = getBcAttribute(issuer, BCStyle.L);
+
+            String cn = getBcAttribute(subject, BCStyle.CN);
+            String email = getBcAttribute(subject, BCStyle.E);
+            String ou = getBcAttribute(subject, BCStyle.OU);
+
+            Instant from = certificate.getNotBefore().toInstant();
+            Instant to = certificate.getNotAfter().toInstant();
+            int daysLeft = (int) ChronoUnit.DAYS.between(Instant.now(), to);
+            String serialHex = certificate.getSerialNumber().toString(16).toUpperCase();
+
+            return new CertificateDTO(cn, email, issuerCity, ou, issuerName, serialHex, from.toString().split("T")[0], to.toString().split("T")[0], daysLeft);
+
+        } catch (CertificateEncodingException e) {
+            throw new RuntimeException("Eroare la parsarea certificatului cu Bouncy Castle", e);
         }
-        if (email == null) {
-            email = getAttribute(subject, "1.2.840.113549.1.9.1");
-        }
-
-        String ou = getAttribute(subject, "OU");
-
-        Instant from = certificate.getNotBefore().toInstant();
-        Instant to = certificate.getNotAfter().toInstant();
-        int daysLeft = (int) ChronoUnit.DAYS.between(Instant.now(), to);
-        String serialHex = certificate.getSerialNumber().toString(16).toUpperCase();
-
-        return new CertificateDTO(cn, email,issuerCity, ou, issuerName, serialHex, from.toString().split("T")[0], to.toString().split("T")[0], daysLeft);
     }
 
-    private static String getAttribute(String dn, String attr) {
-        try {
-            for (Rdn rdn : new LdapName(dn).getRdns()) {
-                if (rdn.getType().equalsIgnoreCase(attr)) {
-                    return String.valueOf(rdn.getValue());
-                }
-            }
-        } catch (Exception ignored) {
+    private static String getBcAttribute(X500Name x500Name, ASN1ObjectIdentifier attributeId) {
+        RDN[] rdns = x500Name.getRDNs(attributeId);
+        if (rdns != null && rdns.length > 0) {
+            return IETFUtils.valueToString(rdns[0].getFirst().getValue());
         }
         return null;
     }

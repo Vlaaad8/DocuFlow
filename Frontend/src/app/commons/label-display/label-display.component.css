@@ -1,23 +1,39 @@
 .label-container {
     display: flex;
+    align-items: center;
     background-color: #fff;
     padding: 12px;
     border-radius: 12px;
     border: 2px solid #e5e7eb;
     font-size: 14px;
     margin: 10px 0;
+    transition: all 0.25s ease;
 }
 
 .label-container:hover {
     transform: translateY(-2px);
-    transition: all 0.25s ease;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #eff6ff;
     color: #1e40af;
     padding: 8px;
     border-radius: 6px;
+    min-width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.icon-container mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
 }
 
 .label-details {
@@ -37,11 +53,6 @@
     font-size: 14px;
 }
 
-.label-container:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-}
 
 .title {
     display: flex;

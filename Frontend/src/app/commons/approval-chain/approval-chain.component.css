@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════
-   CARD
-   ═══════════════════════════════════════ */
+
 .card {
   background: #ffffff;
   border-radius: 16px;
@@ -15,9 +13,7 @@
 }
 
 
-/* ═══════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════ */
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -69,9 +65,6 @@
   letter-spacing: 0.5px;
 }
 
-/* ═══════════════════════════════════════
-   HEADER ACTION BUTTONS
-   ═══════════════════════════════════════ */
 .card-actions-header {
   display: flex;
   gap: 8px;
@@ -111,9 +104,6 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
-/* ═══════════════════════════════════════
-   BODY / STEPS
-   ═══════════════════════════════════════ */
 .card-body {
   padding: 0 24px 24px;
 }
@@ -179,9 +169,7 @@
   height: 16px;
 }
 
-/* ═══════════════════════════════════════
-   ROLE COLORS (kept from original)
-   ═══════════════════════════════════════ */
+
 .CEO {
   background-color: #f2a5a0;
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f2a5a0;

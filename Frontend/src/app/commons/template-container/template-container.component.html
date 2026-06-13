@@ -39,11 +39,10 @@
     </div>
   </div>
 
-  <!-- Actions -->
   <div class="card-actions">
-    <button class="btn btn--view" (click)="handlePreview()">
+    <button class="btn btn--view" [class.loading]="isLoadingPreview" (click)="handlePreview()" [disabled]="isLoadingPreview">
       <mat-icon>search</mat-icon>
-      Preview
+      {{ isLoadingPreview ? 'Loading...' : 'Preview' }}
     </button>
     <button class="btn btn--edit" (click)="handleClick('Edit')">
       <mat-icon>edit</mat-icon>

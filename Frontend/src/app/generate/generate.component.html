@@ -28,8 +28,25 @@
           </div>
         </div>
         <div class="second-part">
-          <app-template-selector [schema]="template" (event)="handleGenerateEvent($event)"
-                                 *ngFor="let template of templates"></app-template-selector>
+          <ng-container *ngIf="templates.length > 0; else noTemplates">
+            <div class="template-container">
+            <app-template-selector
+              [schema]="template"
+              (event)="handleGenerateEvent($event)"
+              *ngFor="let template of templates">
+            </app-template-selector>
+            </div>
+          </ng-container>
+
+          <ng-template #noTemplates>
+              <div class="empty-card">
+                <div class="empty-icon">
+                  <mat-icon>description_off</mat-icon>
+                </div>
+                <h3>No Templates Available</h3>
+                <p>There are no eligible templates for your profile at this time</p>
+              </div>
+          </ng-template>
         </div>
       </div>
     </div>

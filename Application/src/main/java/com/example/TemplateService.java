@@ -269,6 +269,27 @@ public class TemplateService {
 
     }
 
+    public void uploadHTMLTemplate(String content, String name, String description, TemplateCategory templateCategory, int approvalFlowID) {
+        String saveName = UUID.randomUUID() + ".docx";
+        Path destination = rootFolder.resolve(saveName);
+
+        try {
+            Convertors.convertHTMLToWord(content, destination);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            String extractedText = textPort.extract(new FileInputStream(destination.toFile()));
+            Set<Field> fields = extractFields(extractedText);
+            ApprovalChain approvalFlow = this.approvalChainRepository.getReferenceById(approvalFlowID);
+            Template template = new Template(name, templateCategory, description, destination.toAbsolutePath().toString(), fields, approvalFlow);
+
+            templateRepository.save(template);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

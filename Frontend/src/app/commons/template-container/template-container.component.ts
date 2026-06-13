@@ -17,6 +17,7 @@ export class TemplateContainerComponent implements OnInit {
   @Output() event = new EventEmitter<String>();
   @Output() preview = new EventEmitter<number>();
   approvalChain!: ApprovalChain
+  isLoadingPreview: boolean = false;
 
   constructor(private service: TemplateService) {
   }
@@ -45,7 +46,12 @@ export class TemplateContainerComponent implements OnInit {
     }
   }
   handlePreview(): void {
+    this.isLoadingPreview = true;
     this.preview.emit(this.template.id);
+    // Reseta loading-ul după 3 secunde (sau puteți reseta din componenta parent)
+    setTimeout(() => {
+      this.isLoadingPreview = false;
+    }, 3000);
   }
 
 }

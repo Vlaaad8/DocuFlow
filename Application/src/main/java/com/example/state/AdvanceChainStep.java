@@ -54,7 +54,7 @@ public class AdvanceChainStep implements RequestStep {
                 String path = approvalRequest.getTemplate().getPath();
                 User user = approvalRequest.getTemplate().getUser();
 
-                String message = "Your request for " + approvalRequest.getTemplate().getTemplate().getName() + " has been rejected.";
+                String message = "Your request for " + approvalRequest.getTemplate().getTemplate().getName() + " has been accepted.";
                 Notification notification = NotificationBuilder.accepted().withRecipient(user).withMessage(message).build();
 
                 this.emailPort.sendEmail(path, user.getEmail(),user.getFirstName(), user.getLastName());

@@ -301,10 +301,10 @@ span {
   width: 100%;
   margin-top: 16px;
 
-  /* Modificări noi: */
-  flex: 1; /* Forțează containerul de canvas să ocupe tot spațiul rămas liber */
-  height: 300px; /* Înlocuiește max-height cu o înălțime exactă */
-  position: relative; /* CRITIC: Fără asta, Chart.js nu știe cum să se dimensioneze! */
+
+  flex: 1;
+  height: 300px;
+  position: relative;
 }
 .chart-section {
   background: #ffffff;
@@ -312,16 +312,16 @@ span {
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 
-  /* Modificări noi: */
-  flex: 1; /* Forțează lățimi perfect egale (50% - 50%) */
+
+  flex: 1;
   display: flex;
-  flex-direction: column; /* Organizează textul sus și graficul jos */
+  flex-direction: column;
 }
 .chart-container {
   display: flex;
   gap: 24px;
   margin-top: 24px;
-  align-items: stretch; /* Modificat: forțează înălțime egală pentru ambele carduri */
+  align-items: stretch;
   justify-content: center;
 }
 .chart-container {

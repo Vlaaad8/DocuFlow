@@ -1,33 +1,35 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatSidenavContainer, MatSidenavModule } from "@angular/material/sidenav";
-import { SidenavUserComponent } from "../commons/sidenav-user/sidenav-user.component";
-import { ExitButtonComponent } from "../commons/exit-button/exit-button.component";
-import { Network } from 'vis-network';
-import { DataSet } from 'vis-data';
-import { HrService } from '../services/hr.service';
-import { User } from '../model/User';
-import { MatIcon } from "@angular/material/icon";
-import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
-import { Relation } from '../model/Relation';
-import { SnackBarService } from '../services/snackBar.service';
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
+import {SidenavUserComponent} from "../commons/sidenav-user/sidenav-user.component";
+import {ExitButtonComponent} from "../commons/exit-button/exit-button.component";
+import {Network} from 'vis-network';
+import {DataSet} from 'vis-data';
+import {HrService} from '../services/hr.service';
+import {User} from '../model/User';
+import {MatIcon} from "@angular/material/icon";
+import {CommonModule} from '@angular/common';
+import {forkJoin} from 'rxjs';
+import {Relation} from '../model/Relation';
+import {SnackBarService} from '../services/snackBar.service';
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 interface Node {
   id: number;
   label: string;
 }
+
 interface Edge {
   from: number,
   to: number
   arrows: string
 }
+
 @Component({
   selector: 'app-humanResource',
   templateUrl: './humanResource.component.html',
   styleUrls: ['./humanResource.component.css'],
-  imports: [MatSidenavContainer, SidenavUserComponent, MatSidenavModule, ExitButtonComponent, MatIcon, CommonModule, MatDialogModule,ReactiveFormsModule]
+  imports: [MatSidenavContainer, SidenavUserComponent, MatSidenavModule, ExitButtonComponent, MatIcon, CommonModule, MatDialogModule, ReactiveFormsModule]
 })
 export class HumanResourceComponent implements OnInit, AfterViewInit {
 
@@ -40,16 +42,17 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
   public addEdgeMode: boolean = false;
   public removeEdgeMode: boolean = false;
 
-   errorMessage: string | null = null;
-   registerErrorMessage: string | null = null;
+  errorMessage: string | null = null;
+  registerErrorMessage: string | null = null;
 
   @ViewChild('network') networkContainer!: ElementRef;
   @ViewChild('createUserDialog') createUserDialog: any;
 
-  protected loggedUser! :User;
+  protected loggedUser!: User;
   public registerForm!: FormGroup;
 
-  constructor(private service: HrService,private snackBar: SnackBarService,private dialog: MatDialog,private formBuilder: FormBuilder) { }
+  constructor(private service: HrService, private snackBar: SnackBarService, private dialog: MatDialog, private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
@@ -61,7 +64,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       username: new FormControl('', [Validators.required, Validators.minLength(4)])
     });
-   }
+  }
 
   ngAfterViewInit(): void {
 
@@ -110,12 +113,12 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       to: relation.boss.id,
       arrows: 'to'
     })))
-    const data = { nodes, edges };
+    const data = {nodes, edges};
 
     const options = {
       nodes: {
-        widthConstraint: { minimum: 90, maximum: 90 },
-        heightConstraint: { minimum: 90}
+        widthConstraint: {minimum: 90, maximum: 90},
+        heightConstraint: {minimum: 90}
       },
       interaction: {
         hover: true,
@@ -131,7 +134,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
           sortMethod: 'directed'
         }
       },
-      physics: { enabled: false },
+      physics: {enabled: false},
       height: '500px',
       width: '100%',
       edges: {
@@ -141,7 +144,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
           forceDirection: 'vertical',
           roundness: 0.4
         },
-        arrows: { to: { enabled: true } },
+        arrows: {to: {enabled: true}},
         color: {
           color: '#bdc3c7',
           highlight: '#3b82f6',
@@ -154,13 +157,12 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
         addEdge: (data: Edge, callback: any) => {
           if (data.from === data.to) {
             callback(null);
-          }
-          else {
+          } else {
             data.arrows = 'to';
             this.service.addRelation(data.to, data.from).subscribe({
               next: () => {
                 callback(data)
-                this,this.snackBar.showMessage("Relation added successfully!", "success");
+                this.snackBar.showMessage("Relation added successfully!", "success");
               },
               error: (error) => {
                 console.log(error);
@@ -180,6 +182,7 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       this.network = new Network(this.networkContainer.nativeElement, data, options);
     }
   }
+
   public determineColor(role: string): string {
 
     if (role === "CEO") {
@@ -209,84 +212,115 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
 
   public determineIcon(role: string): string {
     switch (role) {
-      case "CEO": return '👑';
-      case "Manager": return '🧑‍💼';
-      case "HumanResources": return '🧑‍🤝‍🧑';
-      case "IT": return '💻';
-      case "Finance": return '💰';
-      case "Law": return '⚖️';
-      case "Sales": return '📈';
-      case "Support": return '🎧';
-      case "Marketing": return '📢';
-      case "Employee": return '🧑‍🔧';
-      default: return '🧑‍🔧';
+      case "CEO":
+        return '👑';
+      case "Manager":
+        return '🧑‍💼';
+      case "HumanResources":
+        return '🧑‍🤝‍🧑';
+      case "IT":
+        return '💻';
+      case "Finance":
+        return '💰';
+      case "Law":
+        return '⚖️';
+      case "Sales":
+        return '📈';
+      case "Support":
+        return '🎧';
+      case "Marketing":
+        return '📢';
+      case "Employee":
+        return '🧑‍🔧';
+      default:
+        return '🧑‍🔧';
     }
   }
 
   public determineHighlightColor(role: string): string {
     switch (role) {
-      case "CEO": return '#b03a2e';
-      case "Manager": return '#1e8449';
-      case "HumanResources": return '#7d3c98';
-      case "IT": return '#21618c';
-      case "Finance": return '#1b5e20';
-      case "Law": return '#9a7d0a';
-      case "Sales": return '#af601a';
-      case "Support": return '#0e6675';
-      case "Marketing": return '#a04000';
-      case "Employee": return '#515a5a';
-      default: return '#515a5a';
+      case "CEO":
+        return '#b03a2e';
+      case "Manager":
+        return '#1e8449';
+      case "HumanResources":
+        return '#7d3c98';
+      case "IT":
+        return '#21618c';
+      case "Finance":
+        return '#1b5e20';
+      case "Law":
+        return '#9a7d0a';
+      case "Sales":
+        return '#af601a';
+      case "Support":
+        return '#0e6675';
+      case "Marketing":
+        return '#a04000';
+      case "Employee":
+        return '#515a5a';
+      default:
+        return '#515a5a';
     }
   }
 
   public determineLevel(role: string): number {
     if (role === "CEO") {
       return 0;
-    }
-    else if (role === "Manager") {
+    } else if (role === "Manager") {
       return 1;
-    }
-    else if (role === "HumanResources" || role === "IT" || role === "Finance" || role === "Law") {
+    } else if (role === "HumanResources" || role === "IT" || role === "Finance" || role === "Law") {
       return 2;
-    }
-    else if (role === "Marketing" || role === "Sales") {
+    } else if (role === "Marketing" || role === "Sales") {
       return 3;
     }
 
     return 4;
   }
+
   toggleAddEdge(): void {
-    this.addEdgeMode = !this.addEdgeMode;
-    this.removeEdgeMode = false;
-    this.network?.addEdgeMode();
-    console.log("Add edge mode:", this.addEdgeMode);
+    if (this.addEdgeMode) {
 
-  }
-  toggleRemoveEdge(): void {
-    this.removeEdgeMode = !this.removeEdgeMode;
-    this.addEdgeMode = false;
-  }
-
-
-  determineBorderColor(userID:number): string {
-    if (userID == this.loggedUser.id) {
-      return '#facc15';; // Blue border for logged-in user
+      this.addEdgeMode = false;
+      this.network?.disableEditMode();
+    } else {
+      this.addEdgeMode = true;
+      this.removeEdgeMode = false;
+      this.network?.addEdgeMode();
     }
-    return '#95a5a6'; // Default border color
   }
-  determineBorderWidth(userID:number): number {
+
+  toggleRemoveEdge(): void {
+    this.network?.deleteSelected();
+
+    this.addEdgeMode = false;
+    this.removeEdgeMode = false;
+    this.network?.disableEditMode();
+  }
+
+
+  determineBorderColor(userID: number): string {
+    if (userID == this.loggedUser.id) {
+      return '#facc15';
+    }
+    return '#95a5a6';
+  }
+
+  determineBorderWidth(userID: number): number {
     if (userID == this.loggedUser.id) {
       return 5;
     }
-   return 2;
+    return 2;
   }
 
-   openCreateModal(): void {
+  openCreateModal(): void {
     this.dialog.open(this.createUserDialog);
   }
+
   closeCreateModal(): void {
     this.dialog.closeAll();
   }
+
   registerUser(): void {
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
@@ -304,8 +338,6 @@ export class HumanResourceComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-
 
 
 }

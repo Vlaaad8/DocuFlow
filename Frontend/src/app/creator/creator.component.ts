@@ -3,7 +3,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {SidenavUserComponent} from "../commons/sidenav-user/sidenav-user.component";
 import {ExitButtonComponent} from "../commons/exit-button/exit-button.component";
 import {EditorComponent} from '@tinymce/tinymce-angular';
-import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {TemplateService} from '../services/template.service';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
@@ -27,7 +27,7 @@ const defaultContent = '<p>Create your template…</p>';
   selector: 'app-creator',
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css'],
-  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule]
+  imports: [MatSidenavModule, SidenavUserComponent, ExitButtonComponent, FormsModule, EditorComponent, CommonModule, MatChipsModule, MatExpansionModule, LabelDisplayComponent, MatIconModule, LoadingComponent, MatDialogModule, ReactiveFormsModule, MatProgressSpinner]
 })
 export class CreatorComponent implements OnInit {
 
@@ -45,6 +45,8 @@ export class CreatorComponent implements OnInit {
   public fields: Field[] = [];
 
   public draggedContent: string = '';
+
+  public isUploading: boolean = false;
 
   templateCategories!: string[];
   approvalFlows!: ApprovalFlowTemplate[];
@@ -97,7 +99,7 @@ export class CreatorComponent implements OnInit {
   }
 
 
-  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService, private dialog: MatDialog) {
+  constructor(private route: ActivatedRoute, private service: TemplateService, private snackBar: SnackBarService, private serviceCreator: CreatorService, private dialog: MatDialog, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -124,7 +126,9 @@ export class CreatorComponent implements OnInit {
         console.error('Error fetching fields:', error);
       }
     });
-
+    this.loadTemplateCategories();
+    this.loadApprovalFlows();
+    this.initializeForm();
 
   }
 
@@ -132,6 +136,7 @@ export class CreatorComponent implements OnInit {
     if (this.id == null) {
       this.handleSave();
     } else {
+      this.isUploading = true;
       this.service.editTemplateHTML(this.content, this.path!).subscribe({
         next: () => {
           this.snackBar.showMessage('Template updated successfully!', 'success');
@@ -139,9 +144,11 @@ export class CreatorComponent implements OnInit {
           this.content = defaultContent;
           this.id = null;
           this.path = null;
+          this.isUploading = false;
         },
         error: (error) => {
           this.errorMessage = error.error;
+          this.isUploading = false;
         }
       });
     }
@@ -179,5 +186,54 @@ export class CreatorComponent implements OnInit {
 
   closeDialog(): void {
     this.dialog.closeAll();
+  }
+
+  loadTemplateCategories(): void {
+    this.service.getTemplateCategories().subscribe({
+      next: (response) => {
+        this.templateCategories = response;
+        console.log('Template categories loaded successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error loading template categories:', error);
+      }
+    });
+  }
+
+  loadApprovalFlows(): void {
+    this.service.getApprovalFlows().subscribe({
+      next: (response) => {
+        this.approvalFlows = response;
+        console.log('Approval flows loaded successfully:', response);
+      }
+      , error: (error) => {
+        console.error('Error loading approval flows:', error);
+      }
+    });
+  }
+
+  initializeForm(): void {
+    this.formGroup = this.formBuilder.group({
+      name: [''],
+      category: [''],
+      description: [''],
+      approvalFlow: ['']
+    });
+  }
+  handleSaveHTML(): void {
+    this.isUploading = true;
+    this.service.uploadTemplateHTML(this.content, this.formGroup.value.name, this.formGroup.value.category, this.formGroup.value.description, this.formGroup.value.approvalFlow).subscribe({
+      next: (response) => {
+        this.dialog.closeAll();
+        this.errorMessage = null;
+        this.isUploading = false;
+        this.content = defaultContent;
+        this.snackBar.showMessage('Template saved successfully!', 'success');
+      },
+      error: (error) => {
+        this.errorMessage = error.error;
+        this.isUploading = false;
+      }
+    });
   }
 }

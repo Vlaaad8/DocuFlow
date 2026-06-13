@@ -19,6 +19,7 @@
   color: #6b7280;
   font-size: 16px;
   font-weight: 400;
+  margin-top: 0
 }
 
 .first-row {
@@ -214,6 +215,12 @@
   display: flex;
   gap: 20px;
   flex-direction: column;
+}
+
+.template-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .close-button:hover {
@@ -468,14 +475,14 @@ mat-icon.missing {
 }
 
 .preview-section select {
-  appearance: none; /* Elimină săgeata default a browserului */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 
   background-color: #ffffff;
   border: 1.5px solid #d1d5db;
   border-radius: 8px;
-  padding: 6px 32px 6px 12px; /* Spațiu în dreapta pentru săgeata custom */
+  padding: 6px 32px 6px 12px;
   font-size: 14px;
   color: #374151;
   cursor: pointer;
@@ -487,7 +494,6 @@ mat-icon.missing {
   background-size: 16px;
 }
 
-/* Stări de Hover și Focus */
 .preview-section select:hover {
   border-color: #9ca3af;
 }
@@ -499,4 +505,59 @@ mat-icon.missing {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+.empty-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 40px 32px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  transition: all 0.25s ease;
+}
+
+.empty-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.empty-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #1e40af;
+}
+
+.empty-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.empty-card p {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 320px;
+}
+.template-container{
+  margin: 16px;
+  gap: 16px;
 }

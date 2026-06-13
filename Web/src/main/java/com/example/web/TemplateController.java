@@ -102,4 +102,14 @@ public class TemplateController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @PostMapping("template/html")
+    public void addHTMLTemplate(@RequestParam("content") String content,
+                            @RequestParam("name") String name,
+                            @RequestParam("description") String description,
+                            @RequestParam("category") TemplateCategory category,
+                            @RequestParam("approvalFlow") int approvalFlowID){
+        this.templateService.uploadHTMLTemplate(content, name, description, category, approvalFlowID);
+    }
+
 }

@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════
-   HERO PANEL (left side)
-   ═══════════════════════════════════════ */
+
 .hero-panel {
     width: 55%;
     height: 100vh;
@@ -12,7 +10,7 @@
     overflow: hidden;
 }
 
-/* ── Subtle floating shapes ── */
+
 .shape {
     position: absolute;
     border-radius: 50%;
@@ -50,7 +48,6 @@
     50%      { transform: translateY(-18px) scale(1.04); }
 }
 
-/* ── Content ── */
 .hero-content {
     position: relative;
     z-index: 1;
