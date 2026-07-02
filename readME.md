@@ -54,10 +54,4 @@
 
 ---
 
-## Vrei o versiune mai scurtă sau în engleză?
-
-Pot transforma această descriere într-un paragraf promoțional pentru pagina principală, într-o variantă în limba engleză sau într-un set de mesaje pentru onboarding. Spune-mi: **ton formal / prietenos / comercial** și pregătesc imediat variantele.
-
----
-
 <!-- ...existing technical sections can follow below if present... -->
